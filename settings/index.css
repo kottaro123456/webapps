@@ -1,0 +1,210 @@
+body {
+    --fontFamily: "ヒラギノ角ゴ-Pro", sans-serif;
+    --fontWeight: 500;
+    --accent1-text: #ffffff;
+    --accent1: #0080ff;
+    --accent2-text: #ffffff;
+    --transition1: all 0.5s;
+    --transition2: all 0.3s 0.2s;
+    --main_selector-text: #000000;
+    --main_selector-bg: #eaf3ff;
+    --boxShadow1: 0px 5px 10px -5px #777777;
+    font-family: var(--fontFamily);
+    font-weight: var(--fontWeight);
+    margin: 0;
+    background: var(--main-bg);
+    color: var(--main-text);
+    overflow-x: hidden!important;
+    --main-text: #eaeaea;
+    --main-bg: #202020;
+    --kirokuBox-text: #ffffff;
+    --kirokuBox-text2: #dbdbdb;
+    --kirokuBox-bg: #464646;
+    --kirokuBox-bg2: #747474;
+    --addRequired: #ff4141;
+    --accent2: #00b7ff;
+    --cancel: #ff4141;
+    --input-bg: #323232;
+    --switch-bg: #202020;
+    --switch-for: #d2d2d2;
+    --main_selector-text: #ffffff;
+    --main_selector-bg: #090909;
+}
+
+/* アカウント */
+.acc_title {
+    width: calc(95% - 10px);
+    padding: 5px;
+    margin: 8px auto;
+    margin-top: 1.6rem;
+    border-bottom: var(--accent1) 3px solid;
+    font-size: 1.4rem;
+    font-weight: 600;
+}
+.acc_content {
+    width: calc(95% - 10px);
+    padding: 10px 5px;
+    background: var(--kirokuBox-bg);
+    border-radius: 8px;
+    margin: 8px auto;
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    cursor: pointer;
+}
+.acc_content.switch {
+    width: calc(95% - 10px);
+    padding: 10px 5px;
+    background: var(--kirokuBox-bg);
+    border-radius: 8px;
+    margin: 8px auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.acc_content_switch_div1 {
+    display: flex;
+    align-items: center;
+    justify-content: left;
+}
+.acc_content_icon {
+    margin: 0 1rem;
+    font-size: 1.6rem;
+}
+.acc_content_text {
+    font-size: 1.2rem;
+}
+.acc_content_delete {
+    color: var(--addRequired);
+}
+
+.acc_content_switch {
+    display: none;
+}
+.acc_content_switch_label {
+    position: relative;
+    display: inline-block;
+    margin-right: 10px;
+}
+.acc_content_switch_back {
+    width: 50px;
+    height: 22px;
+    background: var(--switch-bg);
+    border-radius: 25px;
+    border: 3px var(--switch-for) solid;
+    transition: 0.3s;
+}
+.acc_content_switch_front {
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    top: 4.5px;
+    left: 4.5px;
+    border-radius: 18px;
+    background: var(--switch-for);
+    transition: 0.3s;
+}
+.acc_content_switch:checked ~ .acc_content_switch_back {
+    background: var(--accent1);
+    border: 3px var(--accent1-text) solid;
+}
+.acc_content_switch:checked ~ .acc_content_switch_front {
+    background: var(--accent1-text);
+    left: 32px;
+}
+
+.table_1 {
+    margin: 8px auto;
+    width: calc(95% - 10px);
+    padding: 10px 5px;
+    border-collapse: collapse;
+    font-size: 1rem;
+}
+.table_1 tr td, .table_1 tr th, .table_2 tr td {
+    border: var(--main-text) 1px solid;
+    padding: 5px 10px!important;
+}
+
+#data_reload {
+    width: 180px;
+    height: 180px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    background: #0066ff;
+    color: white;
+    text-align: center;
+    border-radius: 10px;
+    display: none;
+    font-family: var(--fontFamily);
+    font-weight: var(--fontWeight);
+    z-index: 10000000;
+}
+#data_reload.display {
+    display: block;
+}
+#data_reload_bg {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: #00000099;
+    display: none;
+    z-index: 9000000;
+    backdrop-filter: blur(4px);
+}
+#data_reload_bg.display {
+    display: block;
+} 
+.data_reload_text {
+    width: 100%;
+    position: absolute;
+    bottom: 0.5rem;
+}
+.data_reload_icon {
+    font-size: 100px!important;
+    width: 100%;
+    position: absolute;
+    top: calc(35% - 60px);
+    left: 0;
+    animation: 1s linear 0s login_check_icon;
+    animation-fill-mode: both;
+    animation-iteration-count: infinite;
+    transform: rotate(0)
+}
+@keyframes login_check_icon {
+    0% {transform: rotate(0);}
+    100% {transform: rotate(-360deg);}
+}
+
+/* Googleマテリアルアイコン */
+@font-face {
+    font-family: 'Material Symbols Rounded';
+    font-weight: 400;
+    src: url(https://fonts.gstatic.com/s/materialsymbolsrounded/v162/syl0-zNym6YjUruM-QrEh7-nyTnjDwKNJ_190FjpZIvDmUSVOK7BDB_Qb9vUSzq3wzLK-P0J-V_Zs-QtQth3-jOcbTCVpeRL2w5rwZu2rIelXxc.woff2) format('woff2');
+}
+.material-symbols-rounded {
+    font-family: 'Material Symbols Rounded';
+    -webkit-font-smoothing: antialiased;
+    display: inline-block;
+    transform: scale(1.2) translateY(5%);
+    font-weight: 400!important;
+}
+
+@font-face {
+    font-family: 'Material Symbols Rounded Filled';
+    font-weight: 400;
+    src: url(https://fonts.gstatic.com/s/materialsymbolsrounded/v162/syl0-zNym6YjUruM-QrEh7-nyTnjDwKNJ_190FjpZIvDmUSVOK7BDJ_vb9vUSzq3wzLK-P0J-V_Zs-QtQth3-jOcbTCVpeRL2w5rwZu2rIelXxc.woff2) format('woff2');
+}
+.material-symbols-rounded.filled {
+    font-family: 'Material Symbols Rounded Filled';
+    -webkit-font-smoothing: antialiased;
+    display: inline-block;
+    transform: scale(1.2) translateY(5%);
+    font-weight: 400!important;
+}
+.icon_yoko {
+    transform: scale(1.2) translateY(5%) rotate(90deg)!important;
+}

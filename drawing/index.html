@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>お絵かきアプリ (Win10 Style)</title>
+  <!-- Material Symbols -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+  <link rel="stylesheet" href="css/style.css?v=3">
+</head>
+<body>
+  <!-- Toolbar (Win10 Ribbon Style) -->
+  <div id="toolbar">
+    <!-- File Group -->
+    <div class="toolbar-group">
+      <button class="tool-btn" id="btn-save" title="保存 (PNG)"><span class="material-symbols-outlined">save</span></button>
+      <button class="tool-btn" id="btn-clear" title="すべて消去"><span class="material-symbols-outlined">delete</span></button>
+    </div>
+
+    <!-- Edit Group -->
+    <div class="toolbar-group">
+      <button class="tool-btn" id="btn-undo" title="元に戻す (Ctrl+Z)"><span class="material-symbols-outlined">undo</span></button>
+      <button class="tool-btn" id="btn-redo" title="やり直し (Ctrl+Y)"><span class="material-symbols-outlined">redo</span></button>
+    </div>
+
+    <!-- Tools Group -->
+    <div class="toolbar-group">
+      <button class="tool-btn active" id="btn-pen" title="ペン"><span class="material-symbols-outlined">draw</span></button>
+      <button class="tool-btn" id="btn-eraser" title="消しゴム"><span class="material-symbols-outlined">ink_eraser</span></button>
+      <button class="tool-btn" id="btn-line" title="直線"><span class="material-symbols-outlined">horizontal_rule</span></button>
+      <button class="tool-btn" id="btn-rect" title="四角形"><span class="material-symbols-outlined">rectangle</span></button>
+      <button class="tool-btn" id="btn-circle" title="円"><span class="material-symbols-outlined">circle</span></button>
+    </div>
+
+    <!-- Properties Group -->
+    <div class="toolbar-group">
+      <span class="tool-label">太さ:</span>
+      <input type="range" id="lineWidth" min="1" max="50" value="5">
+      <span class="tool-label" id="lineWidthValue" style="width: 20px; text-align: right;">5</span>
+    </div>
+
+    <div class="toolbar-group">
+      <span class="tool-label">色:</span>
+      <input type="color" id="lineColor" value="#000000">
+    </div>
+
+    <!-- Resolution Group -->
+    <div class="toolbar-group">
+      <span class="tool-label">解像度:</span>
+      <input type="number" id="canvas-width" value="1920" style="width: 60px;">
+      <span class="tool-label" style="margin: 0 4px;">x</span>
+      <input type="number" id="canvas-height" value="1080" style="width: 60px;">
+      <button class="tool-btn" id="btn-resize" title="サイズ変更を適用" style="margin-left: 4px;">適用</button>
+    </div>
+
+    <!-- Green Screen Group -->
+    <div class="toolbar-group">
+      <button class="tool-btn" id="btn-greenscreen" title="グリーンバック背景ON/OFF"><span class="material-symbols-outlined">chromecast</span><span class="tool-label" style="margin-left:4px;">GBモード</span></button>
+    </div>
+
+    <!-- UI Toggle Group -->
+    <div class="toolbar-group" style="margin-left: auto; border-right: none;">
+      <button class="tool-btn active" id="btn-toggle-panel" title="レイヤーパネル表示切替"><span class="material-symbols-outlined">right_panel_open</span><span class="tool-label" style="margin-left:4px;">パネル</span></button>
+    </div>
+  </div>
+
+  <div id="main-area">
+    <!-- Canvas Container -->
+    <div id="canvas-wrapper">
+      <div id="canvas-container" style="width: 1920px; height: 1080px;">
+        <!-- Layers will be appended here dynamically -->
+        <!-- Temp Canvas for previewing shapes -->
+        <canvas id="temp-canvas" width="1920" height="1080"></canvas>
+        <!-- Indicator Canvas for cursor -->
+        <canvas id="indicator-canvas" width="1920" height="1080"></canvas>
+      </div>
+    </div>
+
+    <!-- Layer Panel -->
+    <div id="layer-panel">
+      <div class="panel-header">
+        <span>レイヤー</span>
+        <button class="tool-btn" id="btn-layer-add" title="新規レイヤー"><span class="material-symbols-outlined">add</span></button>
+      </div>
+      <div id="layer-list">
+        <!-- Layer items injected via JS -->
+      </div>
+      <div class="panel-footer">
+        <button class="tool-btn" id="btn-layer-up" title="上に移動"><span class="material-symbols-outlined">arrow_upward</span></button>
+        <button class="tool-btn" id="btn-layer-down" title="下に移動"><span class="material-symbols-outlined">arrow_downward</span></button>
+        <div style="flex:1"></div>
+        <button class="tool-btn" id="btn-layer-delete" title="レイヤー削除"><span class="material-symbols-outlined">delete</span></button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/main.js?v=3"></script>
+</body>
+</html>

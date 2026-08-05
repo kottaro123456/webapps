@@ -1,0 +1,142 @@
+html,
+body {
+    font-family: "UD新ゴ-Pro", sans-serif;
+    font-weight: 300;
+    margin: 0;
+    line-height: 1.45em;
+}
+
+a {
+    color: #4040ff;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+.title {
+    background: #cccccc;
+    border-radius: 10px;
+    text-align: center;
+    padding: 10px 0;
+    margin: 10px 5vw;
+    font-size: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 500;
+}
+
+.title img {
+    margin-right: 2rem;
+}
+
+.backhome {
+    margin-bottom: 0.5em;
+    font-size: 1.2rem;
+    display: block;
+    color: #4040ff;
+    text-decoration: none;
+    cursor: pointer;
+}
+.backhome:hover {
+    text-decoration: underline;
+}
+
+.date {
+    margin-top: 0.5em;
+    text-align: right;
+    margin-right: 5vw;
+}
+
+.content {
+    margin-left: 1em;
+    margin-right: 1em;
+}
+
+.content img {
+    display: inline-block;
+    max-width: 90%;
+    max-height: 40vh;
+    vertical-align: top;
+    margin-right: 0.5em;
+    margin-bottom: 0.5em;
+}
+
+.material-symbols-rounded {
+    transform: translateY(6%);
+}
+
+a.normallink {
+    color: #4040ff;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+a.normallink:hover {
+    text-decoration: underline;
+}
+
+.goikenbako_link {
+    background-color: #743ab7;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 5px;
+    text-decoration: none;
+    display: inline-block;
+    margin: 6px;
+    cursor: pointer;
+    box-shadow: 0px 4px 10px -2px #777777;
+}
+
+.goikenbako_link.small {
+    padding: 5px 10px;
+}
+
+.goikenbako_link:hover {
+    box-shadow: 0px 4px 10px -2px #444444;
+}
+
+.goikenbako_link:hover a {
+    text-decoration: underline;
+}
+
+.goikenbako_link a {
+    color: white;
+    text-decoration: none;
+}
+
+/* Googleマテリアルアイコン */
+@font-face {
+    font-family: 'Material Symbols Rounded';
+    font-weight: 400;
+    src: url(https://fonts.gstatic.com/s/materialsymbolsrounded/v162/syl0-zNym6YjUruM-QrEh7-nyTnjDwKNJ_190FjpZIvDmUSVOK7BDB_Qb9vUSzq3wzLK-P0J-V_Zs-QtQth3-jOcbTCVpeRL2w5rwZu2rIelXxc.woff2) format('woff2');
+}
+
+.material-symbols-rounded {
+    font-family: 'Material Symbols Rounded';
+    -webkit-font-smoothing: antialiased;
+    display: inline-block;
+    transform: translateY(5%);
+    font-weight: 400 !important;
+}
+
+@font-face {
+    font-family: 'Material Symbols Rounded Filled';
+    font-weight: 400;
+    src: url(https://fonts.gstatic.com/s/materialsymbolsrounded/v162/syl0-zNym6YjUruM-QrEh7-nyTnjDwKNJ_190FjpZIvDmUSVOK7BDJ_vb9vUSzq3wzLK-P0J-V_Zs-QtQth3-jOcbTCVpeRL2w5rwZu2rIelXxc.woff2) format('woff2');
+}
+
+.material-symbols-rounded.filled {
+    font-family: 'Material Symbols Rounded Filled';
+    -webkit-font-smoothing: antialiased;
+    display: inline-block;
+    transform: translateY(5%);
+    font-weight: 400 !important;
+}
+
+.icon_yoko {
+    transform: translateY(5%) rotate(90deg) !important;
+}

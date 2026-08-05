@@ -1,0 +1,432 @@
+#map {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(180deg, #017CE4 0%, #003EAF 100%);
+}
+html, body {
+    margin: 0;
+    font-family: "ヒラギノ角ゴ-Pro", sans-serif;
+    font-weight: 500;
+    overflow: hidden;
+}
+.ranking_table {
+    z-index: 10000;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: #fff4cc;
+    display: none;
+}
+#ranking_table_close {
+    display: block;
+    position: absolute;
+    z-index: 20000;
+    right: 5px;
+    top: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+}
+.display {
+    display: initial;
+}
+.ranking_table table {
+    position: absolute;
+    width: 95%;
+    height: 95%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50% ,-50%);
+    border: 2px solid #4a1e0b;
+    font-size: 2rem;
+}
+.ranking_table td {
+    border: 1px solid #4a1e0b;
+    white-space: nowrap;
+}
+.ranking_table td rt {
+    font-size: 0.6em;
+}
+.td_1 {
+    width: 6%;
+    background: #4a1e0b;
+    color: white;
+}
+.td_2 {
+    width: 28%;
+    padding-left: 10px;
+}
+.td_3 {
+    width: 14%;
+    padding-right: 10px;
+}
+.td_4 {
+    width: 2%;
+    border-bottom: none;
+    border-top: none;
+}
+select, input, button {
+    outline: none;
+}
+input[type="number"]::-webkit-outer-spin-button, 
+input[type="number"]::-webkit-inner-spin-button { 
+    -webkit-appearance: none; 
+    margin: 0; 
+} 
+input[type="number"] { 
+    -moz-appearance:textfield; 
+}
+#btns {
+    position: absolute;
+    bottom: 5px;
+    left: 10px;
+    z-index: 10000;
+    user-select: none;
+    transition: all 0.5s 0s cubic-bezier(0.65, 0.05, 0.36, 1);
+}
+#btns.close {
+    bottom: calc(var(--btns_height) * -1 + -10px);
+}
+#btns_expand {
+    font-size: 1rem;
+    color: #ffffff;
+    position: absolute;
+    bottom: 0;
+    left: -2px;
+    transform: rotateX(0deg);
+    transition: all 0.5s 0s ease;
+    cursor: pointer;
+}
+#btns_expand.close {
+    transform: rotateX(180deg);
+}
+.reload, #autoreload, .mode_btn, .setsumei, #tempChartBackreload, #tempChartBacktooltip {
+    background: #000000aa;
+    border: white 2.5px solid;
+    border-radius: 5px;
+    color: white;
+    padding: 5px;
+    font-family: "ヒラギノ角ゴ-Pro", sans-serif;
+    font-weight: 500;
+    font-size: 0.9rem;
+    cursor: pointer;
+}
+.setsumei {
+    cursor: default;
+    display: inline-block;
+    padding: 2px 5px;
+}
+.setsumei button {
+    background: #00000000;
+    padding: 4px 5px;
+}
+.autoreload_setsumei.on {
+    background: #ffffff;
+    color: black;
+}
+.autoreload_setsumei.on button, .autoreload_setsumei.on input {
+    color: black!important;
+}
+.autoreload_setsumei.on input {
+    border-bottom: #000000 1px solid!important;
+}
+#autoreload {
+    background: #00000000;
+    padding: 5px;
+    border: none;
+}
+#autoreload_num {
+    background: #00000000;
+    border: 0;
+    width: 2rem;
+    font-family: "ヒラギノ角ゴ-Pro", sans-serif;
+    font-weight: 500;
+    font-size: 0.9rem;
+    color: white;
+    border-bottom: #ffffff 1px solid;
+}
+.hanrei {
+    background: #00000088;
+    color: #ffffff;
+    z-index: 5000;
+    padding: 5px;
+    font-size: 1.1rem;
+    border: #ffffff 1px solid;
+    position: absolute;
+    top: calc(30px + 40px + 1.6rem + 1.4rem + 40px);
+    left: 15px;
+}
+.hanrei.display {
+    display: none;
+}
+.hanrei_td1 {
+    width: 1.4rem;
+}
+.hanrei_td2 {
+    text-align: right;
+    padding: 0 1px;
+}
+.hanrei_td3 {
+    width: 1.6rem;
+    text-align: center;
+}
+.ranking input[type=checkbox] {
+    display: none;
+}
+.ranking label {
+    display: inline-block;
+    background: #000000aa;
+    border: white 2.5px solid;
+    border-radius: 5px;
+    color: white;
+    padding: 5px;
+    font-family: "ヒラギノ角ゴ-Pro", sans-serif;
+    font-weight: 500;
+    font-size: 0.9rem;
+    cursor: pointer;
+}
+#amagumo_settings {
+    position: absolute;
+    bottom: calc(20px + 4.5em);
+    left: 2rem;
+    background-color: #ffffff;
+    border: #000000 2px solid;
+    padding: 1rem;
+    line-height: 1.2em;
+    z-index: 10000;
+    display: none;
+    font-size: 0.9rem;
+}
+#amagumo_settings.display {
+    display: block;
+}
+#amagumo_settings_range, #liden_settings_opacity, #liden_settings_size {
+    width: 10rem;
+}
+#liden_settings_period_10m, #liden_settings_period_all {
+    display: none;
+}
+#liden_settings_period_box {
+    display: flex;
+    justify-content: center;
+    margin: 5px 0;
+    cursor: pointer;
+}
+#liden_settings_period_10m_label, #liden_settings_period_all_label {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 5rem;
+    height: 1.5rem;
+    border: #1f57be 2px solid;
+    text-align: center;
+}
+#liden_settings_period_10m_label {
+    border-radius: 1rem 0 0 1rem;
+    border-right: #1f57be 1px solid;
+}
+#liden_settings_period_10m_span {
+    padding-left: 0.3rem;
+}
+#liden_settings_period_all_label {
+    border-radius: 0 1rem 1rem 0;
+    border-left: #1f57be 1px solid;
+}
+#liden_settings_period_all_span {
+    padding-right: 0.3rem;
+}
+.shindoichiran input[type=checkbox], #shindoiconbig_check {
+    display: none;
+}
+#liden_settings_period_10m:checked+#liden_settings_period_10m_label, #liden_settings_period_all:checked+#liden_settings_period_all_label {
+    color: white;
+    background: #1f57be;
+}
+#liden_settings_redraw {
+    margin: 3px 0;
+    padding: 2px 1px 1px 1px;
+    border: #1f57be 2px solid;
+    width: 10rem;
+    border-radius: 5px;
+    font-size: 0.8rem;
+    color: #1f57be;
+    text-align: center;
+    cursor: pointer;
+}
+
+.leaflet-tooltip {
+    background-color: rgba(255, 255, 255);
+    box-shadow: 0px 3px 5px 1px rgba(0, 0, 0, 0.2);
+    border-radius: 0!important;
+    font-family: "ヒラギノ角ゴ-Pro", sans-serif;
+    font-weight: 600;
+    font-size: 1.4rem;
+    padding: 20px 5px 0px 5px;
+}
+.lidenTooltip {
+    font-size: 0.9rem!important;
+    padding: 5px!important;
+}
+.leaflet-tooltip:before, .leaflet-tooltip:after {
+    content: "";
+}
+.leaflet-popup-content-wrapper, .leaflet-popup-tip {
+    background-color: rgba(255, 255, 255, 0.9);
+    box-shadow: 0px 3px 5px 1px rgba(0, 0, 0, 0.2);
+    border-radius: 0!important;
+    font-family: "ヒラギノ角ゴ-Pro", sans-serif;
+    font-weight: 600;
+}
+.leaflet-tooltip rt {
+    font-size: 0.7em;
+}
+.leaflet-popup-content {
+    color: black !important;
+    font-size: 1.2rem;
+    margin: 10px 8px 8px 8px;
+}
+.leaflet-popup-tip {
+    display: none;
+}
+.leaflet-fade-anim .leaflet-popup {
+    transition: none;
+    }
+#title {
+    position: absolute;
+    top: 30px;
+    left: -10px;
+    z-index: 10000;
+    font-family: "ヒラギノ角ゴ-Pro", sans-serif;
+    font-weight: 600;
+    user-select: none;
+}
+#title.display {
+    display: none;
+}
+#title_text {
+    padding: 10px;
+    padding-left: 20px;
+    font-size: 1.6rem;
+    border: #1f57be 4px solid;
+    background: #ffffff;
+    color: #1f57be;
+    vertical-align: bottom;
+}
+#title_time {
+    padding: 10px;
+    padding-left: 25px;
+    font-size: 1.4rem;
+    background: #00000088;
+    color: white;
+}
+#title_time .small {
+    font-size: 80%;
+    letter-spacing: 2px;
+}
+
+.tempChartDiv {
+    background-color: #222222;
+    padding: 1rem;
+    padding-bottom: 3rem;
+}
+#tempChartBack {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: #000000bb;
+    z-index: 50000;
+    display: none;
+}
+#tempChartBack.display {
+    display: block;
+}
+.tempChartDiv {
+    position: relative;
+    margin: 0 auto;
+    top: 50%;
+    transform: translateY(-50%);
+}
+#tempChartBackClose, #tempChartWaitClose {
+    font-size: 1.5rem;
+    color: white;
+    position: absolute;
+    z-index: 60000;
+    top: 0;
+    right: 0;
+    padding: 10px;
+    cursor: pointer;
+}
+#tempChartWait {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: #000000bb;
+    color: white;
+    z-index: 65000;
+    display: none;
+    font-size: 1.5rem;
+    text-align: center;
+}
+#tempChartWait.display {
+    display: block;
+}
+#tempChartWait span:not(#tempChartWaitClose) {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+#tempChartBackBtns {
+    font-size: 0.8rem;
+    position: absolute;
+    top: 5px;
+    left: 5px;
+}
+#tempChartBackBtns button {font-size: 0.8rem;}
+#tempChartBacktooltip.on {background: #ffffff;color: #000000;}
+#tempChartStaName {
+    color: white;
+    font-size: 1.3rem;
+    padding: 15px 10px;
+}
+#tempChartLowHigh {
+    color: white;
+    font-size: 1rem;
+    padding: 0 10px;
+}
+#tempChartLowHighTable {
+    display: inline;
+    position: absolute;
+    transform: translateY(-1rem);
+}
+#tempChartLowHighTable td {padding: 1px 4px;}
+#tempChartLowHighTable tr:nth-child(1) td:first-child {background-color: #ff4343;}
+#tempChartLowHighTable tr:nth-child(2) td:first-child {background-color: #3895ff;}
+#tempChartStaTemp {
+    color: white;
+    position: absolute;
+    top: 1rem;
+    right: 10px;
+    font-size: 1.3rem;
+    padding: 10px;
+    outline: #ffffff 2px solid;
+}
+#tempChartStaName rt {font-size: 0.7em;}
+
+/* 地図外ツールチップ */
+#tippy-1, .tippy-box {
+    font-weight: 500;
+    z-index: 1000000!important;
+}
+
+.nowcast_tile_img {
+    image-rendering: pixelated;
+}

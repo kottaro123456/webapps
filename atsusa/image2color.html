@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canvasからピクセル色を取得（マウス座標表示付き）</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+        canvas {
+            border: 1px solid black;
+            margin-bottom: 20px;
+            cursor: crosshair; /* マウスカーソルを十字にする */
+        }
+        input, button {
+            margin: 5px;
+            padding: 8px 15px;
+            font-size: 16px;
+        }
+        #mousePosition, #colorInfo {
+            margin-top: 10px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Canvasからピクセル色を取得（マウス座標表示付き）</h1>
+    <p>Canvasに画像を読み込み、マウスを動かすとカーソル位置の座標が表示されます。</p>
+    <p>クリックすると、その位置のピクセル色を取得できます。</p>
+
+    <input type="file" id="imageLoader" accept="image/*">
+    
+    <canvas id="myCanvas" width="800" height="800"></canvas>
+
+    <div id="mousePosition">マウス座標: (X: 0, Y: 0)</div>
+    <div id="colorInfo"></div>
+
+    <script>
+        const canvas = document.getElementById('myCanvas');
+        const ctx = canvas.getContext('2d');
+        const imageLoader = document.getElementById('imageLoader');
+        const mousePositionDiv = document.getElementById('mousePosition');
+        const colorInfoDiv = document.getElementById('colorInfo');
+
+        let currentImage = null; // 現在読み込まれている画像を保持
+
+        // 画像が読み込まれたときの処理
+        imageLoader.addEventListener('change', (e) => {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                const img = new Image();
+                img.onload = () => {
+                    // Canvasをクリア
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    
+                    // 画像をCanvasに描画 (800x800にフィットするように)
+                    // アスペクト比を維持しつつ、800x800に収まるように調整
+                    const imgAspectRatio = img.width / img.height;
+                    const canvasAspectRatio = canvas.width / canvas.height;
+
+                    let drawWidth = canvas.width;
+                    let drawHeight = canvas.height;
+                    let offsetX = 0;
+                    let offsetY = 0;
+
+                    if (imgAspectRatio > canvasAspectRatio) {
+                        // 画像がCanvasより横長の場合
+                        drawHeight = canvas.width / imgAspectRatio;
+                        offsetY = (canvas.height - drawHeight) / 2;
+                    } else {
+                        // 画像がCanvasより縦長の場合、または同じアスペクト比の場合
+                        drawWidth = canvas.height * imgAspectRatio;
+                        offsetX = (canvas.width - drawWidth) / 2;
+                    }
+                    
+                    ctx.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);
+                    currentImage = img; // 現在の画像を保存
+                    colorInfoDiv.textContent = ''; // 画像が変わったら色情報をリセット
+                };
+                img.src = event.target.result;
+            };
+            reader.readAsDataURL(e.target.files[0]);
+        });
+
+        // Canvas上でマウスが動いたときの処理
+        canvas.addEventListener('mousemove', (e) => {
+            // Canvas要素に対する相対座標を取得
+            const rect = canvas.getBoundingClientRect();
+            const x = Math.floor(e.clientX - rect.left);
+            const y = Math.floor(e.clientY - rect.top);
+
+            mousePositionDiv.textContent = `マウス座標: (X: ${x}, Y: ${y})`;
+        });
+
+        // Canvas上でマウスがクリックされたときの処理
+        canvas.addEventListener('click', (e) => {
+            if (!currentImage) {
+                colorInfoDiv.textContent = 'まず画像を読み込んでください。';
+                return;
+            }
+
+            // Canvas要素に対する相対座標を取得
+            const rect = canvas.getBoundingClientRect();
+            const x = Math.floor(e.clientX - rect.left);
+            const y = Math.floor(e.clientY - rect.top);
+
+            // 座標がCanvasの範囲内かチェック
+            if (x < 0 || x >= canvas.width || y < 0 || y >= canvas.height) {
+                colorInfoDiv.textContent = `エラー: X:${x}, Y:${y} はCanvasの範囲外です (0-${canvas.width-1})。`;
+                return;
+            }
+
+            // ImageDataオブジェクトからピクセルデータを取得
+            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            const data = imageData.data; // RGBAの配列
+
+            // 指定された座標のピクセルのインデックスを計算
+            const index = (y * canvas.width + x) * 4;
+
+            const r = data[index];     // 赤
+            const g = data[index + 1]; // 緑
+            const b = data[index + 2]; // 青
+            const a = data[index + 3]; // アルファ (透明度)
+
+            // 取得した色情報を表示
+            colorInfoDiv.textContent = `クリックした座標 (${x}, ${y}) の色: RGB(${r}, ${g}, ${b}) / Alpha: ${a}`;
+            colorInfoDiv.style.backgroundColor = `rgba(${r}, ${g}, ${b}, ${a / 255})`; // 背景色でプレビュー
+            colorInfoDiv.style.color = (r * 0.299 + g * 0.587 + b * 0.114) > 186 ? 'black' : 'white'; // 文字色を自動調整
+        });
+
+        // マウスがCanvasから出たときの処理（座標表示をリセット）
+        canvas.addEventListener('mouseleave', () => {
+            mousePositionDiv.textContent = 'マウス座標: (X: 0, Y: 0)';
+        });
+    </script>
+</body>
+</html>

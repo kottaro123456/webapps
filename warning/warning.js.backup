@@ -1,0 +1,805 @@
+// スムーズスクロール
+L.Map.mergeOptions({
+    smoothWheelZoom: true,
+    smoothSensitivity:0.5
+});
+L.Map.SmoothWheelZoom = L.Handler.extend({
+
+    addHooks: function () {
+        L.DomEvent.on(this._map._container, 'wheel', this._onWheelScroll, this);
+    },
+
+    removeHooks: function () {
+        L.DomEvent.off(this._map._container, 'wheel', this._onWheelScroll, this);
+    },
+
+    _onWheelScroll: function (e) {
+        if (!this._isWheeling) {
+            this._onWheelStart(e);
+        }
+        this._onWheeling(e);
+    },
+
+    _onWheelStart: function (e) {
+        var map = this._map;
+        this._isWheeling = true;
+        this._wheelMousePosition = map.mouseEventToContainerPoint(e);
+        this._centerPoint = map.getSize()._divideBy(2);
+        this._startLatLng = map.containerPointToLatLng(this._centerPoint);
+        this._wheelStartLatLng = map.containerPointToLatLng(this._wheelMousePosition);
+        this._startZoom = map.getZoom();
+        this._moved = false;
+        this._zooming = true;
+
+        map._stop();
+        if (map._panAnim) map._panAnim.stop();
+
+        this._goalZoom = map.getZoom();
+        this._prevCenter = map.getCenter();
+        this._prevZoom = map.getZoom();
+
+        this._zoomAnimationId = requestAnimationFrame(this._updateWheelZoom.bind(this));
+    },
+
+    _onWheeling: function (e) {
+        var map = this._map;
+
+        this._goalZoom = this._goalZoom + L.DomEvent.getWheelDelta(e) * 0.003 * map.options.smoothSensitivity;
+        if (this._goalZoom < map.getMinZoom() || this._goalZoom > map.getMaxZoom()) {
+            this._goalZoom = map._limitZoom(this._goalZoom);
+        }
+        this._wheelMousePosition = this._map.mouseEventToContainerPoint(e);
+
+        clearTimeout(this._timeoutId);
+        this._timeoutId = setTimeout(this._onWheelEnd.bind(this), 200);
+
+        L.DomEvent.preventDefault(e);
+        L.DomEvent.stopPropagation(e);
+    },
+
+    _onWheelEnd: function (e) {
+        this._isWheeling = false;
+        cancelAnimationFrame(this._zoomAnimationId);
+        this._map._moveEnd(true);
+    },
+
+    _updateWheelZoom: function () {
+        var map = this._map;
+
+        if ((!map.getCenter().equals(this._prevCenter)) || map.getZoom() != this._prevZoom)
+            return;
+
+        this._zoom = map.getZoom() + (this._goalZoom - map.getZoom()) * 0.3;
+        this._zoom = Math.floor(this._zoom * 100) / 100;
+
+        var delta = this._wheelMousePosition.subtract(this._centerPoint);
+        if (delta.x === 0 && delta.y === 0)
+            return;
+
+        if (map.options.smoothWheelZoom === 'center') {
+            this._center = this._startLatLng;
+        } else {
+            this._center = map.unproject(map.project(this._wheelStartLatLng, this._zoom).subtract(delta), this._zoom);
+        }
+
+        if (!this._moved) {
+            map._moveStart(true, false);
+            this._moved = true;
+        }
+
+        map._move(this._center, this._zoom);
+        this._prevCenter = map.getCenter();
+        this._prevZoom = map.getZoom();
+
+        this._zoomAnimationId = requestAnimationFrame(this._updateWheelZoom.bind(this));
+    }
+
+});
+
+const mapLF = localforage.createInstance({
+    driver   : localforage.INDEXEDDB,
+    name     : 'webappData',
+    storeName: 'map',
+    version  : 1
+});
+const warningLF = localforage.createInstance({
+    driver   : localforage.INDEXEDDB,
+    name     : 'webappData',
+    storeName: 'warning',
+    version  : 1
+});
+
+L.Map.addInitHook('addHandler', 'smoothWheelZoom', L.Map.SmoothWheelZoom );
+
+var map = L.map('map', {
+    zoomSnap: 0,
+    center: [37.575, 137.984],
+    zoom: 5.6,
+    minZoom: 4,
+    scrollWheelZoom: false,
+    smoothWheelZoom: true,
+    smoothSensitivity: 1.5,
+    preferCanvas:false,
+});
+//L.control.scale({maxWidth:150,position:'bottomright',imperial:false}).addTo(map);  // スケールを表示
+map.zoomControl.setPosition('topright');
+
+map.attributionControl.addAttribution(
+    "<a href='https://www.jma.go.jp/' target='_blank'>気象庁</a>"
+);
+
+map.createPane("pane_map_1").style.zIndex = 1;
+map.createPane("pane_map_2").style.zIndex = 2;
+map.createPane("pane_map_yoho").style.zIndex = 3;
+map.createPane("pane_map_keiho").style.zIndex = 4;
+map.createPane("nowcast").style.zIndex = 10;
+map.createPane("pane_map_3").style.zIndex = 50;
+map.createPane("liden").style.zIndex = 60;
+map.createPane("important").style.zIndex = 70;
+map.createPane("mlit").style.zIndex = 99;
+map.createPane("amedas").style.zIndex = 100;
+
+var map_cities;
+var map_cities2;
+var mapData_cities;
+var map_pref;
+var mapData_pref;
+
+var JSONdata;
+var filledList = {};
+var filledMaxList = {};
+var filled_layer = L.layerGroup();
+var latestTime;
+var latestClickPref;
+var autoScroll_onoff = "off";
+var autoReload_onoff = "off";
+var autoReloadInterval;
+var lightMode_onoff = "off";
+var overview_onoff = "on";
+
+var isAll_text = "";
+
+// メイン処理の呼び出し
+(async () => {
+    await Promise.all([
+        warningPrefGet(),
+        warningCitiesGet()
+    ]);
+    await getData();
+})();
+
+async function warningPrefGet() {
+    await mapLF.getItem("warningPref").then(async function(value) {
+        if (value !== null) {
+            // キーが存在し、値が取得できた場合
+            // ストレージからデータを取得し新しく取得しない
+            mapData_pref = value;
+            console.log("Map Loading completed: 'warningPref', IndexedDB");
+        } else {
+            // キーが存在しない場合
+            // 新しくデータを取得
+            const response = await fetch("https://kottaro123456.github.io/geojsons/warningPref.geojson");
+            const data = await response.json();
+            mapData_pref = data;
+            console.log("Map Loading completed: 'warningPref', Network");
+            await mapLF.setItem("warningPref", mapData_pref);
+            console.log("Map Saved successfully: 'warningPref', IndexedDB");
+        }
+        map_pref = L.geoJson(mapData_pref,{
+            pane: "pane_map_1",
+            style: {
+            "opacity": 0,
+            "fillColor": "#ffffff",
+            "fillOpacity": 1,
+            }
+        }).addTo(map);
+    });
+    await mapData_pref["features"].forEach(element => {
+        var map_pref2 = L.geoJson(element,{
+            pane: "pane_map_3",
+            style: {
+            "color": "#333533",
+            "weight": 1,
+            "opacity": 1,
+            "fillOpacity": 0,
+            }
+        }).addTo(map);
+        map_pref2.prefName = element["properties"]["name"];
+        map_pref2.on('mouseover', function(e) {createOverview(element["properties"]["code"], element["properties"]["name"])});
+        map_pref2.on('mouseout', function(e) {deleteOverview(element["properties"]["code"], element["properties"]["name"])});
+        map_pref2.on('click', function(e) { createDetail(element["properties"]["code"], element["properties"]["name"])}).addTo(map);
+    })
+}
+async function warningCitiesGet() {
+    await mapLF.getItem("warningCities").then(async function(value) {
+        if (value !== null) {
+            // キーが存在し、値が取得できた場合
+            // ストレージからデータを取得し新しく取得しない
+            mapData_cities = value;
+            console.log("Map Loading completed: 'warningCities', IndexedDB");
+        } else {
+            // キーが存在しない場合
+            // 新しくデータを取得
+            const response = await fetch("https://kottaro123456.github.io/geojsons/warningCities.geojson");
+            const data = await response.json();
+            mapData_cities = data;
+            console.log("Map Loading completed: 'warningCities', Network");
+            await mapLF.setItem("warningCities", mapData_cities);
+            console.log("Map Saved successfully: 'warningCities', IndexedDB");
+        }
+        map_cities2 = L.geoJson(mapData_cities,{
+            pane: "pane_map_2",
+            style: {
+            "color": "#333533",
+            "weight": 0.5,
+            "opacity": 1,
+            "fillOpacity": 0,
+            }
+        }).addTo(map);
+    });
+}
+
+function getData() {
+    $.getJSON("https://www.jma.go.jp/bosai/warning/data/r8/map.json",function(data) {
+        JSONdata = data;
+        mapDraw();
+        if ($('#text_yososhindo').hasClass("display") && $('#text_yososhindo').hasClass("ichiranAll")) {
+            document.getElementById('ichiranAll').click();
+        } else if ($('#text_yososhindo').hasClass("display") && latestClickPref != "" && latestClickPref != undefined) {
+            createDetail(latestClickPref, prefNameList[prefCodeList.indexOf(latestClickPref)])
+        }
+    });
+}
+
+function mapDraw() {
+    map.removeLayer(filled_layer);
+    filled_layer = L.layerGroup();
+    filledList = {}; //{"4540600": {"18": 1}}のように、{"地域コード": {"注意報警報コード": 注意報警報数字の最大}}で保存
+    filledMaxList = {}; //{"4540600": 1}のように、{"地域コード": 注意報警報数字の最大}で保存
+
+    for (let i = 0; i < JSONdata.length; i++) {
+        if (i == 0) {
+            latestTime = new Date(JSONdata[i]["reportDatetime"]);
+        } else {
+            if (new Date(JSONdata[i]["reportDatetime"]) > latestTime) {
+                latestTime = new Date(JSONdata[i]["reportDatetime"]);
+            }
+        }
+
+        // 新形式：warning.class20Items が存在するかチェック
+        if (!JSONdata[i]["warning"] || !JSONdata[i]["warning"]["class20Items"]) {
+            continue;
+        }
+
+        JSONdata[i]["warning"]["class20Items"].forEach(element2 => {
+            var currentAreaCode = element2["areaCode"]; // .code から .areaCode に変更
+            var array_Num = cityCode.indexOf(currentAreaCode);
+            
+            if (array_Num != -1) {
+                // .warnings から .kinds に変更
+                element2["kinds"].forEach(element3 => {
+                    // 「発表警報・注意報はなし」のテキスト判定、または code が無い場合のハンドリング
+                    if (element3["status"] === "発表警報・注意報はなし" || !element3["code"]) {
+                        // この地域にすでに登録されている警報があればクリアする
+                        if (filledList[currentAreaCode]) delete filledList[currentAreaCode];
+                        if (filledMaxList[currentAreaCode]) delete filledMaxList[currentAreaCode];
+                        return;
+                    }
+
+                    if (element3["status"] == "発表" || element3["status"] == "継続" || element3["status"] == "警報から注意報") {
+                        // 最大警戒レベルの更新判定
+                        if (filledMaxList[currentAreaCode] == undefined || filledMaxList[currentAreaCode] < warningLevel[element3["code"]]) {
+                            filledMaxList[currentAreaCode] = warningLevel[element3["code"]];
+                        }
+                        
+                        if (filledList[currentAreaCode] == undefined) {
+                            filledList[currentAreaCode] = {};
+                        }
+                        filledList[currentAreaCode][element3["code"]] = warningLevel[element3["code"]];
+
+                    } else if (element3["status"] == "解除") {
+                        if (filledList[currentAreaCode]) {
+                            if (filledList[currentAreaCode][element3["code"]]) {
+                                delete filledList[currentAreaCode][element3["code"]];
+                            }
+                            // もし解除された結果、他に警報がなくなったらMAXリストからも削除
+                            if (Object.keys(filledList[currentAreaCode]).length === 0) {
+                                delete filledList[currentAreaCode];
+                                delete filledMaxList[currentAreaCode];
+                            } else {
+                                // 他にまだ残っている場合は、残った中で最大のレベルに再計算
+                                var max = 0;
+                                Object.keys(filledList[currentAreaCode]).forEach(key => {
+                                    if (filledList[currentAreaCode][key] > max) max = filledList[currentAreaCode][key];
+                                });
+                                filledMaxList[currentAreaCode] = max;
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    let latestTime_month = ('0' + (latestTime.getMonth() + 1)).slice(-2);
+    let latestTime_date = ('0' + latestTime.getDate()).slice(-2);
+    let latestTime_hour = ('0' + latestTime.getHours()).slice(-2);
+    let latestTime_minute = ('0' + latestTime.getMinutes()).slice(-2);
+    document.getElementById('title_time').innerHTML = latestTime_month+'<span class="small">月</span>'+latestTime_date+'<span class="small">日</span> '+latestTime_hour+'<span class="small">時</span>'+latestTime_minute+'<span class="small">分</span>更新';
+
+    if (lightMode_onoff == "on") { // 都道府県ごとで塗りつぶし
+        map.removeLayer(map_cities2);
+
+        var prefFilledMaxList = {};
+        Object.keys(filledMaxList).forEach(FMLi => {
+            if (prefFilledMaxList[cityToPref[FMLi]] == undefined) {
+                prefFilledMaxList[cityToPref[FMLi]] = "";
+            }
+            if (prefFilledMaxList[cityToPref[FMLi]] < filledMaxList[FMLi]) {
+                prefFilledMaxList[cityToPref[FMLi]] = filledMaxList[FMLi];
+            }
+        });
+        
+        Object.keys(prefFilledMaxList).forEach(PRFkey => {
+            var style;
+            // if (prefFilledMaxList[PRFkey] == 1) {
+            //     style = {"color": "#333533","weight": 0.5,"opacity": 1,"fillColor": "#ffd000","fillOpacity": 1,}
+            // } else if (prefFilledMaxList[PRFkey] == 2) {
+            //     style = {"color": "#333533","weight": 0.5,"opacity": 1,"fillColor": "#dd0000","fillOpacity": 1,}
+            // } else if (prefFilledMaxList[PRFkey] == 3) {
+            //     style = {"color": "#333533","weight": 0.5,"opacity": 1,"fillColor": "#aa00dd","fillOpacity": 1,}
+            // } else if (prefFilledMaxList[PRFkey] == 4) {
+            //     style = {"color": "#333533","weight": 0.5,"opacity": 1,"fillColor": "#000000","fillOpacity": 1,}
+            // } else {
+            //     style = {"weight": 0,"opacity": 0,"fillOpacity": 0,}
+            // }
+            if (prefFilledMaxList[PRFkey] == 2) { // ★公式レベル2（注意報相当）
+                style = {"color": "#333533","weight": 0.5,"opacity": 1,"fillColor": "#ffd000","fillOpacity": 1,} // 黄色
+            } else if (prefFilledMaxList[PRFkey] == 3) { // ★公式レベル3（警報相当）
+                style = {"color": "#333533","weight": 0.5,"opacity": 1,"fillColor": "#dd0000","fillOpacity": 1,} // 赤
+            } else if (prefFilledMaxList[PRFkey] == 4) { // ★公式レベル4（危険警報・避難指示相当）
+                style = {"color": "#333533","weight": 0.5,"opacity": 1,"fillColor": "#aa00dd","fillOpacity": 1,} // 紫
+            } else if (prefFilledMaxList[PRFkey] == 5) { // ★公式レベル5（特別警報・緊急安全確保相当）
+                style = {"color": "#333533","weight": 0.5,"opacity": 1,"fillColor": "#000000","fillOpacity": 1,} // 黒
+            } else {
+                style = {"weight": 0,"opacity": 0,"fillOpacity": 0,}
+            }
+            var data_japan = mapData_pref["features"][prefCodeList.indexOf(PRFkey)];
+            var FILLEDLAYER = L.geoJSON(data_japan, {
+                style: style,
+                pane: "pane_map_yoho"
+            });
+            filled_layer.addLayer(FILLEDLAYER);
+        });
+    } else { // 市区町村ごとで塗りつぶし
+        map.removeLayer(map_cities2);
+        map.addLayer(map_cities2);
+
+        Object.keys(filledMaxList).forEach(FMLi => {
+            // if (filledMaxList[FMLi] == 1) {
+            //     style = {"color": "#333533","weight": 0.5,"opacity": 1,"fillColor": "#ffd000","fillOpacity": 1,}
+            // } else if (filledMaxList[FMLi] == 2) {
+            //     style = {"color": "#333533","weight": 0.5,"opacity": 1,"fillColor": "#dd0000","fillOpacity": 1,}
+            // } else if (filledMaxList[FMLi] == 3) {
+            //     style = {"color": "#333533","weight": 0.5,"opacity": 1,"fillColor": "#aa00dd","fillOpacity": 1,}
+            // } else if (filledMaxList[FMLi] == 4) {
+            //     style = {"color": "#333533","weight": 0.5,"opacity": 1,"fillColor": "#000000","fillOpacity": 1,}
+            // } else {
+            //     style = {"weight": 0,"opacity": 0,"fillOpacity": 0,}
+            // }
+            if (filledMaxList[FMLi] == 2) { // ★公式レベル2（注意報相当）
+                style = {"color": "#333533","weight": 0.5,"opacity": 1,"fillColor": "#ffd000","fillOpacity": 1,} // 黄色
+            } else if (filledMaxList[FMLi] == 3) { // ★公式レベル3（警報相当）
+                style = {"color": "#333533","weight": 0.5,"opacity": 1,"fillColor": "#dd0000","fillOpacity": 1,} // 赤
+            } else if (filledMaxList[FMLi] == 4) { // ★公式レベル4（危険警報・避難指示相当）
+                style = {"color": "#333533","weight": 0.5,"opacity": 1,"fillColor": "#aa00dd","fillOpacity": 1,} // 紫
+            } else if (filledMaxList[FMLi] == 5) { // ★公式レベル5（特別警報・緊急安全確保相当）
+                style = {"color": "#333533","weight": 0.5,"opacity": 1,"fillColor": "#000000","fillOpacity": 1,} // 黒
+            } else {
+                style = {"weight": 0,"opacity": 0,"fillOpacity": 0,}
+            }
+            var data_japan = mapData_cities["features"][cityCode.indexOf(FMLi)];
+            var FILLEDLAYER = L.geoJSON(data_japan, {
+                style: style,
+                pane: "pane_map_yoho"
+            });
+            filled_layer.addLayer(FILLEDLAYER);
+        });
+    }
+
+    map.addLayer(filled_layer);
+    
+}
+
+function createDetail(pref, prefName, isAll) {
+    if (document.getElementById('btn_scroll_text_yososhindo').innerText == "ｽｸﾛｰﾙ停止") {
+        clearInterval(scrollInterval);
+        document.getElementById('btn_scroll_text_yososhindo').innerText = "ｽｸﾛｰﾙ開始";
+    }
+
+    // 表の大見出し（都道府県名など）
+    var text1 = '<tr><td class="cityName">'+prefName+'</td><td class="cityName">発表警報・注意報</td></tr>';
+    
+    // 各カテゴリごとのHTMLを保持するオブジェクト
+    var catHtml = {
+        level5: "",
+        level4: "",
+        level3: "",
+        level2: "",
+        tokubetsu: "",
+        keiho: "",
+        chuiho: ""
+    };
+
+    prefToCity[pref].forEach(element => {
+        if (filledList[element]) {
+            var array_Num = cityCode.indexOf(element);
+            var cityNameStr = '<ruby>'+cityName[array_Num]+'<rt>'+cityNameKana[array_Num]+'</rt></ruby>';
+            var codes = Object.keys(filledList[element]);
+
+            // この市区町村の、カテゴリごとのspanタグを一時保存
+            var localSpans = { level5: "", level4: "", level3: "", level2: "", tokubetsu: "", keiho: "", chuiho: "" };
+
+            codes.forEach(code => {
+                var name = warningName[code];
+                var shortName = warningShortName[code];
+                var longName = warningName[code];
+                var levelVal = filledList[element][code];
+                
+                var span_short = '<span class="color' + levelVal + '">' + shortName + '</span>';
+                var span_long = '<span class="widthMushi color' + levelVal + '">' + longName + '</span>';
+
+                // 名称に特定の文字列が含まれているかで仕分け
+                if (name.includes("レベル５")) {
+                    localSpans.level5 += span_long;
+                } else if (name.includes("レベル４")) {
+                    localSpans.level4 += span_long;
+                } else if (name.includes("レベル３")) {
+                    localSpans.level3 += span_long;
+                } else if (name.includes("レベル２")) {
+                    localSpans.level2 += span_long;
+                } else if (name.includes("特別警報")) {
+                    localSpans.tokubetsu += span_short;
+                } else if (name.includes("警報")) {
+                    localSpans.keiho += span_short;
+                } else if (name.includes("注意報")) {
+                    localSpans.chuiho += span_short;
+                }
+            });
+
+            // 該当する情報があれば、各カテゴリのHTMLに追加
+            if (localSpans.level5) catHtml.level5 += '<tr><td>'+cityNameStr+'</td><td>'+localSpans.level5+'</td></tr>';
+            if (localSpans.level4) catHtml.level4 += '<tr><td>'+cityNameStr+'</td><td>'+localSpans.level4+'</td></tr>';
+            if (localSpans.level3) catHtml.level3 += '<tr><td>'+cityNameStr+'</td><td>'+localSpans.level3+'</td></tr>';
+            if (localSpans.level2) catHtml.level2 += '<tr><td>'+cityNameStr+'</td><td>'+localSpans.level2+'</td></tr>';
+            if (localSpans.tokubetsu) catHtml.tokubetsu += '<tr><td>'+cityNameStr+'</td><td>'+localSpans.tokubetsu+'</td></tr>';
+            if (localSpans.keiho) catHtml.keiho += '<tr><td>'+cityNameStr+'</td><td>'+localSpans.keiho+'</td></tr>';
+            if (localSpans.chuiho) catHtml.chuiho += '<tr><td>'+cityNameStr+'</td><td>'+localSpans.chuiho+'</td></tr>';
+        }
+    });
+
+    // 存在するカテゴリのみ見出し（colspan=2, 左揃え）を付けて結合
+    var contentHtml = "";
+    if (catHtml.level5) contentHtml += '<tr><td colspan="2" style="background-color: #000000; color: #ffffff; text-align: left; padding: 5px;">警戒レベル５相当</td></tr>' + catHtml.level5;
+    if (catHtml.level4) contentHtml += '<tr><td colspan="2" style="background-color: #aa00dd; color: #ffffff; text-align: left; padding: 5px;">警戒レベル４相当</td></tr>' + catHtml.level4;
+    if (catHtml.level3) contentHtml += '<tr><td colspan="2" style="background-color: #dd0000; color: #ffffff; text-align: left; padding: 5px;">警戒レベル３相当</td></tr>' + catHtml.level3;
+    if (catHtml.level2) contentHtml += '<tr><td colspan="2" style="background-color: #ffd000; color: #000000; text-align: left; padding: 5px;">警戒レベル２相当</td></tr>' + catHtml.level2;
+    if (catHtml.tokubetsu) contentHtml += '<tr><td colspan="2" style="background-color: #000000; color: #ffffff; text-align: left; padding: 5px;">特別警報</td></tr>' + catHtml.tokubetsu;
+    if (catHtml.keiho) contentHtml += '<tr><td colspan="2" style="background-color: #dd0000; color: #ffffff; text-align: left; padding: 5px;">警報</td></tr>' + catHtml.keiho;
+    if (catHtml.chuiho) contentHtml += '<tr><td colspan="2" style="background-color: #ffd000; color: #000000; text-align: left; padding: 5px;">注意報</td></tr>' + catHtml.chuiho;
+
+    // 発表がない場合の処理
+    if (contentHtml === "") {
+        text1 += '<tr><td colspan="2" class="nowarning">現在発表されている警報・注意報はありません。</td></tr>';
+    } else {
+        text1 += contentHtml;
+    }
+
+    // 全国一覧表かどうかの分岐
+    if (isAll != undefined) {
+        latestClickPref = "";
+        $('#text_yososhindo').addClass("ichiranAll");
+
+        if (isAll == 0) { // 最初
+            if (contentHtml !== "") {
+                isAll_text += text1;
+            }
+        } else if (isAll == 63) { // 最後
+            if (contentHtml !== "") {
+                if (isAll_text != "") {
+                    isAll_text += ('<tr><td colspan="2" style="height: 2rem;opacity: 0;"></td></tr>'+text1);
+                } else {
+                    isAll_text += (text1);
+                }
+            }
+            document.getElementById('table_text_yososhindo').innerHTML = isAll_text;
+            isAll_text = "";
+        } else { // 途中
+            if (contentHtml !== "") {
+                if (isAll_text != "") {
+                    isAll_text += ('<tr><td colspan="2" style="height: 2rem;opacity: 0;"></td></tr>'+text1);
+                } else {
+                    isAll_text += (text1);
+                }
+            }
+        }
+    } else {
+        latestClickPref = pref;
+        $('#text_yososhindo').removeClass("ichiranAll");
+        document.getElementById('table_text_yososhindo').innerHTML = text1;
+    }
+    
+    document.getElementById('text_yososhindo').classList.add("display");
+    
+    // スクロールの処理
+    if (autoReload_onoff == "on" && autoScroll_onoff == "on" && document.getElementById('btn_scroll_text_yososhindo').innerText == "ｽｸﾛｰﾙ開始") {
+        document.getElementById('table_text_yososhindo').scrollTop = 0;
+        document.getElementById('btn_scroll_text_yososhindo').click();
+    }
+    if (latestClickPref != undefined && latestClickPref != "") {
+        document.getElementById('table_text_yososhindo').scrollTop = 0;
+    }
+}
+// function createDetail(pref, prefName, isAll) {
+//     if (document.getElementById('btn_scroll_text_yososhindo').innerText == "ｽｸﾛｰﾙ停止") {
+//         clearInterval(scrollInterval);
+//         document.getElementById('btn_scroll_text_yososhindo').innerText = "ｽｸﾛｰﾙ開始";
+//     }
+
+//     var text1 = '<tr><td class="cityName">'+prefName+'</td><td class="cityName">発表警報・注意報</td></tr>';
+//     var textTr_level4 = "";
+//     var textTr_level3 = "";
+//     var textTr_level2 = "";
+//     var textTr_level1 = "";
+    
+//     prefToCity[pref].forEach(element => {
+//         if (filledList[element]) {
+//             var text_allKari = "";
+//             var array_Num = cityCode.indexOf(element);
+//             var textSpan_level4 = "";
+//             var textSpan_level3 = "";
+//             var textSpan_level2 = "";
+//             var textSpan_level1 = "";
+//             Object.keys(filledList[element]).forEach(element2 => {
+//                 if (warningLevel[element2] == 4) {
+//                     textSpan_level4 += '<span class="color'+filledList[element][element2]+'">'+warningShortName[element2]+'</span>';
+//                 } else if (warningLevel[element2] == 3) {
+//                     textSpan_level3 += '<span class="color'+filledList[element][element2]+'">'+warningShortName[element2]+'</span>';
+//                 } else if (warningLevel[element2] == 2) {
+//                     textSpan_level2 += '<span class="color'+filledList[element][element2]+'">'+warningShortName[element2]+'</span>';
+//                 } else if (warningLevel[element2] == 1) {
+//                     textSpan_level1 += '<span class="color'+filledList[element][element2]+'">'+warningShortName[element2]+'</span>';
+//                 }
+//             });
+//             text_allKari += '<tr><td><ruby>'+cityName[array_Num]+'<rt>'+cityNameKana[array_Num]+'</rt></ruby></td>';
+//             text_allKari += '<td>';
+//             text_allKari += textSpan_level4 + textSpan_level3 + textSpan_level2 + textSpan_level1;
+//             text_allKari += '</td>';
+//             if (filledMaxList[element] == 4) {
+//                 textTr_level4 += text_allKari;
+//             } else if (filledMaxList[element] == 3) {
+//                 textTr_level3 += text_allKari;
+//             } else if (filledMaxList[element] == 2) {
+//                 textTr_level2 += text_allKari;
+//             } else if (filledMaxList[element] == 1) {
+//                 textTr_level1 += text_allKari;
+//             }
+//         }
+//     });
+    
+//     text1 += textTr_level4 + textTr_level3 + textTr_level2 + textTr_level1;
+
+//     if (isAll != undefined) {
+//         latestClickPref = "";
+//         $('#text_yososhindo').addClass("ichiranAll");
+
+//         if (isAll == 0) { // 最初
+//             if (textTr_level4 != "" || textTr_level3 != "" || textTr_level2 != "" || textTr_level1 != "") {
+//                 isAll_text += text1;
+//             }
+//         } else if (isAll == 63) { // 最後
+//             if (textTr_level4 != "" || textTr_level3 != "" || textTr_level2 != "" || textTr_level1 != "") {
+//                 if (isAll_text != "") {
+//                     isAll_text += ('<tr><td colspan="2" style="height: 2rem;opacity: 0;"></td></tr>'+text1);
+//                 } else {
+//                     isAll_text += (text1);
+//                 }
+//             }
+//             document.getElementById('table_text_yososhindo').innerHTML = isAll_text;
+//             isAll_text = "";
+//         } else { // 途中
+//             if (textTr_level4 != "" || textTr_level3 != "" || textTr_level2 != "" || textTr_level1 != "") {
+//                 if (isAll_text != "") {
+//                     isAll_text += ('<tr><td colspan="2" style="height: 2rem;opacity: 0;"></td></tr>'+text1);
+//                 } else {
+//                     isAll_text += (text1);
+//                 }
+//             }
+//         }
+//     } else {
+//         latestClickPref = pref;
+//         $('#text_yososhindo').removeClass("ichiranAll");
+
+//         if (textTr_level4 == "" && textTr_level3 == "" && textTr_level2 == "" && textTr_level1 == "") {
+//             text1 += '<tr><td colspan="2" class="nowarning">現在発表されている警報・注意報はありません。</td></tr>';
+//         }
+//         document.getElementById('table_text_yososhindo').innerHTML = text1;
+//     }
+//     document.getElementById('text_yososhindo').classList.add("display");
+//     if (autoReload_onoff == "on" && autoScroll_onoff == "on" && document.getElementById('btn_scroll_text_yososhindo').innerText == "ｽｸﾛｰﾙ開始") {
+//         document.getElementById('table_text_yososhindo').scrollTop = 0;
+//         document.getElementById('btn_scroll_text_yososhindo').click();
+//     }
+//     if (latestClickPref != undefined || latestClickPref != "") {
+//         document.getElementById('table_text_yososhindo').scrollTop = 0;
+//     }
+// }
+
+function createOverview(pref, prefName) {
+    console.log(pref, prefName);
+    
+    if (overview_onoff == "on") {
+        var level4 = [];
+        var level3 = [];
+        var level2 = [];
+        var level1 = [];
+        prefToCity[pref].forEach(element => {
+            if (filledList[element]) {
+                Object.keys(filledList[element]).forEach(element2 => {
+                    if (warningLevel[element2] == 4) {
+                        if (!level4.includes(element2)) {level4.push(element2);}
+                    } else if (warningLevel[element2] == 3) {
+                        if (!level3.includes(element2)) {level3.push(element2);}
+                    } else if (warningLevel[element2] == 2) {
+                        if (!level2.includes(element2)) {level2.push(element2);}
+                    } else if (warningLevel[element2] == 1) {
+                        if (!level1.includes(element2)) {level1.push(element2);}
+                    }
+                });
+            }
+        });
+        var level4_text = "";
+        var level3_text = "";
+        var level2_text = "";
+        var level1_text = "";
+        level4.forEach(L => {level4_text += '<span class="color4">'+warningShortName[L]+'</span>';});
+        level3.forEach(L => {level3_text += '<span class="color3">'+warningShortName[L]+'</span>';});
+        level2.forEach(L => {level2_text += '<span class="color2">'+warningShortName[L]+'</span>';});
+        level1.forEach(L => {level1_text += '<span class="color1">'+warningShortName[L]+'</span>';});
+        if (level4_text === "" && level3_text === "" && level2_text === "" && level1_text === "") {
+            level4_text = "発表されている警報・注意報はありません。";
+        }
+        document.getElementById('overview').innerHTML = '<div style="line-height: 1.6em;font-size: 1.1em;">'+prefName+'</div>'+level4_text+level3_text+level2_text+level1_text;
+        document.getElementById('overview').classList.add("display");
+    }
+}
+function deleteOverview(pref, e) {
+    //document.getElementById('overview').innerHTML = "";
+    document.getElementById('overview').classList.remove("display");
+}
+document.getElementById('map').addEventListener("mousemove", (e)=>{overviewMove(e);});
+document.getElementById('overview').addEventListener("mousemove", (e)=>{overviewMove(e);});
+function overviewMove(e) {
+    if (document.getElementById('overview').classList.contains("display") == true) {
+        document.getElementById('overview').style.top = (e.clientY + 10) + "px";
+        document.getElementById('overview').style.left = (e.clientX + 10) + "px";
+    }
+}
+
+
+var koushin;
+var koushin_ok;
+//ボタン押下時のイベント設定とローカルストレージの設定
+document.getElementById('reload').addEventListener("click",()=>{
+    clearTimeout(koushin);
+    clearTimeout(koushin_ok);
+    getData();
+    document.getElementById('reload').innerText = "更新中…";
+    koushin = setTimeout(() => {
+        document.getElementById('reload').innerText = "更新完了";
+        koushin_ok = setTimeout(() => {
+            document.getElementById('reload').innerText = "情報更新";
+        }, 1000);
+    }, 1000);
+});
+
+document.getElementById('autoReload').addEventListener("click",()=>{
+    if (autoReload_onoff == "on") {
+        document.getElementById('autoReload').classList.remove('on');
+        document.getElementById('text_yososhindo_autoreload_onoff').innerText = "AR:×";
+    } else {
+        document.getElementById('autoReload').classList.add('on');
+        document.getElementById('text_yososhindo_autoreload_onoff').innerText = "AR:⭘";
+    }
+    interval();
+});
+function interval() {
+    var autoReload_onoff_num = 5 * 60 * 1000;
+    if (autoReload_onoff == "off") {
+        if (autoReloadInterval != null || autoReloadInterval != 0) {
+            clearInterval(autoReloadInterval);
+            autoReloadInterval = null;
+        }
+        console.warn("5分間隔で情報の自動更新を行います。\n異常時に自動更新を強制停止させる場合は「clearInterval(autoReloadInterval);」または「interval();」をこのコンソールにコピーし実行してください。");
+        autoReloadInterval = setInterval(() => {
+            getData();
+        }, autoReload_onoff_num);
+        autoReload_onoff = "on";
+    } else {
+        clearInterval(autoReloadInterval);
+        autoReloadInterval = null;
+        autoReload_onoff = "off";
+        console.info("情報の自動更新を解除しました。");
+    }
+}
+
+document.getElementById('ichiranAll').addEventListener("click",()=>{
+    for (let i = 0; i < prefCodeList.length; i++) {
+        var code = prefCodeList[i];
+        var name = prefNameList[i];
+        createDetail(code, name, i);
+    }
+});
+
+const overviewBtn = document.getElementById('overviewBtn');
+overviewBtn.addEventListener('click', () => {
+    if (overview_onoff == 'on') {
+        overviewBtn.classList.remove('on');
+        overview_onoff = 'off';
+    } else {
+        overviewBtn.classList.add('on');
+        overview_onoff = 'on';
+    }
+});
+
+$('#lightMode').click(event => {
+    if (lightMode_onoff == "off") {
+        lightMode_onoff = "on";
+        $('#lightMode').addClass('on');
+        mapDraw(true);
+    } else {
+        lightMode_onoff = "off";
+        $('#lightMode').removeClass('on');
+        mapDraw();
+    }
+});
+
+
+document.getElementById('close_text_yososhindo').addEventListener("click",()=>{
+    document.getElementById('text_yososhindo').classList.remove("display");
+    scrollY = 0;
+    clearInterval(scrollInterval);
+    document.getElementById('btn_scroll_text_yososhindo').classList.remove('on');
+    latestClickPref = "";
+});
+
+var scrollInterval;
+var scrollY = 0;
+var scrollSpeed = 1;
+document.getElementById('btn_scroll_text_yososhindo').addEventListener("click", ()=>{
+    var table = document.querySelector('#table_text_yososhindo');
+    var tbody = document.querySelector('#table_text_yososhindo tbody');
+    if (document.getElementById('btn_scroll_text_yososhindo').classList.contains('on') == false) {
+        if (!document.getElementById('scroll_num').value || document.getElementById('scroll_num').value < 0.1) {
+            document.getElementById('scroll_num').value = 1;
+            console.log("スクロール速度が不正な値に設定されたため、1に初期化しました。");
+        }
+        scrollSpeed = Number(document.getElementById('scroll_num').value);
+        document.getElementById('btn_scroll_text_yososhindo').classList.add('on');
+        autoScroll_onoff = "on";
+        scrollY = table.scrollTop;
+        scrollInterval = setInterval(() => {
+            table.scrollTop = scrollY + Number(scrollSpeed);
+            scrollY += Number(scrollSpeed);
+            
+            if (scrollY > (tbody.scrollHeight-table.clientHeight+20)) {
+                scrollY = 0;
+                table.scrollTop = scrollY;
+            }
+        }, 20);
+    } else {
+        clearInterval(scrollInterval);
+        document.getElementById('btn_scroll_text_yososhindo').classList.remove('on');
+        autoScroll_onoff = "off";
+    }
+});

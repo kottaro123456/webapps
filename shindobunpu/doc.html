@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>震度分布図 for MiyakoCam</title>
+        <meta charset="UTF-8" lang="ja">
+        <meta name="viewport" content="width=device-width,initial-scale=1">
+        <meta name="description" content="ドキュメント - 震度分布図 for MiyakoCam">
+        <!--SNSでのサイト表示-->
+        <meta property="twitter:card" content="summary_large_image">
+        <meta property="twitter:site" content="@MiyakoCam">
+        <meta property="twitter:description" content="震度分布図 for MiyakoCamのドキュメントです。">
+        <meta property="og:title" content="ドキュメント - 震度分布図 for MiyakoCam">
+        <meta property="og:site_name" content="ドキュメント - 震度分布図 for MiyakoCam">
+        <meta property="og:image" content="http://nanka.html.xdomain.jp/html/quake/maps/source/shindobunpu.png">
+        <!--その他のCSS・ライブラリ読み込み-->
+        <script src="https://kit.fontawesome.com/e9f92a9dd0.js" crossorigin="anonymous"></script>
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-9SL593EYR6"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            
+            gtag('config', 'G-9SL593EYR6');
+        </script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css" integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ==" crossorigin="" />
+        <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>
+        <script src="../../../html/RealtimeQuakeInfo/static/js/leaflet-src.js"></script>
+        <link rel="stylesheet" href="../../../html/RealtimeQuakeInfo/static/css/font.css">
+        <style>
+            body {
+                font-family: "ヒラギノ角ゴ-Pro", sans-serif;
+                font-weight: 400;
+                
+            }
+            body p {
+                font-size: 1.1rem;
+            }
+            .midashi {
+                border-bottom: 3px solid #4285f4;
+                border-left: 10px solid #4285f4;
+                margin-top: 0.5em;
+                display: inline-block;
+            }
+            h2,h3 {
+                border-bottom: 2px solid #4285f4;
+            }
+            @media (max-width: 767px) {
+                img {
+                    width: 100%;
+                }
+                .midashi1, .midashi2, .midashi3, .midashi4 {
+                    margin-left: 0.5em;
+                }
+            }
+            @media (min-width: 768px) {
+                img {
+                    width: 50%;
+                }
+                .midashi1 {
+                    margin-left: 1.5em;
+                }
+                .midashi2 {
+                    margin-left: 1.5em;
+                }
+                .midashi3 {
+                    margin-left: 2em;
+                }
+                .midashi4 {
+                    margin-left: 2em;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <h1 style="text-align: center;">震度分布図 for MiyakoCam</h1>
+        <h1 class="midashi" id="tsukaikata">１．使い方</h1>
+        <div class="midashi1">
+            <p>
+                本アプリの画面の見方、使い方について解説していきます。
+                <br>↓下の画像の見たい部分をクリックしてください。
+            </p>
+            <img src="source/doc/1_1.jpg" usemap="#1_ImageMap" alt="">
+            <map name="1_ImageMap">
+                <area shape="rect" coords="3,0,367,368" href="#1-1" alt="" />
+                <area shape="rect" coords="374,4,1602,791" href="#1-2" alt="" />
+                <area shape="rect" coords="4,796,1602,897" href="#1-3" alt="" />
+            </map>
+            <h2 id="1-1">①　情報パネル</h2>
+            <div class="midashi2">
+                <p>
+                    情報パネルの部分について解説します。
+                    <br>↓下の画像の見たい部分をクリックしてください。
+                </p>
+                <img src="source/doc/1_2.jpg" usemap="#1_1_ImageMap" alt="">
+                <map name="1_1_ImageMap">
+                    <area shape="rect" coords="-27,85,1653,224" href="#1-1-1" alt="" />
+                    <area shape="rect" coords="-39,225,1831,334" href="#1-1-2" alt="" />
+                    <area shape="rect" coords="-121,391,2047,826" href="#1-1-3" alt="" />
+                </map>
+                <div class="midashi3">
+                    <h3 id="1-1-1">①　タイトル</h3>
+                    <div class="midashi4">
+                        タイトルを表示します。
+                    </div>
+                    <h3 id="1-1-2">②　取得時刻</h3>
+                    <div class="midashi4">
+                        地震情報の最終取得時間を表示します。
+                    </div>
+                    <h3 id="1-1-3">③　地震の情報</h3>
+                    <div class="midashi4">
+                        最大震度<br>
+                        発生時刻<br>
+                        震源地<br>
+                        地震の規模（マグニチュード）<br>
+                        震源の深さ<br>
+                        を表示します。
+                    </div>
+                </div>
+            </div>
+            <h2 id="1-2">②　地図コンテンツ</h2>
+            <div class="midashi2">
+                <p>
+                    地図コンテンツの部分について解説します。
+                    <br>↓下の画像の見たい部分をクリックしてください。
+                </p>
+                <img src="source/doc/1_3.jpg" usemap="#1_3_ImageMap" alt="">
+                <map name="1_3_ImageMap">
+                    <area shape="rect" coords="125,2,1402,463" href="#1-2-1" alt="" />
+                    <area shape="rect" coords="125,463,588,896" href="#1-2-1" alt="" />
+                    <area shape="rect" coords="587,575,1402,898" href="#1-2-1" alt="" />
+                    <area shape="rect" coords="797,463,1400,577" href="#1-2-1" alt="" />
+                    <area shape="rect" coords="589,465,798,577" href="#1-2-3" alt="" />
+                    <area shape="rect" coords="1404,3,1481,128" href="#1-2-2" alt="" />
+                </map>
+                <div class="midashi3">
+                    <h3 id="1-2-1">①　震度分布</h3>
+                    <div class="midashi4">
+                        地図上に震度1以上を観測した観測点をプロットします。
+                        <br><span style="color: red;font-weight: 600;">※観測点情報の欠落により、<a href="#1-3-7">各地の震度（テキスト）</a> の観測点との数が異なる場合があります。</span>
+                    </div>
+                    <h3 id="1-2-2">②　ズームコントローラー</h3>
+                    <div class="midashi4">
+                        地図のズームをコントロールします。
+                    </div>
+                    <h3 id="1-2-3">③　震源アイコン</h3>
+                    <div class="midashi4">
+                        震源の場所をアイコンでプロットします。
+                    </div>
+                </div>
+            </div>
+            <h2 id="1-3">③　ツールボタン</h2>
+            <div class="midashi2">
+                <p>
+                    ツールボタンの部分について解説します。
+                    <br>↓下の画像の見たい部分をクリックしてください。
+                </p>
+                <img src="source/doc/1_4.jpg" usemap="#1_4_ImageMap" alt="">
+                <map name="1_4_ImageMap">
+                    <area shape="rect" coords="17,381,654,438" href="#1-3-1" alt="" />
+                    <area shape="rect" coords="667,389,902,440" href="#1-3-2" alt="" />
+                    <area shape="rect" coords="918,389,1066,441" href="#1-3-3" alt="" />
+                    <area shape="rect" coords="1083,390,1231,439" href="#1-3-4" alt="" />
+                    <area shape="rect" coords="23,457,615,517" href="#1-3-5" alt="" />
+                    <area shape="rect" coords="629,456,1011,512" href="#1-3-6" alt="" />
+                    <area shape="rect" coords="1030,457,1300,509" href="#1-3-7" alt="" />
+                    <area shape="rect" coords="1316,459,1550,508" href="#1-3-8" alt="" />
+                </map>
+                <div class="midashi3">
+                    <h3 id="1-3-1">①　地震情報選択ボタン</h3>
+                    <div class="midashi4">
+                        表示する地震情報の選択をします。
+                        <br><span style="color: red;font-weight: 600;">※<a href="#1-3-8">自動更新</a> をオフにしないと、自動更新された際に最新の地震情報に切り替わります。</span>
+                    </div>
+                    <h3 id="1-3-2">②　地震情報更新ボタン</h3>
+                    <div class="midashi4">
+                        地震情報を更新します。
+                        <br>横のテキストボックスで何件の地震情報を取得するかを設定できます。（最大100件）
+                        <br><span style="color: red;font-weight: 600;">※リロードしてしまうと、地図の読み込みなどに時間がかかってしまいますので、内部で更新します。</span>
+                    </div>
+                    <h3 id="1-3-3">③　位置初期化ボタン</h3>
+                    <div class="midashi4">
+                        地図を移動させた際に、初期状態の位置に戻します。
+                    </div>
+                    <h3 id="1-3-4">④　テスト開始/停止ボタン</h3>
+                    <div class="midashi4">
+                        2016/04/14に起きた、熊本地震（震度7）の試験描画を開始/終了します。
+                        <br><span style="color: red;font-weight: 600;">※899ヶ所の観測点が登録されていますので、描画にはスペックと時間がかかります。</span>
+                        <br><span style="color: red;font-weight: 600;">※<a href="#1-3-8">自動更新</a> をオフにしないと、自動更新された際に最新の地震情報に切り替わります。</span>
+                    </div>
+                    <h3 id="1-3-5">⑤　テーマ切り替えボタン</h3>
+                    <div class="midashi4">
+                        地図のテーマを変更します。
+                        <br><span style="color: red;font-weight: 600;">※アイコンのテーマを変更したい場合は、次へお進みください。</span>
+                    </div>
+                    <h3 id="1-3-6">⑥　アイコンテーマ切り替えボタン</h3>
+                    <div class="midashi4">
+                        アイコンのテーマを変更します。
+                        <br><span style="color: red;font-weight: 600;">※地図のテーマを変更したい場合は、前へお戻りください。</span>
+                    </div>
+                    <h3 id="1-3-7">⑦　各地の震度表示/非表示ボタン</h3>
+                    <div class="midashi4">
+                        各地の震度をテキストで、震度7から順に表示します。
+                        <br>また、その横に何ヶ所かを表示します。
+                        <br><span style="color: red;font-weight: 600;">※観測点情報の欠落により、<a href="#1-2-1">震度分布</a> の観測点との数が異なる場合があります。</span>
+                    </div>
+                    <h3 id="1-3-8">⑧　自動更新ボタン</h3>
+                    <div class="midashi4">
+                        自動更新をするかどうかを設定できます。
+                        <br>その横のテキストボックスで、何秒ごとに更新するかを設定できます。（最低2秒）
+                        <br>4秒以上の場合は分かりやすいよう更新ボタンを操作します。4秒未満の場合は内部から更新します。
+                        <br><span style="color: red;font-weight: 600;">※この機能をオフにしておかないと、<a href="#1-3-1">地震情報選択</a> や <a href="#1-3-4">テスト開始/停止</a>で予期せぬ動作を起こす場合があります。</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/image-map-resizer/1.0.10/js/imageMapResizer.min.js"></script>
+        <script>imageMapResize();</script>
+    </body>
+</html>

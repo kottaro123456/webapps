@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>暑さ情報マップ for MiyakoCam</title>
+        <meta charset="UTF-8" lang="ja">
+        <meta name="viewport" content="width=device-width,initial-scale=1">
+        <meta name="description" content="暑さ情報マップ for MiyakoCam">
+        <!--SNSでのサイト表示-->
+        <meta property="twitter:card" content="summary_large_image">
+        <meta property="twitter:site" content="@MiyakoCam">
+        <meta property="twitter:description" content="暑さ指数や熱中症警戒アラートを地図上で見られます。">
+        <meta property="og:title" content="暑さ情報マップ for MiyakoCam">
+        <meta property="og:site_name" content="暑さ情報マップ for MiyakoCam">
+        <meta property="og:image" content="https://kottaro123456.com/webapps/atsusa/source/og.png">
+        <!--その他のCSS・ライブラリ読み込み-->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZL8HPL24E7"></script>
+        <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-ZL8HPL24E7');
+        </script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css" integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ==" crossorigin="" />
+        <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@eai/moji/dist/moji.min.js"></script>
+
+        <script src="https://cdn.jsdelivr.net/npm/maplibre-gl@4.7.0/dist/maplibre-gl.min.js"></script>
+        <link href="https://cdn.jsdelivr.net/npm/maplibre-gl@4.7.0/dist/maplibre-gl.min.css" rel="stylesheet">
+
+        <link rel="stylesheet" href="../../static/font/fonts.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@40,400,0,0" />
+        <link rel="stylesheet" href="index.css">
+    </head>
+    <body>
+        <div id="map" class="background_nerv"></div>
+        <div id="title" class="display">
+            <div id="title_text">暑さ指数 - 観測点モード</div>
+            <div id="title_time">00<span class="small">月</span>00<span class="small">日</span> 00<span class="small">時</span>00<span class="small">分</span>現在</div>
+        </div>
+
+        <div class="btns">
+            <div>
+                <button id="reload">情報更新</button>
+                <!-- <button id="map_ichi">位置初期化</button>
+                <button id="btn_text_yososhindo" class="setsumei">津波到達時刻・高さ</button>
+                <button id="menu-open-btn">情報</button>
+                <span class="setsumei" id="display_onoff" style="padding: 2px 5px;">表示 
+                    <input type="checkbox" name="shindo_ichiran" id="display_onoff_point_check" checked><label for="display_onoff_point_check">観測点</label>
+                    <input type="checkbox" name="shindo_ichiran" id="display_onoff_fill_check" checked><label for="display_onoff_fill_check">海岸線</label>
+                </span>
+                <span class="setsumei" id="ui_display_onoff" style="padding: 2px 5px;">UI 
+                    <input type="checkbox" name="shindo_ichiran" id="ui_display_onoff_title_check" checked><label for="ui_display_onoff_title_check">１</label>
+                    <input type="checkbox" name="shindo_ichiran" id="ui_display_onoff_info1_check" checked><label for="ui_display_onoff_info1_check">２</label>
+                    <input type="checkbox" name="shindo_ichiran" id="ui_display_onoff_info2_check" checked><label for="ui_display_onoff_info2_check">３</label>
+                </span> -->
+            </div>
+            
+        </div>
+
+        <div id="text_yososhindo">
+            <span id="close_text_yososhindo">×</span>
+            <button id="btn_mikata_text_yososhindo">見方</button>
+            <div class="mihon">
+                <div style="background-color: #dd00dd;color: #ffffff;">大津波警報</div><div style="background-color: #ff1400;color: #ffffff;">津波警報</div><div style="background-color: #faf500;color: #000000;">津波注意報</div><div style="background-color: #00ccff;color: #000000;">津波予報<span style="font-size: 0.7em;">(情報表示未対応)</span></div>
+            </div>
+            <table id="table_text_yososhindo">
+                <tr><td><ruby>地域名<rt>ちいきめい</rt></ruby></td><td>到達時刻</td><td>到達状況</td><td>大きさ</td></tr>
+            </table>
+            <div id="mikata_text_yososhindo">
+                <span id="close_mikata_text_yososhindo">×</span>
+                <img id="img_mikata_text_yososhindo" src="source/doc/point_mikata_text_yososhindo.png">
+                <!-- <img src="source/tsunami/mikata_text_yososhindo.png"> -->
+            </div>
+        </div>
+
+        <div id="menu">
+            <span class="material-symbols-rounded" id="menu-close">close</span>
+            <table>
+                <tr><td colspan="4" class="header">情報提供元</td></tr>
+                <tr><td>・</td><td>GeoJSON地図データ</td><td>by</td><td>Natural Earth</td></tr>
+                <tr><td>・</td><td>GeoJSON海岸線データ</td><td>by</td><td>基盤地図情報</td></tr>
+                <tr><td>・</td><td>Web地図システム</td><td>by</td><td>Leaflet</td></tr>
+                <tr><td>・</td><td>PHPサーバー津波情報</td><td>by</td><td>MiyakojimaCam</td></tr>
+                <tr><td>・</td><td>津波情報</td><td>by</td><td>P2P地震情報</td></tr>
+            </table>
+        </div>
+
+        <div class="hanrei">
+            <table cellspacing="0" cellpadding="0">
+                <tr style="font-size: 0.7rem;">
+                    <td class="hanrei_td1" align="left" id="hanrei_td0_1"></td>
+                    <td class="hanrei_td4">状態</td>
+                    <td class="hanrei_td2">以上</td>
+                    <td class="hanrei_td3"></td>
+                    <td class="hanrei_td2">未満</td>
+                </tr>
+                <tr id="hanrei_td1">
+                    <td class="hanrei_td1" id="hanrei_td1_1" style="color: #FF1100;">█</td>
+                    <td class="hanrei_td4 wbgt1">危険</td>
+                    <td class="hanrei_td2" id="hanrei_td1_2">31</td>
+                    <td class="hanrei_td3" id="hanrei_td1_3">～</td>
+                    <td class="hanrei_td2" id="hanrei_td1_4"></td>
+                </tr>
+                <tr id="hanrei_td2">
+                    <td class="hanrei_td1" id="hanrei_td2_1" style="color: #FF8800;">█</td>
+                    <td class="hanrei_td4 wbgt2">厳重警戒</td>
+                    <td class="hanrei_td2" id="hanrei_td2_2">28</td>
+                    <td class="hanrei_td3" id="hanrei_td2_3">～</td>
+                    <td class="hanrei_td2" id="hanrei_td2_4">31</td>
+                </tr>
+                <tr id="hanrei_td3">
+                    <td class="hanrei_td1" id="hanrei_td3_1" style="color: #FAF000;">█</td>
+                    <td class="hanrei_td4 wbgt3">警戒</td>
+                    <td class="hanrei_td2" id="hanrei_td3_2">25</td>
+                    <td class="hanrei_td3" id="hanrei_td3_3">～</td>
+                    <td class="hanrei_td2" id="hanrei_td3_4">28</td>
+                </tr>
+                <tr id="hanrei_td4">
+                    <td class="hanrei_td1" id="hanrei_td4_1" style="color: #7BD0FF;">█</td>
+                    <td class="hanrei_td4 wbgt4">注意</td>
+                    <td class="hanrei_td2" id="hanrei_td4_2">21</td>
+                    <td class="hanrei_td3" id="hanrei_td4_3">～</td>
+                    <td class="hanrei_td2" id="hanrei_td4_4">25</td>
+                </tr>
+                <tr id="hanrei_td5">
+                    <td class="hanrei_td1" id="hanrei_td5_1" style="color: #1952ff;">█</td>
+                    <td class="hanrei_td4 wbgt5">ほぼ安全</td>
+                    <td class="hanrei_td2" id="hanrei_td5_2"></td>
+                    <td class="hanrei_td3" id="hanrei_td5_3">～</td>
+                    <td class="hanrei_td2" id="hanrei_td5_4">21</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- <script src="../../static/js/SmoothWheelZoom.js"></script> -->
+        <script src="index_maplibre.js"></script>
+        
+    </body>
+</html>

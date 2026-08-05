@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>震度分布図 for kottaro123456</title>
+    <meta charset="UTF-8" lang="ja">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="description" content="震度分布図 for kottaro123456">
+    <!--SNSでのサイト表示-->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:site" content="@kottaro123456">
+    <meta property="twitter:description" content="震度の広がりや津波情報を地図で一覧で見ることができます。配色等のカスタマイズも可能です。">
+    <meta property="og:title" content="震度分布図 for kottaro123456">
+    <meta property="og:site_name" content="震度分布図 for kottaro123456">
+    <meta property="og:image" content="https://kottaro123456.com/webapps/shindobunpu/source/og.jpg">
+    <!--その他のCSS・ライブラリ読み込み-->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZL8HPL24E7"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-ZL8HPL24E7');
+    </script>
+    <link href="https://unpkg.com/maplibre-gl@3.6.0/dist/maplibre-gl.css" rel="stylesheet" />
+    <script src="https://unpkg.com/maplibre-gl@3.6.0/dist/maplibre-gl.js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moveable/0.53.0/moveable.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/localforage/1.10.0/localforage.min.js"></script>
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,300,0,0">
+
+    <link rel="stylesheet" href="index.css">
+</head>
+
+<body>
+    <div id="map" class="background_nerv"></div>
+
+    <div id="topleftConsole" style="display: none;">Top-Left console</div>
+
+    <div class="topRightError"><span class="material-symbols-rounded">emergency_home</span> 対象の震度速報を取得できませんでした。</div>
+    <div class="topRightInfo"><span class="material-symbols-rounded">data_info_alert</span> 直前の震度速報を描画しています。</div>
+
+    <div id="title">
+        <div id="title_text">震度分布図 - 観測点モード</div>
+        <div id="title_time">00<span class="small">月</span>00<span class="small">日</span> 00<span
+                class="small">時</span>00<span class="small">分</span>00<span class="small">秒</span>現在</div>
+    </div>
+    <div id="info">
+        <div class="maxint">最大震度<img src="source/svg/eqm_int_.svg"></div>
+        00月00日 00時00分ころ<br>
+        　震源地　：震源名<br>
+        地震の規模：M0.0<br>
+        震源の深さ：約00km<br>
+        津波の心配：<span id="tsunami_text_span">情報なし</span>
+    </div>
+    <div class="btns">
+        <div>
+            <div id="custom_quakelist_wrapper" class="custom_quakelist_wrapper">
+                <div id="custom_quakelist_trigger" class="custom_quakelist_trigger">
+                    <span id="custom_quakelist_chip" class="quake_chip int_">-</span>
+                    <span id="custom_quakelist_text" class="custom_quakelist_text">地震情報の取得中…</span>
+                    <span class="custom_quakelist_arrow">▲</span>
+                </div>
+                <div id="custom_quakelist_menu" class="custom_quakelist_menu"></div>
+            </div>
+            <select id="quakelist" style="display: none;">
+                <option>地震情報の取得中…</option>
+            </select>
+            <span class="setsumei" style="padding: 0;padding-right: 5px;"><button id="reload">情報更新</button> <input
+                    type="number" id="reload_num" value="20" min="1" max="500">件</span>
+            <button id="map_ichi">位置初期化</button>
+            <button id="map_ss">画像保存・共有</button>
+            <button id="test">テスト開始</button>
+            <span class="setsumei autoreload_setsumei" style="padding: 0;padding-right: 5px;"><button
+                    id="autoreload">自動更新</button> <input type="number" id="autoreload_num" value="10">秒</span>
+            <input type="checkbox" name="shindoiconbig" id="shindoiconbig_check"><label
+                for="shindoiconbig_check">震度大きく</label>
+        </div>
+        <div style="margin-top: 5px;">
+            <span class="setsumei" id="theme_set" style="padding: 2px 5px;">テーマ
+                <input type="radio" name="theme" id="theme_nerv" value="nerv" onchange="theme_change(this.value)"
+                    checked><label for="theme_nerv">NERV</label>
+                <input type="radio" name="theme" id="theme_wni" value="wni" onchange="theme_change(this.value)"><label
+                    for="theme_wni">WNI</label>
+                <input type="radio" name="theme" id="theme_quarog" value="quarog"
+                    onchange="theme_change(this.value)"><label for="theme_quarog">Quarog</label>
+            </span>
+            <span class="setsumei" id="icon_theme_set" style="padding: 2px 5px;">アイコン
+                <input type="radio" name="icon_theme" id="icon_theme_eqm" value="eqm"
+                    onchange="icon_theme_change(this.value)" checked><label for="icon_theme_eqm">EQM1</label>
+                <input type="radio" name="icon_theme" id="icon_theme_jqk" value="jqk"
+                    onchange="icon_theme_change(this.value)"><label for="icon_theme_jqk">JQuake</label>
+                <input type="radio" name="icon_theme" id="icon_theme_wni" value="wni"
+                    onchange="icon_theme_change(this.value)"><label for="icon_theme_wni">WNI</label>
+            </span>
+            <span class="setsumei" id="display_onoff" style="padding: 2px 5px;">表示
+                <input type="checkbox" name="shindo_ichiran" id="display_onoff_shingen_check" checked><label
+                    for="display_onoff_shingen_check">震源</label>
+                <input type="checkbox" name="shindo_ichiran" id="display_onoff_point_check" checked><label
+                    for="display_onoff_point_check">観測点</label>
+                <input type="checkbox" name="shindo_ichiran" id="display_onoff_fill_check" checked><label
+                    for="display_onoff_fill_check">塗り</label>
+                <input type="checkbox" name="shindo_ichiran" id="display_onoff_saibun_check"><label
+                    for="display_onoff_saibun_check">市町村</label>
+                <input type="checkbox" name="shindo_ichiran" id="display_onoff_tsunami_check" checked><label
+                    for="display_onoff_tsunami_check">津波</label>
+            </span>
+            <span class="shindoichiran">
+                <input type="checkbox" name="shindo_ichiran" id="shindo_ichiran_check"><label
+                    for="shindo_ichiran_check">各地の震度</label>
+            </span>
+            <button id="view_info">情報</button>
+        </div>
+    </div>
+    <div id="shindo_ichiran">
+        <div id="shindo_ichiran_drag"></div>
+        <div id="shindo_ichiran_title_parent">
+            <div class="shindo_ichiran_title">各地の震度</div>
+            <div id="shindoichiran_title_num">全 000<span class="small">ヶ所</span></div>
+            <hr>
+        </div>
+        <div id="shindo_ichiran_scroll">
+            <div id="shindo7">
+                <div class="shindo_ichiran_kakutitle">震度<img src="source/svg/eqm_int7.svg"></div>
+                <div id="shindo7_article"><ruby>○○市○○<rt>まるまるしまるまる</rt></ruby>　<ruby>△△市△△<rt>さんかくさんかくしさんかくさんかく</rt>
+                    </ruby>　<ruby>□□町□□<rt>しかくしかくまちしかくしかく</rt></ruby></div>
+                <hr>
+            </div>
+            <div id="shindo65">
+                <div class="shindo_ichiran_kakutitle">震度<img src="source/svg/eqm_int65.svg"></div>
+                <div id="shindo65_article"><ruby>○○市○○<rt>まるまるしまるまる</rt></ruby>　<ruby>△△市△△<rt>さんかくさんかくしさんかくさんかく</rt>
+                    </ruby>　<ruby>□□町□□<rt>しかくしかくまちしかくしかく</rt></ruby></div>
+                <hr>
+            </div>
+            <div id="shindo60">
+                <div class="shindo_ichiran_kakutitle">震度<img src="source/svg/eqm_int60.svg"></div>
+                <div id="shindo60_article"><ruby>○○市○○<rt>まるまるしまるまる</rt></ruby>　<ruby>△△市△△<rt>さんかくさんかくしさんかくさんかく</rt>
+                    </ruby>　<ruby>□□町□□<rt>しかくしかくまちしかくしかく</rt></ruby></div>
+                <hr>
+            </div>
+            <div id="shindo55">
+                <div class="shindo_ichiran_kakutitle">震度<img src="source/svg/eqm_int55.svg"></div>
+                <div id="shindo55_article"><ruby>○○市○○<rt>まるまるしまるまる</rt></ruby>　<ruby>△△市△△<rt>さんかくさんかくしさんかくさんかく</rt>
+                    </ruby>　<ruby>□□町□□<rt>しかくしかくまちしかくしかく</rt></ruby></div>
+                <hr>
+            </div>
+            <div id="shindo50">
+                <div class="shindo_ichiran_kakutitle">震度<img src="source/svg/eqm_int50.svg"></div>
+                <div id="shindo50_article"><ruby>○○市○○<rt>まるまるしまるまる</rt></ruby>　<ruby>△△市△△<rt>さんかくさんかくしさんかくさんかく</rt>
+                    </ruby>　<ruby>□□町□□<rt>しかくしかくまちしかくしかく</rt></ruby></div>
+                <hr>
+            </div>
+            <div id="shindo51">
+                <div class="shindo_ichiran_kakutitle">震度<img src="source/svg/eqm_int51.svg"></div>
+                <div id="shindo51_article"><ruby>○○市○○<rt>まるまるしまるまる</rt></ruby>　<ruby>△△市△△<rt>さんかくさんかくしさんかくさんかく</rt>
+                    </ruby>　<ruby>□□町□□<rt>しかくしかくまちしかくしかく</rt></ruby></div>
+                <hr>
+            </div>
+            <div id="shindo4">
+                <div class="shindo_ichiran_kakutitle">震度<img src="source/svg/eqm_int4.svg"></div>
+                <div id="shindo4_article"><ruby>○○市○○<rt>まるまるしまるまる</rt></ruby>　<ruby>△△市△△<rt>さんかくさんかくしさんかくさんかく</rt>
+                    </ruby>　<ruby>□□町□□<rt>しかくしかくまちしかくしかく</rt></ruby></div>
+                <hr>
+            </div>
+            <div id="shindo3">
+                <div class="shindo_ichiran_kakutitle">震度<img src="source/svg/eqm_int3.svg"></div>
+                <div id="shindo3_article"><ruby>○○市○○<rt>まるまるしまるまる</rt></ruby>　<ruby>△△市△△<rt>さんかくさんかくしさんかくさんかく</rt>
+                    </ruby>　<ruby>□□町□□<rt>しかくしかくまちしかくしかく</rt></ruby></div>
+                <hr>
+            </div>
+            <div id="shindo2">
+                <div class="shindo_ichiran_kakutitle">震度<img src="source/svg/eqm_int2.svg"></div>
+                <div id="shindo2_article"><ruby>○○市○○<rt>まるまるしまるまる</rt></ruby>　<ruby>△△市△△<rt>さんかくさんかくしさんかくさんかく</rt>
+                    </ruby>　<ruby>□□町□□<rt>しかくしかくまちしかくしかく</rt></ruby></div>
+                <hr>
+            </div>
+            <div id="shindo1">
+                <div class="shindo_ichiran_kakutitle">震度<img src="source/svg/eqm_int1.svg"></div>
+                <div id="shindo1_article"><ruby>○○市○○<rt>まるまるしまるまる</rt></ruby>　<ruby>△△市△△<rt>さんかくさんかくしさんかくさんかく</rt>
+                    </ruby>　<ruby>□□町□□<rt>しかくしかくまちしかくしかく</rt></ruby></div>
+                <hr>
+            </div>
+            <div id="shindo_">
+                <div class="shindo_ichiran_kakutitle">震度<img src="source/svg/eqm_int_.svg"></div>
+                <div id="shindo__article"><ruby>○○市○○<rt>まるまるしまるまる</rt></ruby>　<ruby>△△市△△<rt>さんかくさんかくしさんかくさんかく</rt>
+                    </ruby>　<ruby>□□町□□<rt>しかくしかくまちしかくしかく</rt></ruby></div>
+                <hr>
+            </div>
+            <div id="shindoN">
+                <div class="shindo_ichiran_kakutitle">観測点情報なし<img src="source/svg/eqm_intN.svg"></div>
+                <div id="shindoN_article"><ruby>○○市○○<rt>まるまるしまるまる</rt></ruby>　<ruby>△△市△△<rt>さんかくさんかくしさんかくさんかく</rt>
+                    </ruby>　<ruby>□□町□□<rt>しかくしかくまちしかくしかく</rt></ruby></div>
+                <hr>
+            </div>
+        </div>
+    </div>
+
+    <div class="tsunami_infobox">
+        <span class="tsunami_infobox_close"><span class="material-symbols-outlined">close</span></span>
+    </div>
+
+    <div id="appinfo">
+        <span class="material-symbols-outlined cap" id="info_closebtn">close</span>
+        <div class="appinfo_header">
+            <h2>Information</h2>
+            <div class="appinfo_subtitle">震度分布図 - アプリ情報</div>
+        </div>
+        <div class="appinfo_content">
+            <div class="appinfo_card">
+                <div class="appinfo_card_title"><span class="material-symbols-rounded">info</span> アプリ概要</div>
+                <p>震度の広がりや津波情報を地図上でリアルタイム・過去履歴別に確認できるWebアプリケーションです。</p>
+                <div class="appinfo_author">
+                    作成者: <a href="https://twitter.com/kottaro123456" target="_blank" class="appinfo_link">@kottaro123456</a>
+                </div>
+            </div>
+
+            <div class="appinfo_card">
+                <div class="appinfo_card_title"><span class="material-symbols-rounded">database</span> 情報取得元・使用データ</div>
+                <ul class="appinfo_list">
+                    <li><span class="label">地震情報・津波情報</span><span class="val">P2P地震情報 (P2PQuake API)</span></li>
+                    <li><span class="label">日本標準時</span><span class="val">情報通信研究機構 (NICT)</span></li>
+                    <li><span class="label">GeoJSON地図データ</span><span class="val">Natural Earth / 気象庁区分</span></li>
+                    <li><span class="label">Web地図システム</span><span class="val">MapLibre GL JS</span></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script src="source/JMAPoints.js"></script>
+    <script src="../../static/font/fonts.php"></script>
+    <script src="index.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>更新のお知らせ</title>
+    <link rel="stylesheet" href="../index.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/localforage/1.10.0/localforage.min.js"></script><script src="../../../static/font/fonts.php"></script><script></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZL8HPL24E7"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-ZL8HPL24E7');
+    </script>
+    <style>
+    </style>
+</head>
+<body>
+    <div class="title"><img src="../../shindobunpu/source/og.png" style="height: 2em;"> ズーム処理改善のお知らせ</div>
+    <div class="date">2024/08/15</div>
+    <a href="../" class="backhome">← 一覧へ戻る</a>
+    <p class="content"><span class="material-symbols-rounded" style="color: #8800ff;">earthquake</span> 震度分布図</p>
+    <div class="content">
+        震度分布図 for MiyakoCamをアップデートしました！
+        <br><br>アップデートの詳細は以下のとおりです。
+        <ul>
+            <li>
+                以前の問題点
+                <ul>
+                    <li>①地図テーマやアイコンテーマを変更したときや、各地の震度や震度大きくを操作したときに、強制的に初期位置に戻されていたこと。</li>
+                </ul>
+            </li>
+            <br>
+            <li>
+                改善点
+                <ul>
+                    <li>①地図テーマやアイコンテーマを変更したときや震度大きくを操作したときには、地図の強制移動はしないようするとともに、各地の震度を操作したときは初期ズームレベルからズーム操作がされている場合は地図の強制移動はしないようにしました。<br>これにより、今見ている部分を見失うことなく地図に変更を加えられるようになりました。<br>（地震リスト選択の際や情報更新の際は、今まで通り、地図の強制移動を行います。）</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</body>
+</html>

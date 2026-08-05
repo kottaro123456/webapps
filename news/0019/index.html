@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="description" content="読み込み機能改善のお知らせ - Webアプリお知らせ一覧">
+    <!--SNSでのサイト表示-->
+    <meta property="twitter:card" content="summary">
+    <meta property="twitter:site" content="@MiyakoCam">
+    <meta property="twitter:description" content="読み込み改善のお知らせ - Webアプリお知らせ一覧">
+    <meta property="og:title" content="読み込み改善のお知らせ">
+    <meta property="og:image" content="https://kottaro123456.com/webapps/og.png">
+    <meta property="og:site_name" content="読み込み改善のお知らせ">
+    <title>読み込み改善のお知らせ - Webアプリお知らせ一覧</title>
+
+    <link rel="stylesheet" href="../index.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/localforage/1.10.0/localforage.min.js"></script><script src="../../../static/font/fonts.php"></script><script></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZL8HPL24E7"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-ZL8HPL24E7');
+    </script>
+    <style>
+    </style>
+</head>
+<body>
+    <div class="title"><img src="../../shindobunpu/source/og.png" style="height: 2em;"> 読み込み改善・アイコン変更のお知らせ</div>
+    <div class="date">2025/01/13</div>
+    <a href="../" class="backhome">← 一覧へ戻る</a>
+    <p class="content">全体</p>
+    <div class="content">
+        みなさま、あけましておめでとうございます。
+        <br>今年2025年もどうぞよろしくお願いいたします。
+        <br><br>
+        <a href="../" target="_blank" rel="noopener noreferrer">Webアプリ</a>をアップデートしました！
+        <br><br>アップデートの詳細は以下のとおりです。
+        <ul>
+            <li>
+                新機能
+                <ul>
+                    <li>
+                        読み込みの削減をしました。
+                        <br><a href="../0018/" target="_blank" rel="noopener noreferrer">前回のアップデート(0018)</a>では、震度分布図のみを対象に地図データの端末内保存機能を追加しましたが、
+                        <br>今回のアップデートでは
+                        <ul>
+                            <li>Webアプリトップページを含む全てのWebアプリでのフォントファイルの端末内保存</li>
+                            <li>全てのWebアプリでの地図データの端末内保存</li>
+                        </ul>
+                        ができるようになりました。
+                        <br>これにより、初回読み込み時と比べて約37MBの通信量を削減できるようになりました。
+                    </li>
+                    <br>
+                    <li>
+                        <a href="../../settings/" target="_blank" rel="noopener noreferrer">Webアプリ共通の設定ページ</a>を新しく作成しました。
+                        <br>Webアプリ共通設定の
+                        <ul>
+                            <li>フォントを端末内に保存するかの設定</li>
+                            <li>Webフォントを使用するかの設定</li>
+                            <li>フォントを端末内に保存</li>
+                            <li>端末内保存のフォントの削除</li>
+                            <li>地図データを端末内に保存</li>
+                            <li>端末内保存の地図データの削除</li>
+                        </ul>
+                        ができるようになりました。
+                        <br>
+                        <img src="1.jpeg">
+                    </li>
+                </ul>
+            </li>
+            <br>
+            <li>
+                修正
+                <ul>
+                    <li>
+                        震度分布図でのエラーを修正しました。
+                        <br>震度分布図で更新ボタンを押した際に、更新前に選択されていた地震情報が更新後の情報にない場合、エラーとなり更新が終わらない現象が発生しておりました。
+                        <br>地震情報の有無の分岐を設定することでこのエラーは修正されています。
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</body>
+</html>

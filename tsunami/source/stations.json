@@ -1,0 +1,4189 @@
+{
+  "responseId": "261babe3d781f1b5",
+  "responseTime": "2023-10-09T02:42:31.232Z",
+  "status": "ok",
+  "changeTime": "2022-07-21T12:00:00+09:00",
+  "version": "20220721",
+  "items": [
+    {
+      "area": "北海道太平洋沿岸東部",
+      "prefecture": "北海道",
+      "code": "10001",
+      "name": "釧路",
+      "kana": "クシロ",
+      "owner": "気象庁",
+      "latitude": "42.9833",
+      "longitude": "144.3667"
+    },
+    {
+      "area": "北海道太平洋沿岸東部",
+      "prefecture": "北海道",
+      "code": "10002",
+      "name": "根室市花咲",
+      "kana": "ネムロシハナサキ",
+      "owner": "気象庁",
+      "latitude": "43.2833",
+      "longitude": "145.5667"
+    },
+    {
+      "area": "北海道太平洋沿岸東部",
+      "prefecture": "北海道",
+      "code": "10020",
+      "name": "根室港",
+      "kana": "ネムロコウ",
+      "owner": "北海道開発局",
+      "latitude": "43.3500",
+      "longitude": "145.5833"
+    },
+    {
+      "area": "北海道太平洋沿岸東部",
+      "prefecture": "北海道",
+      "code": "10021",
+      "name": "浜中町霧多布港",
+      "kana": "ハマナカチョウキリタップコウ",
+      "owner": "北海道開発局",
+      "latitude": "43.0833",
+      "longitude": "145.1167"
+    },
+    {
+      "area": "北海道太平洋沿岸東部",
+      "prefecture": "北海道",
+      "code": "10050",
+      "name": "釧路沖１００ｋｍＡ",
+      "kana": "クシロオキ１００ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "42.0833",
+      "longitude": "144.6333"
+    },
+    {
+      "area": "北海道太平洋沿岸東部",
+      "prefecture": "北海道",
+      "code": "10060",
+      "name": "釧路沖８０ｋｍＡ",
+      "kana": "クシロオキ８０ｋｍＡ",
+      "owner": "海洋研究開発機構",
+      "latitude": "42.2333",
+      "longitude": "144.8500"
+    },
+    {
+      "area": "北海道太平洋沿岸東部",
+      "prefecture": "北海道",
+      "code": "10061",
+      "name": "釧路沖８０ｋｍＢ",
+      "kana": "クシロオキ８０ｋｍＢ",
+      "owner": "防災科学技術研究所",
+      "latitude": "42.2333",
+      "longitude": "145.2000"
+    },
+    {
+      "area": "北海道太平洋沿岸東部",
+      "prefecture": "北海道",
+      "code": "10062",
+      "name": "根室南東沖８０ｋｍＡ",
+      "kana": "ネムロナントウオキ８０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "42.5833",
+      "longitude": "146.0833"
+    },
+    {
+      "area": "北海道太平洋沿岸東部",
+      "prefecture": "北海道",
+      "code": "10070",
+      "name": "釧路沖６０ｋｍＡ",
+      "kana": "クシロオキ６０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "42.4833",
+      "longitude": "145.1500"
+    },
+    {
+      "area": "北海道太平洋沿岸東部",
+      "prefecture": "北海道",
+      "code": "10071",
+      "name": "根室南東沖５０ｋｍＡ",
+      "kana": "ネムロナントウオキ５０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "42.7667",
+      "longitude": "145.7167"
+    },
+    {
+      "area": "北海道太平洋沿岸東部",
+      "prefecture": "北海道",
+      "code": "10072",
+      "name": "釧路沖５０ｋｍＡ",
+      "kana": "クシロオキ５０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "42.6333",
+      "longitude": "145.4000"
+    },
+    {
+      "area": "北海道太平洋沿岸東部",
+      "prefecture": "北海道",
+      "code": "10073",
+      "name": "根室南東沖６０ｋｍＡ",
+      "kana": "ネムロナントウオキ６０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "42.8000",
+      "longitude": "146.0167"
+    },
+    {
+      "area": "北海道太平洋沿岸中部",
+      "prefecture": "北海道",
+      "code": "10101",
+      "name": "浦河",
+      "kana": "ウラカワ",
+      "owner": "北海道開発局",
+      "latitude": "42.1667",
+      "longitude": "142.7667"
+    },
+    {
+      "area": "北海道太平洋沿岸中部",
+      "prefecture": "北海道",
+      "code": "10102",
+      "name": "十勝港",
+      "kana": "トカチコウ",
+      "owner": "北海道開発局",
+      "latitude": "42.3000",
+      "longitude": "143.3167"
+    },
+    {
+      "area": "北海道太平洋沿岸中部",
+      "prefecture": "北海道",
+      "code": "10103",
+      "name": "えりも町庶野",
+      "kana": "エリモチョウショヤ",
+      "owner": "気象庁",
+      "latitude": "42.0500",
+      "longitude": "143.3000"
+    },
+    {
+      "area": "北海道太平洋沿岸中部",
+      "prefecture": "北海道",
+      "code": "10150",
+      "name": "十勝沖１００ｋｍＡ",
+      "kana": "トカチオキ１００ｋｍＡ",
+      "owner": "海洋研究開発機構",
+      "latitude": "41.7000",
+      "longitude": "144.4333"
+    },
+    {
+      "area": "北海道太平洋沿岸中部",
+      "prefecture": "北海道",
+      "code": "10151",
+      "name": "浦河沖１００ｋｍＡ",
+      "kana": "ウラカワオキ１００ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "41.0500",
+      "longitude": "143.1167"
+    },
+    {
+      "area": "北海道太平洋沿岸中部",
+      "prefecture": "北海道",
+      "code": "10152",
+      "name": "浦河沖１００ｋｍＢ",
+      "kana": "ウラカワオキ１００ｋｍＢ",
+      "owner": "防災科学技術研究所",
+      "latitude": "41.0833",
+      "longitude": "142.7667"
+    },
+    {
+      "area": "北海道太平洋沿岸中部",
+      "prefecture": "北海道",
+      "code": "10153",
+      "name": "十勝沖９０ｋｍＡ",
+      "kana": "トカチオキ９０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "41.9833",
+      "longitude": "144.3500"
+    },
+    {
+      "area": "北海道太平洋沿岸中部",
+      "prefecture": "北海道",
+      "code": "10160",
+      "name": "十勝沖８０ｋｍＡ",
+      "kana": "トカチオキ８０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "41.7500",
+      "longitude": "144.1833"
+    },
+    {
+      "area": "北海道太平洋沿岸中部",
+      "prefecture": "北海道",
+      "code": "10161",
+      "name": "十勝沖８０ｋｍＢ",
+      "kana": "トカチオキ８０ｋｍＢ",
+      "owner": "防災科学技術研究所",
+      "latitude": "41.5000",
+      "longitude": "144.0833"
+    },
+    {
+      "area": "北海道太平洋沿岸中部",
+      "prefecture": "北海道",
+      "code": "10162",
+      "name": "十勝沖８０ｋｍＣ",
+      "kana": "トカチオキ８０ｋｍＣ",
+      "owner": "防災科学技術研究所",
+      "latitude": "41.3667",
+      "longitude": "143.8000"
+    },
+    {
+      "area": "北海道太平洋沿岸中部",
+      "prefecture": "北海道",
+      "code": "10163",
+      "name": "浦河沖７０ｋｍＡ",
+      "kana": "ウラカワオキ７０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "41.6167",
+      "longitude": "142.4833"
+    },
+    {
+      "area": "北海道太平洋沿岸中部",
+      "prefecture": "北海道",
+      "code": "10170",
+      "name": "十勝沖６０ｋｍＡ",
+      "kana": "トカチオキ６０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "41.3667",
+      "longitude": "143.4500"
+    },
+    {
+      "area": "北海道太平洋沿岸中部",
+      "prefecture": "北海道",
+      "code": "10171",
+      "name": "浦河沖６０ｋｍＡ",
+      "kana": "ウラカワオキ６０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "41.4333",
+      "longitude": "143.1333"
+    },
+    {
+      "area": "北海道太平洋沿岸中部",
+      "prefecture": "北海道",
+      "code": "10172",
+      "name": "浦河沖５０ｋｍＡ",
+      "kana": "ウラカワオキ５０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "41.5667",
+      "longitude": "142.8167"
+    },
+    {
+      "area": "北海道太平洋沿岸西部",
+      "prefecture": "北海道",
+      "code": "10202",
+      "name": "函館",
+      "kana": "ハコダテ",
+      "owner": "気象庁",
+      "latitude": "41.7833",
+      "longitude": "140.7167"
+    },
+    {
+      "area": "北海道太平洋沿岸西部",
+      "prefecture": "北海道",
+      "code": "10203",
+      "name": "苫小牧西港",
+      "kana": "トマコマイニシコウ",
+      "owner": "北海道開発局",
+      "latitude": "42.6333",
+      "longitude": "141.6167"
+    },
+    {
+      "area": "北海道太平洋沿岸西部",
+      "prefecture": "北海道",
+      "code": "10204",
+      "name": "福島町吉岡",
+      "kana": "フクシマチョウヨシオカ",
+      "owner": "",
+      "latitude": "41.4500",
+      "longitude": "140.2333"
+    },
+    {
+      "area": "北海道太平洋沿岸西部",
+      "prefecture": "北海道",
+      "code": "10221",
+      "name": "苫小牧東港",
+      "kana": "トマコマイヒガシコウ",
+      "owner": "北海道開発局",
+      "latitude": "42.6000",
+      "longitude": "141.8167"
+    },
+    {
+      "area": "北海道太平洋沿岸西部",
+      "prefecture": "北海道",
+      "code": "10222",
+      "name": "白老港",
+      "kana": "シラオイコウ",
+      "owner": "北海道開発局",
+      "latitude": "42.5167",
+      "longitude": "141.3167"
+    },
+    {
+      "area": "北海道太平洋沿岸西部",
+      "prefecture": "北海道",
+      "code": "10223",
+      "name": "渡島森港",
+      "kana": "オシマモリコウ",
+      "owner": "北海道開発局",
+      "latitude": "42.1167",
+      "longitude": "140.6000"
+    },
+    {
+      "area": "北海道太平洋沿岸西部",
+      "prefecture": "北海道",
+      "code": "10224",
+      "name": "室蘭港",
+      "kana": "ムロランコウ",
+      "owner": "北海道開発局",
+      "latitude": "42.3500",
+      "longitude": "140.9500"
+    },
+    {
+      "area": "北海道日本海沿岸北部",
+      "prefecture": "北海道",
+      "code": "11001",
+      "name": "稚内",
+      "kana": "ワッカナイ",
+      "owner": "気象庁",
+      "latitude": "45.4000",
+      "longitude": "141.6833"
+    },
+    {
+      "area": "北海道日本海沿岸北部",
+      "prefecture": "北海道",
+      "code": "11002",
+      "name": "留萌",
+      "kana": "ルモイ",
+      "owner": "北海道開発局",
+      "latitude": "43.9500",
+      "longitude": "141.6333"
+    },
+    {
+      "area": "北海道日本海沿岸北部",
+      "prefecture": "北海道",
+      "code": "11003",
+      "name": "小樽",
+      "kana": "オタル",
+      "owner": "気象庁",
+      "latitude": "43.2000",
+      "longitude": "141.0000"
+    },
+    {
+      "area": "北海道日本海沿岸北部",
+      "prefecture": "北海道",
+      "code": "11022",
+      "name": "石狩湾新港",
+      "kana": "イシカリワンシンコウ",
+      "owner": "北海道開発局",
+      "latitude": "43.2167",
+      "longitude": "141.3000"
+    },
+    {
+      "area": "北海道日本海沿岸北部",
+      "prefecture": "北海道",
+      "code": "11023",
+      "name": "利尻島沓形港",
+      "kana": "リシリトウクツガタコウ",
+      "owner": "北海道開発局",
+      "latitude": "45.1833",
+      "longitude": "141.1333"
+    },
+    {
+      "area": "北海道日本海沿岸北部",
+      "prefecture": "北海道",
+      "code": "11024",
+      "name": "羽幌港",
+      "kana": "ハボロコウ",
+      "owner": "",
+      "latitude": "44.3667",
+      "longitude": "141.7000"
+    },
+    {
+      "area": "北海道日本海沿岸北部",
+      "prefecture": "北海道",
+      "code": "11030",
+      "name": "小樽市忍路",
+      "kana": "オタルシオショロ",
+      "owner": "国土地理院",
+      "latitude": "43.2167",
+      "longitude": "140.8667"
+    },
+    {
+      "area": "北海道日本海沿岸南部",
+      "prefecture": "北海道",
+      "code": "11101",
+      "name": "寿都",
+      "kana": "スッツ",
+      "owner": "",
+      "latitude": "42.7833",
+      "longitude": "140.2667"
+    },
+    {
+      "area": "北海道日本海沿岸南部",
+      "prefecture": "北海道",
+      "code": "11102",
+      "name": "江差",
+      "kana": "エサシ",
+      "owner": "北海道開発局",
+      "latitude": "41.8667",
+      "longitude": "140.1333"
+    },
+    {
+      "area": "北海道日本海沿岸南部",
+      "prefecture": "北海道",
+      "code": "11121",
+      "name": "瀬棚港",
+      "kana": "セタナコウ",
+      "owner": "北海道開発局",
+      "latitude": "42.4500",
+      "longitude": "139.8500"
+    },
+    {
+      "area": "北海道日本海沿岸南部",
+      "prefecture": "北海道",
+      "code": "11122",
+      "name": "岩内港",
+      "kana": "イワナイコウ",
+      "owner": "北海道開発局",
+      "latitude": "42.9833",
+      "longitude": "140.5000"
+    },
+    {
+      "area": "北海道日本海沿岸南部",
+      "prefecture": "北海道",
+      "code": "11123",
+      "name": "奥尻島奥尻港",
+      "kana": "オクシリトウオクシリコウ",
+      "owner": "北海道開発局",
+      "latitude": "42.1667",
+      "longitude": "139.5167"
+    },
+    {
+      "area": "北海道日本海沿岸南部",
+      "prefecture": "北海道",
+      "code": "11130",
+      "name": "奥尻島松江",
+      "kana": "オクシリトウマツエ",
+      "owner": "国土地理院",
+      "latitude": "42.0833",
+      "longitude": "139.4833"
+    },
+    {
+      "area": "オホーツク海沿岸",
+      "prefecture": "北海道",
+      "code": "12001",
+      "name": "網走",
+      "kana": "アバシリ",
+      "owner": "気象庁",
+      "latitude": "44.0167",
+      "longitude": "144.2833"
+    },
+    {
+      "area": "オホーツク海沿岸",
+      "prefecture": "北海道",
+      "code": "12003",
+      "name": "枝幸港",
+      "kana": "エサシコウ",
+      "owner": "北海道開発局",
+      "latitude": "44.9333",
+      "longitude": "142.5833"
+    },
+    {
+      "area": "オホーツク海沿岸",
+      "prefecture": "北海道",
+      "code": "12020",
+      "name": "紋別港",
+      "kana": "モンベツコウ",
+      "owner": "北海道開発局",
+      "latitude": "44.3500",
+      "longitude": "143.3667"
+    },
+    {
+      "area": "青森県日本海沿岸",
+      "prefecture": "青森県",
+      "code": "20001",
+      "name": "深浦",
+      "kana": "フカウラ",
+      "owner": "気象庁",
+      "latitude": "40.6500",
+      "longitude": "139.9333"
+    },
+    {
+      "area": "青森県日本海沿岸",
+      "prefecture": "青森県",
+      "code": "20002",
+      "name": "竜飛",
+      "kana": "タッピ",
+      "owner": "海上保安庁",
+      "latitude": "41.2500",
+      "longitude": "140.3833"
+    },
+    {
+      "area": "青森県日本海沿岸",
+      "prefecture": "青森県",
+      "code": "20090",
+      "name": "青森深浦沖",
+      "kana": "アオモリフカウラオキ",
+      "owner": "東北地方整備局",
+      "latitude": "40.7833",
+      "longitude": "139.9333"
+    },
+    {
+      "area": "青森県太平洋沿岸",
+      "prefecture": "青森県",
+      "code": "20102",
+      "name": "むつ市関根浜",
+      "kana": "ムツシセキネハマ",
+      "owner": "気象庁",
+      "latitude": "41.3667",
+      "longitude": "141.2333"
+    },
+    {
+      "area": "青森県太平洋沿岸",
+      "prefecture": "青森県",
+      "code": "20120",
+      "name": "むつ小川原港",
+      "kana": "ムツオガワラコウ",
+      "owner": "東北地方整備局",
+      "latitude": "40.9333",
+      "longitude": "141.3833"
+    },
+    {
+      "area": "青森県太平洋沿岸",
+      "prefecture": "青森県",
+      "code": "20121",
+      "name": "八戸港",
+      "kana": "ハチノヘコウ",
+      "owner": "東北地方整備局",
+      "latitude": "40.5333",
+      "longitude": "141.5500"
+    },
+    {
+      "area": "青森県太平洋沿岸",
+      "prefecture": "青森県",
+      "code": "20150",
+      "name": "青森東方沖１００ｋｍＡ",
+      "kana": "アオモリトウホウオキ１００ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "40.5167",
+      "longitude": "142.9667"
+    },
+    {
+      "area": "青森県太平洋沿岸",
+      "prefecture": "青森県",
+      "code": "20151",
+      "name": "青森東方沖９０ｋｍＡ",
+      "kana": "アオモリトウホウオキ９０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "41.0167",
+      "longitude": "142.4333"
+    },
+    {
+      "area": "青森県太平洋沿岸",
+      "prefecture": "青森県",
+      "code": "20160",
+      "name": "青森東方沖８０ｋｍＡ",
+      "kana": "アオモリトウホウオキ８０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "40.6000",
+      "longitude": "142.6333"
+    },
+    {
+      "area": "青森県太平洋沿岸",
+      "prefecture": "青森県",
+      "code": "20170",
+      "name": "青森東方沖６０ｋｍＡ",
+      "kana": "アオモリトウホウオキ６０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "41.4167",
+      "longitude": "142.2167"
+    },
+    {
+      "area": "青森県太平洋沿岸",
+      "prefecture": "青森県",
+      "code": "20171",
+      "name": "青森東方沖６０ｋｍＢ",
+      "kana": "アオモリトウホウオキ６０ｋｍＢ",
+      "owner": "防災科学技術研究所",
+      "latitude": "40.9000",
+      "longitude": "142.1000"
+    },
+    {
+      "area": "青森県太平洋沿岸",
+      "prefecture": "青森県",
+      "code": "20172",
+      "name": "青森東方沖５０ｋｍＡ",
+      "kana": "アオモリトウホウオキ５０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "41.2000",
+      "longitude": "142.0333"
+    },
+    {
+      "area": "青森県太平洋沿岸",
+      "prefecture": "青森県",
+      "code": "20173",
+      "name": "青森東方沖５０ｋｍＢ",
+      "kana": "アオモリトウホウオキ５０ｋｍＢ",
+      "owner": "防災科学技術研究所",
+      "latitude": "40.6000",
+      "longitude": "142.2833"
+    },
+    {
+      "area": "青森県太平洋沿岸",
+      "prefecture": "青森県",
+      "code": "20180",
+      "name": "青森東方沖４０ｋｍＡ",
+      "kana": "アオモリトウホウオキ４０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "40.9500",
+      "longitude": "141.8833"
+    },
+    {
+      "area": "青森県太平洋沿岸",
+      "prefecture": "青森県",
+      "code": "20181",
+      "name": "青森東方沖３０ｋｍＡ",
+      "kana": "アオモリトウホウオキ３０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "40.7833",
+      "longitude": "141.7833"
+    },
+    {
+      "area": "青森県太平洋沿岸",
+      "prefecture": "青森県",
+      "code": "20190",
+      "name": "青森八戸沖",
+      "kana": "アオモリハチノヘオキ",
+      "owner": "東北地方整備局",
+      "latitude": "40.6333",
+      "longitude": "141.7500"
+    },
+    {
+      "area": "陸奥湾",
+      "prefecture": "青森県",
+      "code": "20201",
+      "name": "青森",
+      "kana": "アオモリ",
+      "owner": "東北地方整備局",
+      "latitude": "40.8333",
+      "longitude": "140.7667"
+    },
+    {
+      "area": "陸奥湾",
+      "prefecture": "青森県",
+      "code": "20202",
+      "name": "むつ市大湊",
+      "kana": "ムツシオオミナト",
+      "owner": "",
+      "latitude": "41.2500",
+      "longitude": "141.1500"
+    },
+    {
+      "area": "岩手県",
+      "prefecture": "岩手県",
+      "code": "21001",
+      "name": "宮古",
+      "kana": "ミヤコ",
+      "owner": "気象庁",
+      "latitude": "39.6500",
+      "longitude": "141.9833"
+    },
+    {
+      "area": "岩手県",
+      "prefecture": "岩手県",
+      "code": "21002",
+      "name": "大船渡",
+      "kana": "オオフナト",
+      "owner": "気象庁",
+      "latitude": "39.0167",
+      "longitude": "141.7500"
+    },
+    {
+      "area": "岩手県",
+      "prefecture": "岩手県",
+      "code": "21003",
+      "name": "釜石",
+      "kana": "カマイシ",
+      "owner": "海上保安庁",
+      "latitude": "39.2667",
+      "longitude": "141.8833"
+    },
+    {
+      "area": "岩手県",
+      "prefecture": "岩手県",
+      "code": "21020",
+      "name": "久慈港",
+      "kana": "クジコウ",
+      "owner": "東北地方整備局",
+      "latitude": "40.2000",
+      "longitude": "141.8000"
+    },
+    {
+      "area": "岩手県",
+      "prefecture": "岩手県",
+      "code": "21050",
+      "name": "岩手沖９０ｋｍＡ",
+      "kana": "イワテオキ９０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "40.0833",
+      "longitude": "142.9667"
+    },
+    {
+      "area": "岩手県",
+      "prefecture": "岩手県",
+      "code": "21051",
+      "name": "岩手沖９０ｋｍＢ",
+      "kana": "イワテオキ９０ｋｍＢ",
+      "owner": "防災科学技術研究所",
+      "latitude": "39.3167",
+      "longitude": "143.1167"
+    },
+    {
+      "area": "岩手県",
+      "prefecture": "岩手県",
+      "code": "21060",
+      "name": "岩手沖７０ｋｍＡ",
+      "kana": "イワテオキ７０ｋｍＡ",
+      "owner": "東京大学地震研究所",
+      "latitude": "39.2333",
+      "longitude": "142.7667"
+    },
+    {
+      "area": "岩手県",
+      "prefecture": "岩手県",
+      "code": "21061",
+      "name": "岩手沖８０ｋｍＡ",
+      "kana": "イワテオキ８０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "39.7167",
+      "longitude": "143.0333"
+    },
+    {
+      "area": "岩手県",
+      "prefecture": "岩手県",
+      "code": "21070",
+      "name": "岩手沖６０ｋｍＡ",
+      "kana": "イワテオキ６０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "40.1167",
+      "longitude": "142.6167"
+    },
+    {
+      "area": "岩手県",
+      "prefecture": "岩手県",
+      "code": "21071",
+      "name": "岩手沖６０ｋｍＢ",
+      "kana": "イワテオキ６０ｋｍＢ",
+      "owner": "防災科学技術研究所",
+      "latitude": "39.7500",
+      "longitude": "142.6833"
+    },
+    {
+      "area": "岩手県",
+      "prefecture": "岩手県",
+      "code": "21072",
+      "name": "岩手沖６０ｋｍＣ",
+      "kana": "イワテオキ６０ｋｍＣ",
+      "owner": "防災科学技術研究所",
+      "latitude": "39.3667",
+      "longitude": "142.8000"
+    },
+    {
+      "area": "岩手県",
+      "prefecture": "岩手県",
+      "code": "21080",
+      "name": "岩手沖４０ｋｍＡ",
+      "kana": "イワテオキ４０ｋｍＡ",
+      "owner": "東京大学地震研究所",
+      "latitude": "39.2500",
+      "longitude": "142.4333"
+    },
+    {
+      "area": "岩手県",
+      "prefecture": "岩手県",
+      "code": "21081",
+      "name": "岩手沖４０ｋｍＢ",
+      "kana": "イワテオキ４０ｋｍＢ",
+      "owner": "防災科学技術研究所",
+      "latitude": "40.3333",
+      "longitude": "142.2667"
+    },
+    {
+      "area": "岩手県",
+      "prefecture": "岩手県",
+      "code": "21082",
+      "name": "岩手沖４０ｋｍＣ",
+      "kana": "イワテオキ４０ｋｍＣ",
+      "owner": "防災科学技術研究所",
+      "latitude": "40.1167",
+      "longitude": "142.4000"
+    },
+    {
+      "area": "岩手県",
+      "prefecture": "岩手県",
+      "code": "21083",
+      "name": "岩手沖３０ｋｍＡ",
+      "kana": "イワテオキ３０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "39.7333",
+      "longitude": "142.3333"
+    },
+    {
+      "area": "岩手県",
+      "prefecture": "岩手県",
+      "code": "21084",
+      "name": "岩手沖３０ｋｍＢ",
+      "kana": "イワテオキ３０ｋｍＢ",
+      "owner": "防災科学技術研究所",
+      "latitude": "39.4500",
+      "longitude": "142.4500"
+    },
+    {
+      "area": "岩手県",
+      "prefecture": "岩手県",
+      "code": "21090",
+      "name": "岩手釜石沖",
+      "kana": "イワテカマイシオキ",
+      "owner": "東北地方整備局",
+      "latitude": "39.2667",
+      "longitude": "142.1000"
+    },
+    {
+      "area": "岩手県",
+      "prefecture": "岩手県",
+      "code": "21091",
+      "name": "岩手宮古沖",
+      "kana": "イワテミヤコオキ",
+      "owner": "東北地方整備局",
+      "latitude": "39.6333",
+      "longitude": "142.1833"
+    },
+    {
+      "area": "岩手県",
+      "prefecture": "岩手県",
+      "code": "21092",
+      "name": "岩手久慈沖",
+      "kana": "イワテクジオキ",
+      "owner": "東北地方整備局",
+      "latitude": "40.1167",
+      "longitude": "142.0667"
+    },
+    {
+      "area": "宮城県",
+      "prefecture": "宮城県",
+      "code": "22002",
+      "name": "石巻市鮎川",
+      "kana": "イシノマキシアユカワ",
+      "owner": "気象庁",
+      "latitude": "38.3000",
+      "longitude": "141.5000"
+    },
+    {
+      "area": "宮城県",
+      "prefecture": "宮城県",
+      "code": "22021",
+      "name": "仙台港",
+      "kana": "センダイコウ",
+      "owner": "東北地方整備局",
+      "latitude": "38.2667",
+      "longitude": "141.0000"
+    },
+    {
+      "area": "宮城県",
+      "prefecture": "宮城県",
+      "code": "22022",
+      "name": "石巻港",
+      "kana": "イシノマキコウ",
+      "owner": "東北地方整備局",
+      "latitude": "38.4000",
+      "longitude": "141.2667"
+    },
+    {
+      "area": "宮城県",
+      "prefecture": "宮城県",
+      "code": "22050",
+      "name": "宮城沖９０ｋｍＡ",
+      "kana": "ミヤギオキ９０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "38.0333",
+      "longitude": "142.5667"
+    },
+    {
+      "area": "宮城県",
+      "prefecture": "宮城県",
+      "code": "22060",
+      "name": "宮城沖８０ｋｍＡ",
+      "kana": "ミヤギオキ８０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "38.8667",
+      "longitude": "142.8167"
+    },
+    {
+      "area": "宮城県",
+      "prefecture": "宮城県",
+      "code": "22061",
+      "name": "宮城沖８０ｋｍＢ",
+      "kana": "ミヤギオキ８０ｋｍＢ",
+      "owner": "防災科学技術研究所",
+      "latitude": "38.5000",
+      "longitude": "142.5000"
+    },
+    {
+      "area": "宮城県",
+      "prefecture": "宮城県",
+      "code": "22070",
+      "name": "宮城沖６０ｋｍＡ",
+      "kana": "ミヤギオキ６０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "38.0500",
+      "longitude": "142.2333"
+    },
+    {
+      "area": "宮城県",
+      "prefecture": "宮城県",
+      "code": "22071",
+      "name": "宮城沖５０ｋｍＡ",
+      "kana": "ミヤギオキ５０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "38.9333",
+      "longitude": "142.4833"
+    },
+    {
+      "area": "宮城県",
+      "prefecture": "宮城県",
+      "code": "22072",
+      "name": "宮城沖５０ｋｍＢ",
+      "kana": "ミヤギオキ５０ｋｍＢ",
+      "owner": "防災科学技術研究所",
+      "latitude": "38.5833",
+      "longitude": "142.1833"
+    },
+    {
+      "area": "宮城県",
+      "prefecture": "宮城県",
+      "code": "22080",
+      "name": "宮城沖４０ｋｍＡ",
+      "kana": "ミヤギオキ４０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "38.8333",
+      "longitude": "142.1833"
+    },
+    {
+      "area": "宮城県",
+      "prefecture": "宮城県",
+      "code": "22081",
+      "name": "宮城沖３０ｋｍＡ",
+      "kana": "ミヤギオキ３０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "38.1000",
+      "longitude": "141.9000"
+    },
+    {
+      "area": "宮城県",
+      "prefecture": "宮城県",
+      "code": "22090",
+      "name": "宮城金華山沖",
+      "kana": "ミヤギキンカサンオキ",
+      "owner": "東北地方整備局",
+      "latitude": "38.2333",
+      "longitude": "141.6833"
+    },
+    {
+      "area": "宮城県",
+      "prefecture": "宮城県",
+      "code": "22091",
+      "name": "気仙沼広田湾沖",
+      "kana": "ケセンヌマヒロタワンオキ",
+      "owner": "東北地方整備局",
+      "latitude": "38.8500",
+      "longitude": "141.9000"
+    },
+    {
+      "area": "宮城県",
+      "prefecture": "宮城県",
+      "code": "22095",
+      "name": "宮城牡鹿沖",
+      "kana": "ミヤギオシカオキ",
+      "owner": "防災科学技術研究所",
+      "latitude": "38.1000",
+      "longitude": "141.5500"
+    },
+    {
+      "area": "秋田県",
+      "prefecture": "秋田県",
+      "code": "23001",
+      "name": "秋田",
+      "kana": "アキタ",
+      "owner": "東北地方整備局",
+      "latitude": "39.7500",
+      "longitude": "140.0667"
+    },
+    {
+      "area": "秋田県",
+      "prefecture": "秋田県",
+      "code": "23090",
+      "name": "秋田男鹿沖",
+      "kana": "アキタオガオキ",
+      "owner": "東北地方整備局",
+      "latitude": "40.2167",
+      "longitude": "139.6667"
+    },
+    {
+      "area": "山形県",
+      "prefecture": "山形県",
+      "code": "24001",
+      "name": "酒田",
+      "kana": "サカタ",
+      "owner": "東北地方整備局",
+      "latitude": "38.9167",
+      "longitude": "139.8167"
+    },
+    {
+      "area": "山形県",
+      "prefecture": "山形県",
+      "code": "24030",
+      "name": "飛島",
+      "kana": "トビシマ",
+      "owner": "国土地理院",
+      "latitude": "39.1833",
+      "longitude": "139.5500"
+    },
+    {
+      "area": "山形県",
+      "prefecture": "山形県",
+      "code": "24031",
+      "name": "鶴岡市鼠ケ関",
+      "kana": "ツルオカシネズガセキ",
+      "owner": "国土地理院",
+      "latitude": "38.5667",
+      "longitude": "139.5500"
+    },
+    {
+      "area": "山形県",
+      "prefecture": "山形県",
+      "code": "24090",
+      "name": "山形酒田沖",
+      "kana": "ヤマガタサカタオキ",
+      "owner": "東北地方整備局",
+      "latitude": "38.9667",
+      "longitude": "139.6000"
+    },
+    {
+      "area": "福島県",
+      "prefecture": "福島県",
+      "code": "25002",
+      "name": "いわき市小名浜",
+      "kana": "イワキシオナハマ",
+      "owner": "気象庁",
+      "latitude": "36.9333",
+      "longitude": "140.9000"
+    },
+    {
+      "area": "福島県",
+      "prefecture": "福島県",
+      "code": "25030",
+      "name": "相馬",
+      "kana": "ソウマ",
+      "owner": "国土地理院",
+      "latitude": "37.8333",
+      "longitude": "140.9667"
+    },
+    {
+      "area": "福島県",
+      "prefecture": "福島県",
+      "code": "25050",
+      "name": "福島沖９０ｋｍＡ",
+      "kana": "フクシマオキ９０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "37.6667",
+      "longitude": "142.3000"
+    },
+    {
+      "area": "福島県",
+      "prefecture": "福島県",
+      "code": "25060",
+      "name": "福島沖７０ｋｍＡ",
+      "kana": "フクシマオキ７０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "37.7000",
+      "longitude": "141.9667"
+    },
+    {
+      "area": "福島県",
+      "prefecture": "福島県",
+      "code": "25061",
+      "name": "福島沖７０ｋｍＢ",
+      "kana": "フクシマオキ７０ｋｍＢ",
+      "owner": "防災科学技術研究所",
+      "latitude": "37.2833",
+      "longitude": "141.8833"
+    },
+    {
+      "area": "福島県",
+      "prefecture": "福島県",
+      "code": "25070",
+      "name": "福島沖５０ｋｍＡ",
+      "kana": "フクシマオキ５０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "37.7000",
+      "longitude": "141.6333"
+    },
+    {
+      "area": "福島県",
+      "prefecture": "福島県",
+      "code": "25071",
+      "name": "福島沖５０ｋｍＢ",
+      "kana": "フクシマオキ５０ｋｍＢ",
+      "owner": "防災科学技術研究所",
+      "latitude": "37.3000",
+      "longitude": "141.5667"
+    },
+    {
+      "area": "福島県",
+      "prefecture": "福島県",
+      "code": "25080",
+      "name": "福島沖３０ｋｍＡ",
+      "kana": "フクシマオキ３０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "37.8500",
+      "longitude": "141.3833"
+    },
+    {
+      "area": "福島県",
+      "prefecture": "福島県",
+      "code": "25081",
+      "name": "福島沖３０ｋｍＢ",
+      "kana": "フクシマオキ３０ｋｍＢ",
+      "owner": "防災科学技術研究所",
+      "latitude": "37.1000",
+      "longitude": "141.3667"
+    },
+    {
+      "area": "福島県",
+      "prefecture": "福島県",
+      "code": "25090",
+      "name": "福島小名浜沖",
+      "kana": "フクシマオナハマオキ",
+      "owner": "東北地方整備局",
+      "latitude": "36.9667",
+      "longitude": "141.1833"
+    },
+    {
+      "area": "茨城県",
+      "prefecture": "茨城県",
+      "code": "30001",
+      "name": "大洗",
+      "kana": "オオアライ",
+      "owner": "気象庁",
+      "latitude": "36.3000",
+      "longitude": "140.5667"
+    },
+    {
+      "area": "茨城県",
+      "prefecture": "茨城県",
+      "code": "30020",
+      "name": "神栖市鹿島港",
+      "kana": "カミスシカシマコウ",
+      "owner": "関東地方整備局",
+      "latitude": "35.9333",
+      "longitude": "140.7000"
+    },
+    {
+      "area": "茨城県",
+      "prefecture": "茨城県",
+      "code": "30050",
+      "name": "茨城沖９０ｋｍＡ",
+      "kana": "イバラキオキ９０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "36.6333",
+      "longitude": "141.8333"
+    },
+    {
+      "area": "茨城県",
+      "prefecture": "茨城県",
+      "code": "30051",
+      "name": "茨城沖９０ｋｍＢ",
+      "kana": "イバラキオキ９０ｋｍＢ",
+      "owner": "防災科学技術研究所",
+      "latitude": "36.0000",
+      "longitude": "141.8000"
+    },
+    {
+      "area": "茨城県",
+      "prefecture": "茨城県",
+      "code": "30060",
+      "name": "茨城沖７０ｋｍＡ",
+      "kana": "イバラキオキ７０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "36.0667",
+      "longitude": "141.5167"
+    },
+    {
+      "area": "茨城県",
+      "prefecture": "茨城県",
+      "code": "30070",
+      "name": "茨城沖６０ｋｍＡ",
+      "kana": "イバラキオキ６０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "36.6667",
+      "longitude": "141.5167"
+    },
+    {
+      "area": "茨城県",
+      "prefecture": "茨城県",
+      "code": "30071",
+      "name": "茨城沖５０ｋｍＡ",
+      "kana": "イバラキオキ５０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "36.1500",
+      "longitude": "141.2000"
+    },
+    {
+      "area": "茨城県",
+      "prefecture": "茨城県",
+      "code": "30072",
+      "name": "茨城沖５０ｋｍＢ",
+      "kana": "イバラキオキ５０ｋｍＢ",
+      "owner": "防災科学技術研究所",
+      "latitude": "35.8500",
+      "longitude": "141.3833"
+    },
+    {
+      "area": "茨城県",
+      "prefecture": "茨城県",
+      "code": "30080",
+      "name": "茨城沖４０ｋｍＡ",
+      "kana": "イバラキオキ４０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "36.8333",
+      "longitude": "141.3333"
+    },
+    {
+      "area": "茨城県",
+      "prefecture": "茨城県",
+      "code": "30095",
+      "name": "茨城神栖沖",
+      "kana": "イバラキカミスオキ",
+      "owner": "防災科学技術研究所",
+      "latitude": "35.9000",
+      "longitude": "141.0500"
+    },
+    {
+      "area": "千葉県九十九里・外房",
+      "prefecture": "千葉県",
+      "code": "31001",
+      "name": "銚子",
+      "kana": "チョウシ",
+      "owner": "千葉県",
+      "latitude": "35.7500",
+      "longitude": "140.8667"
+    },
+    {
+      "area": "千葉県九十九里・外房",
+      "prefecture": "千葉県",
+      "code": "31002",
+      "name": "勝浦市興津",
+      "kana": "カツウラシオキツ",
+      "owner": "気象庁",
+      "latitude": "35.1333",
+      "longitude": "140.2500"
+    },
+    {
+      "area": "千葉県九十九里・外房",
+      "prefecture": "千葉県",
+      "code": "31050",
+      "name": "千葉東方沖９０ｋｍＡ",
+      "kana": "チバトウホウオキ９０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "35.6000",
+      "longitude": "141.9000"
+    },
+    {
+      "area": "千葉県九十九里・外房",
+      "prefecture": "千葉県",
+      "code": "31051",
+      "name": "千葉南東沖９０ｋｍＡ",
+      "kana": "チバナントウオキ９０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "34.6333",
+      "longitude": "141.0833"
+    },
+    {
+      "area": "千葉県九十九里・外房",
+      "prefecture": "千葉県",
+      "code": "31060",
+      "name": "千葉東方沖８０ｋｍＡ",
+      "kana": "チバトウホウオキ８０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "35.2833",
+      "longitude": "141.5833"
+    },
+    {
+      "area": "千葉県九十九里・外房",
+      "prefecture": "千葉県",
+      "code": "31061",
+      "name": "千葉南東沖８０ｋｍＡ",
+      "kana": "チバナントウオキ８０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "34.2667",
+      "longitude": "140.4167"
+    },
+    {
+      "area": "千葉県九十九里・外房",
+      "prefecture": "千葉県",
+      "code": "31062",
+      "name": "千葉東方沖７０ｋｍＡ",
+      "kana": "チバトウホウオキ７０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "35.7167",
+      "longitude": "141.6500"
+    },
+    {
+      "area": "千葉県九十九里・外房",
+      "prefecture": "千葉県",
+      "code": "31063",
+      "name": "千葉東方沖７０ｋｍＢ",
+      "kana": "チバトウホウオキ７０ｋｍＢ",
+      "owner": "防災科学技術研究所",
+      "latitude": "35.1000",
+      "longitude": "141.2000"
+    },
+    {
+      "area": "千葉県九十九里・外房",
+      "prefecture": "千葉県",
+      "code": "31064",
+      "name": "千葉南東沖８０ｋｍＢ",
+      "kana": "チバナントウオキ８０ｋｍＢ",
+      "owner": "防災科学技術研究所",
+      "latitude": "34.1833",
+      "longitude": "139.9833"
+    },
+    {
+      "area": "千葉県九十九里・外房",
+      "prefecture": "千葉県",
+      "code": "31070",
+      "name": "千葉南東沖６０ｋｍＡ",
+      "kana": "チバナントウオキ６０ｋｍＡ",
+      "owner": "気象庁",
+      "latitude": "34.7500",
+      "longitude": "140.7500"
+    },
+    {
+      "area": "千葉県九十九里・外房",
+      "prefecture": "千葉県",
+      "code": "31071",
+      "name": "千葉東方沖６０ｋｍＡ",
+      "kana": "チバトウホウオキ６０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "35.2333",
+      "longitude": "141.3000"
+    },
+    {
+      "area": "千葉県九十九里・外房",
+      "prefecture": "千葉県",
+      "code": "31072",
+      "name": "千葉東方沖６０ｋｍＢ",
+      "kana": "チバトウホウオキ６０ｋｍＢ",
+      "owner": "防災科学技術研究所",
+      "latitude": "34.8833",
+      "longitude": "140.9667"
+    },
+    {
+      "area": "千葉県九十九里・外房",
+      "prefecture": "千葉県",
+      "code": "31073",
+      "name": "千葉南東沖６０ｋｍＢ",
+      "kana": "チバナントウオキ６０ｋｍＢ",
+      "owner": "防災科学技術研究所",
+      "latitude": "34.4167",
+      "longitude": "140.2000"
+    },
+    {
+      "area": "千葉県九十九里・外房",
+      "prefecture": "千葉県",
+      "code": "31074",
+      "name": "千葉東方沖５０ｋｍＡ",
+      "kana": "チバトウホウオキ５０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "35.4500",
+      "longitude": "141.3833"
+    },
+    {
+      "area": "千葉県九十九里・外房",
+      "prefecture": "千葉県",
+      "code": "31075",
+      "name": "千葉東方沖５０ｋｍＢ",
+      "kana": "チバトウホウオキ５０ｋｍＢ",
+      "owner": "防災科学技術研究所",
+      "latitude": "35.1167",
+      "longitude": "140.9667"
+    },
+    {
+      "area": "千葉県九十九里・外房",
+      "prefecture": "千葉県",
+      "code": "31080",
+      "name": "千葉南東沖４０ｋｍＡ",
+      "kana": "チバナントウオキ４０ｋｍＡ",
+      "owner": "気象庁",
+      "latitude": "34.8000",
+      "longitude": "140.5167"
+    },
+    {
+      "area": "千葉県九十九里・外房",
+      "prefecture": "千葉県",
+      "code": "31081",
+      "name": "千葉南東沖３０ｋｍＡ",
+      "kana": "チバナントウオキ３０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "34.6000",
+      "longitude": "139.9167"
+    },
+    {
+      "area": "千葉県九十九里・外房",
+      "prefecture": "千葉県",
+      "code": "31082",
+      "name": "千葉東方沖４０ｋｍＡ",
+      "kana": "チバトウホウオキ４０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "35.0167",
+      "longitude": "140.8167"
+    },
+    {
+      "area": "千葉県九十九里・外房",
+      "prefecture": "千葉県",
+      "code": "31083",
+      "name": "千葉南東沖３０ｋｍＢ",
+      "kana": "チバナントウオキ３０ｋｍＢ",
+      "owner": "防災科学技術研究所",
+      "latitude": "34.6500",
+      "longitude": "140.0833"
+    },
+    {
+      "area": "千葉県九十九里・外房",
+      "prefecture": "千葉県",
+      "code": "31084",
+      "name": "千葉南東沖３０ｋｍＣ",
+      "kana": "チバナントウオキ３０ｋｍＣ",
+      "owner": "防災科学技術研究所",
+      "latitude": "34.6667",
+      "longitude": "139.8167"
+    },
+    {
+      "area": "千葉県内房",
+      "prefecture": "千葉県",
+      "code": "31101",
+      "name": "館山市布良",
+      "kana": "タテヤマシメラ",
+      "owner": "気象庁",
+      "latitude": "34.9167",
+      "longitude": "139.8333"
+    },
+    {
+      "area": "東京湾内湾",
+      "prefecture": "東京都",
+      "code": "31202",
+      "name": "東京晴海",
+      "kana": "トウキョウハルミ",
+      "owner": "気象庁",
+      "latitude": "35.6500",
+      "longitude": "139.7667"
+    },
+    {
+      "area": "東京湾内湾",
+      "prefecture": "神奈川県",
+      "code": "31204",
+      "name": "横須賀",
+      "kana": "ヨコスカ",
+      "owner": "海上保安庁",
+      "latitude": "35.2833",
+      "longitude": "139.6500"
+    },
+    {
+      "area": "東京湾内湾",
+      "prefecture": "千葉県",
+      "code": "31205",
+      "name": "千葉",
+      "kana": "チバ",
+      "owner": "海上保安庁",
+      "latitude": "35.5667",
+      "longitude": "140.0500"
+    },
+    {
+      "area": "東京湾内湾",
+      "prefecture": "神奈川県",
+      "code": "31206",
+      "name": "横浜",
+      "kana": "ヨコハマ",
+      "owner": "海上保安庁",
+      "latitude": "35.4500",
+      "longitude": "139.6500"
+    },
+    {
+      "area": "伊豆諸島",
+      "prefecture": "東京都",
+      "code": "32001",
+      "name": "伊豆大島岡田",
+      "kana": "イズオオシマオカダ",
+      "owner": "気象庁",
+      "latitude": "34.7833",
+      "longitude": "139.3833"
+    },
+    {
+      "area": "伊豆諸島",
+      "prefecture": "東京都",
+      "code": "32002",
+      "name": "三宅島坪田",
+      "kana": "ミヤケジマツボタ",
+      "owner": "気象庁",
+      "latitude": "34.0500",
+      "longitude": "139.5500"
+    },
+    {
+      "area": "伊豆諸島",
+      "prefecture": "東京都",
+      "code": "32003",
+      "name": "八丈島八重根",
+      "kana": "ハチジョウジマヤエネ",
+      "owner": "気象庁",
+      "latitude": "33.1000",
+      "longitude": "139.7833"
+    },
+    {
+      "area": "伊豆諸島",
+      "prefecture": "東京都",
+      "code": "32004",
+      "name": "神津島神津島港",
+      "kana": "コウヅシマコウヅシマコウ",
+      "owner": "海上保安庁",
+      "latitude": "34.2167",
+      "longitude": "139.1333"
+    },
+    {
+      "area": "伊豆諸島",
+      "prefecture": "東京都",
+      "code": "32005",
+      "name": "三宅島阿古",
+      "kana": "ミヤケジマアコ",
+      "owner": "海上保安庁",
+      "latitude": "34.0667",
+      "longitude": "139.4833"
+    },
+    {
+      "area": "伊豆諸島",
+      "prefecture": "東京都",
+      "code": "32006",
+      "name": "八丈島神湊",
+      "kana": "ハチジョウジマカミナト",
+      "owner": "海上保安庁",
+      "latitude": "33.1333",
+      "longitude": "139.8000"
+    },
+    {
+      "area": "小笠原諸島",
+      "prefecture": "東京都",
+      "code": "32101",
+      "name": "父島二見",
+      "kana": "チチジマフタミ",
+      "owner": "気象庁",
+      "latitude": "27.1000",
+      "longitude": "142.2000"
+    },
+    {
+      "area": "小笠原諸島",
+      "prefecture": "東京都",
+      "code": "32102",
+      "name": "南鳥島",
+      "kana": "ミナミトリシマ",
+      "owner": "気象庁",
+      "latitude": "24.2833",
+      "longitude": "153.9833"
+    },
+    {
+      "area": "相模湾・三浦半島",
+      "prefecture": "神奈川県",
+      "code": "33000",
+      "name": "小田原",
+      "kana": "オダワラ",
+      "owner": "気象庁",
+      "latitude": "35.2333",
+      "longitude": "139.1500"
+    },
+    {
+      "area": "相模湾・三浦半島",
+      "prefecture": "神奈川県",
+      "code": "33001",
+      "name": "三浦市三崎漁港",
+      "kana": "ミウラシミサキギョコウ",
+      "owner": "気象庁",
+      "latitude": "35.1500",
+      "longitude": "139.6167"
+    },
+    {
+      "area": "相模湾・三浦半島",
+      "prefecture": "神奈川県",
+      "code": "33030",
+      "name": "三浦市油壺",
+      "kana": "ミウラシアブラツボ",
+      "owner": "国土地理院",
+      "latitude": "35.1667",
+      "longitude": "139.6167"
+    },
+    {
+      "area": "相模湾・三浦半島",
+      "prefecture": "神奈川県",
+      "code": "33080",
+      "name": "神奈川沖４０ｋｍ",
+      "kana": "カナガワオキ４０ｋｍ",
+      "owner": "防災科学技術研究所",
+      "latitude": "34.8000",
+      "longitude": "139.6000"
+    },
+    {
+      "area": "相模湾・三浦半島",
+      "prefecture": "神奈川県",
+      "code": "33095",
+      "name": "神奈川相模湾沖",
+      "kana": "カナガワサガミワンオキ",
+      "owner": "防災科学技術研究所",
+      "latitude": "35.0667",
+      "longitude": "139.4000"
+    },
+    {
+      "area": "新潟県上中下越",
+      "prefecture": "新潟県",
+      "code": "34001",
+      "name": "新潟",
+      "kana": "ニイガタ",
+      "owner": "北陸地方整備局",
+      "latitude": "37.9333",
+      "longitude": "139.0667"
+    },
+    {
+      "area": "新潟県上中下越",
+      "prefecture": "新潟県",
+      "code": "34003",
+      "name": "粟島",
+      "kana": "アワシマ",
+      "owner": "海上保安庁",
+      "latitude": "38.4667",
+      "longitude": "139.2500"
+    },
+    {
+      "area": "新潟県上中下越",
+      "prefecture": "新潟県",
+      "code": "34030",
+      "name": "柏崎市鯨波",
+      "kana": "カシワザキシクジラナミ",
+      "owner": "国土地理院",
+      "latitude": "37.3500",
+      "longitude": "138.5167"
+    },
+    {
+      "area": "佐渡",
+      "prefecture": "新潟県",
+      "code": "34103",
+      "name": "佐渡市鷲崎",
+      "kana": "サドシワシザキ",
+      "owner": "気象庁",
+      "latitude": "38.3167",
+      "longitude": "138.5167"
+    },
+    {
+      "area": "富山県",
+      "prefecture": "富山県",
+      "code": "35001",
+      "name": "富山",
+      "kana": "トヤマ",
+      "owner": "気象庁",
+      "latitude": "36.7667",
+      "longitude": "137.2167"
+    },
+    {
+      "area": "富山県",
+      "prefecture": "富山県",
+      "code": "35021",
+      "name": "伏木富山港新湊",
+      "kana": "フシキトヤマコウシンミナト",
+      "owner": "北陸地方整備局",
+      "latitude": "36.7833",
+      "longitude": "137.1167"
+    },
+    {
+      "area": "石川県能登",
+      "prefecture": "石川県",
+      "code": "36001",
+      "name": "珠洲市長橋",
+      "kana": "スズシナガハシ",
+      "owner": "気象庁",
+      "latitude": "37.5000",
+      "longitude": "137.1500"
+    },
+    {
+      "area": "石川県能登",
+      "prefecture": "石川県",
+      "code": "36020",
+      "name": "輪島港",
+      "kana": "ワジマコウ",
+      "owner": "北陸地方整備局",
+      "latitude": "37.4000",
+      "longitude": "136.9000"
+    },
+    {
+      "area": "石川県能登",
+      "prefecture": "石川県",
+      "code": "36021",
+      "name": "七尾港",
+      "kana": "ナナオコウ",
+      "owner": "北陸地方整備局",
+      "latitude": "37.0500",
+      "longitude": "136.9667"
+    },
+    {
+      "area": "石川県加賀",
+      "prefecture": "石川県",
+      "code": "36101",
+      "name": "金沢",
+      "kana": "カナザワ",
+      "owner": "北陸地方整備局",
+      "latitude": "36.6167",
+      "longitude": "136.6000"
+    },
+    {
+      "area": "福井県",
+      "prefecture": "福井県",
+      "code": "37003",
+      "name": "坂井市三国",
+      "kana": "サカイシミクニ",
+      "owner": "",
+      "latitude": "36.2500",
+      "longitude": "136.1500"
+    },
+    {
+      "area": "福井県",
+      "prefecture": "福井県",
+      "code": "37020",
+      "name": "敦賀港",
+      "kana": "ツルガコウ",
+      "owner": "北陸地方整備局",
+      "latitude": "35.6667",
+      "longitude": "136.0667"
+    },
+    {
+      "area": "静岡県",
+      "prefecture": "静岡県",
+      "code": "38001",
+      "name": "沼津市内浦",
+      "kana": "ヌマヅシウチウラ",
+      "owner": "気象庁",
+      "latitude": "35.0167",
+      "longitude": "138.8833"
+    },
+    {
+      "area": "静岡県",
+      "prefecture": "静岡県",
+      "code": "38002",
+      "name": "清水",
+      "kana": "シミズ",
+      "owner": "気象庁",
+      "latitude": "35.0167",
+      "longitude": "138.5167"
+    },
+    {
+      "area": "静岡県",
+      "prefecture": "静岡県",
+      "code": "38004",
+      "name": "南伊豆町石廊崎",
+      "kana": "ミナミイズチョウイロウザキ",
+      "owner": "気象庁",
+      "latitude": "34.6167",
+      "longitude": "138.8500"
+    },
+    {
+      "area": "静岡県",
+      "prefecture": "静岡県",
+      "code": "38005",
+      "name": "御前崎",
+      "kana": "オマエザキ",
+      "owner": "気象庁",
+      "latitude": "34.6167",
+      "longitude": "138.2167"
+    },
+    {
+      "area": "静岡県",
+      "prefecture": "静岡県",
+      "code": "38006",
+      "name": "舞阪",
+      "kana": "マイサカ",
+      "owner": "気象庁",
+      "latitude": "34.6833",
+      "longitude": "137.6167"
+    },
+    {
+      "area": "静岡県",
+      "prefecture": "静岡県",
+      "code": "38007",
+      "name": "南伊豆町手石港",
+      "kana": "ミナミイズチョウテイシコウ",
+      "owner": "気象庁",
+      "latitude": "34.6333",
+      "longitude": "138.8833"
+    },
+    {
+      "area": "静岡県",
+      "prefecture": "静岡県",
+      "code": "38020",
+      "name": "下田港",
+      "kana": "シモダコウ",
+      "owner": "中部地方整備局",
+      "latitude": "34.6833",
+      "longitude": "138.9667"
+    },
+    {
+      "area": "静岡県",
+      "prefecture": "静岡県",
+      "code": "38030",
+      "name": "伊東",
+      "kana": "イトウ",
+      "owner": "国土地理院",
+      "latitude": "34.9000",
+      "longitude": "139.1333"
+    },
+    {
+      "area": "静岡県",
+      "prefecture": "静岡県",
+      "code": "38031",
+      "name": "西伊豆町田子",
+      "kana": "ニシイズチョウタゴ",
+      "owner": "国土地理院",
+      "latitude": "34.8000",
+      "longitude": "138.7667"
+    },
+    {
+      "area": "静岡県",
+      "prefecture": "静岡県",
+      "code": "38032",
+      "name": "焼津",
+      "kana": "ヤイヅ",
+      "owner": "国土地理院",
+      "latitude": "34.8667",
+      "longitude": "138.3333"
+    },
+    {
+      "area": "静岡県",
+      "prefecture": "静岡県",
+      "code": "38070",
+      "name": "静岡沖５０ｋｍ",
+      "kana": "シズオカオキ５０ｋｍ",
+      "owner": "気象庁",
+      "latitude": "34.2167",
+      "longitude": "137.7000"
+    },
+    {
+      "area": "静岡県",
+      "prefecture": "静岡県",
+      "code": "38090",
+      "name": "静岡御前崎沖",
+      "kana": "シズオカオマエザキオキ",
+      "owner": "中部地方整備局",
+      "latitude": "34.4000",
+      "longitude": "138.2833"
+    },
+    {
+      "area": "愛知県外海",
+      "prefecture": "愛知県",
+      "code": "39001",
+      "name": "田原市赤羽根",
+      "kana": "タハラシアカバネ",
+      "owner": "気象庁",
+      "latitude": "34.6000",
+      "longitude": "137.1833"
+    },
+    {
+      "area": "愛知県外海",
+      "prefecture": "愛知県",
+      "code": "39090",
+      "name": "伊勢湾口沖",
+      "kana": "イセワンコウオキ",
+      "owner": "中部地方整備局",
+      "latitude": "34.3667",
+      "longitude": "137.1167"
+    },
+    {
+      "area": "伊勢・三河湾",
+      "prefecture": "愛知県",
+      "code": "39101",
+      "name": "名古屋",
+      "kana": "ナゴヤ",
+      "owner": "気象庁",
+      "latitude": "35.0833",
+      "longitude": "136.8833"
+    },
+    {
+      "area": "伊勢・三河湾",
+      "prefecture": "愛知県",
+      "code": "39102",
+      "name": "半田市衣浦",
+      "kana": "ハンダシキヌウラ",
+      "owner": "愛知県",
+      "latitude": "34.8833",
+      "longitude": "136.9500"
+    },
+    {
+      "area": "伊勢・三河湾",
+      "prefecture": "三重県",
+      "code": "39103",
+      "name": "四日市",
+      "kana": "ヨッカイチ",
+      "owner": "四日市港管理組合",
+      "latitude": "34.9667",
+      "longitude": "136.6333"
+    },
+    {
+      "area": "伊勢・三河湾",
+      "prefecture": "愛知県",
+      "code": "39120",
+      "name": "豊橋市三河港",
+      "kana": "トヨハシシミカワコウ",
+      "owner": "中部地方整備局",
+      "latitude": "34.7333",
+      "longitude": "137.3167"
+    },
+    {
+      "area": "三重県南部",
+      "prefecture": "三重県",
+      "code": "40001",
+      "name": "鳥羽",
+      "kana": "トバ",
+      "owner": "気象庁",
+      "latitude": "34.4833",
+      "longitude": "136.8167"
+    },
+    {
+      "area": "三重県南部",
+      "prefecture": "三重県",
+      "code": "40002",
+      "name": "尾鷲",
+      "kana": "オワセ",
+      "owner": "気象庁",
+      "latitude": "34.0833",
+      "longitude": "136.2000"
+    },
+    {
+      "area": "三重県南部",
+      "prefecture": "三重県",
+      "code": "40003",
+      "name": "熊野市遊木",
+      "kana": "クマノシユキ",
+      "owner": "気象庁",
+      "latitude": "33.9333",
+      "longitude": "136.1667"
+    },
+    {
+      "area": "三重県南部",
+      "prefecture": "三重県",
+      "code": "40050",
+      "name": "三重南東沖９０ｋｍＡ",
+      "kana": "ミエナントウオキ９０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "33.3667",
+      "longitude": "136.9167"
+    },
+    {
+      "area": "三重県南部",
+      "prefecture": "三重県",
+      "code": "40060",
+      "name": "三重南東沖８０ｋｍＡ",
+      "kana": "ミエナントウオキ８０ｋｍＡ",
+      "owner": "気象庁",
+      "latitude": "33.7667",
+      "longitude": "137.5833"
+    },
+    {
+      "area": "三重県南部",
+      "prefecture": "三重県",
+      "code": "40061",
+      "name": "三重南東沖８０ｋｍＢ",
+      "kana": "ミエナントウオキ８０ｋｍＢ",
+      "owner": "防災科学技術研究所",
+      "latitude": "33.4833",
+      "longitude": "136.9333"
+    },
+    {
+      "area": "三重県南部",
+      "prefecture": "三重県",
+      "code": "40062",
+      "name": "三重南東沖８０ｋｍＣ",
+      "kana": "ミエナントウオキ８０ｋｍＣ",
+      "owner": "防災科学技術研究所",
+      "latitude": "33.3667",
+      "longitude": "136.8000"
+    },
+    {
+      "area": "三重県南部",
+      "prefecture": "三重県",
+      "code": "40063",
+      "name": "三重南東沖７０ｋｍＡ",
+      "kana": "ミエナントウオキ７０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "33.4667",
+      "longitude": "136.8000"
+    },
+    {
+      "area": "三重県南部",
+      "prefecture": "三重県",
+      "code": "40070",
+      "name": "三重南東沖６０ｋｍＡ",
+      "kana": "ミエナントウオキ６０ｋｍＡ",
+      "owner": "気象庁",
+      "latitude": "33.8500",
+      "longitude": "137.3667"
+    },
+    {
+      "area": "三重県南部",
+      "prefecture": "三重県",
+      "code": "40071",
+      "name": "三重南東沖６０ｋｍＢ",
+      "kana": "ミエナントウオキ６０ｋｍＢ",
+      "owner": "気象庁",
+      "latitude": "33.6500",
+      "longitude": "136.8333"
+    },
+    {
+      "area": "三重県南部",
+      "prefecture": "三重県",
+      "code": "40072",
+      "name": "三重南東沖５０ｋｍＡ",
+      "kana": "ミエナントウオキ５０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "33.6500",
+      "longitude": "136.6000"
+    },
+    {
+      "area": "三重県南部",
+      "prefecture": "三重県",
+      "code": "40080",
+      "name": "三重南東沖４０ｋｍＡ",
+      "kana": "ミエナントウオキ４０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "33.7500",
+      "longitude": "136.6500"
+    },
+    {
+      "area": "三重県南部",
+      "prefecture": "三重県",
+      "code": "40081",
+      "name": "三重南東沖４０ｋｍＢ",
+      "kana": "ミエナントウオキ４０ｋｍＢ",
+      "owner": "防災科学技術研究所",
+      "latitude": "33.6833",
+      "longitude": "136.4667"
+    },
+    {
+      "area": "三重県南部",
+      "prefecture": "三重県",
+      "code": "40082",
+      "name": "三重南東沖３０ｋｍＡ",
+      "kana": "ミエナントウオキ３０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "33.8000",
+      "longitude": "136.5500"
+    },
+    {
+      "area": "三重県南部",
+      "prefecture": "三重県",
+      "code": "40090",
+      "name": "三重尾鷲沖",
+      "kana": "ミエオワセオキ",
+      "owner": "中部地方整備局",
+      "latitude": "33.9000",
+      "longitude": "136.2667"
+    },
+    {
+      "area": "京都府",
+      "prefecture": "京都府",
+      "code": "50001",
+      "name": "舞鶴",
+      "kana": "マイヅル",
+      "owner": "気象庁",
+      "latitude": "35.4833",
+      "longitude": "135.3833"
+    },
+    {
+      "area": "大阪府",
+      "prefecture": "大阪府",
+      "code": "51001",
+      "name": "大阪天保山",
+      "kana": "オオサカテンポウザン",
+      "owner": "気象庁",
+      "latitude": "34.6500",
+      "longitude": "135.4333"
+    },
+    {
+      "area": "大阪府",
+      "prefecture": "大阪府",
+      "code": "51002",
+      "name": "岬町淡輪",
+      "kana": "ミサキチョウタンノワ",
+      "owner": "気象庁",
+      "latitude": "34.3333",
+      "longitude": "135.1833"
+    },
+    {
+      "area": "兵庫県北部",
+      "prefecture": "兵庫県",
+      "code": "52001",
+      "name": "豊岡市津居山",
+      "kana": "トヨオカシツイヤマ",
+      "owner": "兵庫県",
+      "latitude": "35.6500",
+      "longitude": "134.8333"
+    },
+    {
+      "area": "兵庫県瀬戸内海沿岸",
+      "prefecture": "兵庫県",
+      "code": "52101",
+      "name": "神戸",
+      "kana": "コウベ",
+      "owner": "気象庁",
+      "latitude": "34.6833",
+      "longitude": "135.1833"
+    },
+    {
+      "area": "兵庫県瀬戸内海沿岸",
+      "prefecture": "兵庫県",
+      "code": "52102",
+      "name": "姫路",
+      "kana": "ヒメジ",
+      "owner": "兵庫県",
+      "latitude": "34.7833",
+      "longitude": "134.6667"
+    },
+    {
+      "area": "淡路島南部",
+      "prefecture": "兵庫県",
+      "code": "52202",
+      "name": "洲本",
+      "kana": "スモト",
+      "owner": "気象庁",
+      "latitude": "34.3500",
+      "longitude": "134.9000"
+    },
+    {
+      "area": "和歌山県",
+      "prefecture": "和歌山県",
+      "code": "53001",
+      "name": "那智勝浦町浦神",
+      "kana": "ナチカツウラチョウウラガミ",
+      "owner": "気象庁",
+      "latitude": "33.5667",
+      "longitude": "135.9000"
+    },
+    {
+      "area": "和歌山県",
+      "prefecture": "和歌山県",
+      "code": "53002",
+      "name": "串本町袋港",
+      "kana": "クシモトチョウフクロコウ",
+      "owner": "気象庁",
+      "latitude": "33.4833",
+      "longitude": "135.7667"
+    },
+    {
+      "area": "和歌山県",
+      "prefecture": "和歌山県",
+      "code": "53004",
+      "name": "和歌山",
+      "kana": "ワカヤマ",
+      "owner": "気象庁",
+      "latitude": "34.2167",
+      "longitude": "135.1500"
+    },
+    {
+      "area": "和歌山県",
+      "prefecture": "和歌山県",
+      "code": "53006",
+      "name": "御坊市祓井戸",
+      "kana": "ゴボウシハライド",
+      "owner": "気象庁",
+      "latitude": "33.8500",
+      "longitude": "135.1667"
+    },
+    {
+      "area": "和歌山県",
+      "prefecture": "和歌山県",
+      "code": "53007",
+      "name": "白浜町堅田",
+      "kana": "シラハマチョウカタタ",
+      "owner": "気象庁",
+      "latitude": "33.6833",
+      "longitude": "135.3833"
+    },
+    {
+      "area": "和歌山県",
+      "prefecture": "和歌山県",
+      "code": "53060",
+      "name": "和歌山沖８０ｋｍＡ",
+      "kana": "ワカヤマオキ８０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "33.2167",
+      "longitude": "136.6833"
+    },
+    {
+      "area": "和歌山県",
+      "prefecture": "和歌山県",
+      "code": "53061",
+      "name": "和歌山沖８０ｋｍＢ",
+      "kana": "ワカヤマオキ８０ｋｍＢ",
+      "owner": "防災科学技術研究所",
+      "latitude": "33.1667",
+      "longitude": "136.5833"
+    },
+    {
+      "area": "和歌山県",
+      "prefecture": "和歌山県",
+      "code": "53062",
+      "name": "和歌山沖７０ｋｍＡ",
+      "kana": "ワカヤマオキ７０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "33.3000",
+      "longitude": "136.6000"
+    },
+    {
+      "area": "和歌山県",
+      "prefecture": "和歌山県",
+      "code": "53063",
+      "name": "和歌山沖７０ｋｍＢ",
+      "kana": "ワカヤマオキ７０ｋｍＢ",
+      "owner": "防災科学技術研究所",
+      "latitude": "33.2333",
+      "longitude": "136.5667"
+    },
+    {
+      "area": "和歌山県",
+      "prefecture": "和歌山県",
+      "code": "53064",
+      "name": "和歌山沖８０ｋｍＣ",
+      "kana": "ワカヤマオキ８０ｋｍＣ",
+      "owner": "防災科学技術研究所",
+      "latitude": "32.8833",
+      "longitude": "135.3000"
+    },
+    {
+      "area": "和歌山県",
+      "prefecture": "和歌山県",
+      "code": "53065",
+      "name": "和歌山沖８０ｋｍＤ",
+      "kana": "ワカヤマオキ８０ｋｍＤ",
+      "owner": "防災科学技術研究所",
+      "latitude": "32.8500",
+      "longitude": "135.1833"
+    },
+    {
+      "area": "和歌山県",
+      "prefecture": "和歌山県",
+      "code": "53066",
+      "name": "和歌山沖８０ｋｍＥ",
+      "kana": "ワカヤマオキ８０ｋｍＥ",
+      "owner": "防災科学技術研究所",
+      "latitude": "32.9000",
+      "longitude": "135.1500"
+    },
+    {
+      "area": "和歌山県",
+      "prefecture": "和歌山県",
+      "code": "53067",
+      "name": "和歌山沖７０ｋｍＣ",
+      "kana": "ワカヤマオキ７０ｋｍＣ",
+      "owner": "防災科学技術研究所",
+      "latitude": "32.8000",
+      "longitude": "135.7667"
+    },
+    {
+      "area": "和歌山県",
+      "prefecture": "和歌山県",
+      "code": "53068",
+      "name": "和歌山沖７０ｋｍＤ",
+      "kana": "ワカヤマオキ７０ｋｍＤ",
+      "owner": "防災科学技術研究所",
+      "latitude": "32.8667",
+      "longitude": "135.6667"
+    },
+    {
+      "area": "和歌山県",
+      "prefecture": "和歌山県",
+      "code": "53069",
+      "name": "和歌山沖７０ｋｍＥ",
+      "kana": "ワカヤマオキ７０ｋｍＥ",
+      "owner": "防災科学技術研究所",
+      "latitude": "32.9833",
+      "longitude": "135.2333"
+    },
+    {
+      "area": "和歌山県",
+      "prefecture": "和歌山県",
+      "code": "53070",
+      "name": "和歌山沖５０ｋｍＡ",
+      "kana": "ワカヤマオキ５０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "33.4833",
+      "longitude": "136.4500"
+    },
+    {
+      "area": "和歌山県",
+      "prefecture": "和歌山県",
+      "code": "53071",
+      "name": "和歌山沖５０ｋｍＢ",
+      "kana": "ワカヤマオキ５０ｋｍＢ",
+      "owner": "防災科学技術研究所",
+      "latitude": "33.3833",
+      "longitude": "136.3833"
+    },
+    {
+      "area": "和歌山県",
+      "prefecture": "和歌山県",
+      "code": "53072",
+      "name": "和歌山沖６０ｋｍＡ",
+      "kana": "ワカヤマオキ６０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "32.9000",
+      "longitude": "135.8333"
+    },
+    {
+      "area": "和歌山県",
+      "prefecture": "和歌山県",
+      "code": "53073",
+      "name": "和歌山沖６０ｋｍＢ",
+      "kana": "ワカヤマオキ６０ｋｍＢ",
+      "owner": "防災科学技術研究所",
+      "latitude": "32.9333",
+      "longitude": "135.7667"
+    },
+    {
+      "area": "和歌山県",
+      "prefecture": "和歌山県",
+      "code": "53074",
+      "name": "和歌山沖６０ｋｍＣ",
+      "kana": "ワカヤマオキ６０ｋｍＣ",
+      "owner": "防災科学技術研究所",
+      "latitude": "33.1833",
+      "longitude": "135.1000"
+    },
+    {
+      "area": "和歌山県",
+      "prefecture": "和歌山県",
+      "code": "53075",
+      "name": "和歌山沖５０ｋｍＣ",
+      "kana": "ワカヤマオキ５０ｋｍＣ",
+      "owner": "防災科学技術研究所",
+      "latitude": "33.0333",
+      "longitude": "135.8333"
+    },
+    {
+      "area": "和歌山県",
+      "prefecture": "和歌山県",
+      "code": "53076",
+      "name": "和歌山沖５０ｋｍＤ",
+      "kana": "ワカヤマオキ５０ｋｍＤ",
+      "owner": "防災科学技術研究所",
+      "latitude": "33.0833",
+      "longitude": "135.4167"
+    },
+    {
+      "area": "和歌山県",
+      "prefecture": "和歌山県",
+      "code": "53077",
+      "name": "和歌山沖５０ｋｍＥ",
+      "kana": "ワカヤマオキ５０ｋｍＥ",
+      "owner": "防災科学技術研究所",
+      "latitude": "33.2333",
+      "longitude": "135.1667"
+    },
+    {
+      "area": "和歌山県",
+      "prefecture": "和歌山県",
+      "code": "53078",
+      "name": "和歌山沖５０ｋｍＦ",
+      "kana": "ワカヤマオキ５０ｋｍＦ",
+      "owner": "防災科学技術研究所",
+      "latitude": "33.2833",
+      "longitude": "134.9833"
+    },
+    {
+      "area": "和歌山県",
+      "prefecture": "和歌山県",
+      "code": "53079",
+      "name": "和歌山沖４０ｋｍＡ",
+      "kana": "ワカヤマオキ４０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "33.3333",
+      "longitude": "136.2667"
+    },
+    {
+      "area": "和歌山県",
+      "prefecture": "和歌山県",
+      "code": "53080",
+      "name": "和歌山沖３０ｋｍＡ",
+      "kana": "ワカヤマオキ３０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "33.5500",
+      "longitude": "136.3333"
+    },
+    {
+      "area": "和歌山県",
+      "prefecture": "和歌山県",
+      "code": "53081",
+      "name": "和歌山沖３０ｋｍＢ",
+      "kana": "ワカヤマオキ３０ｋｍＢ",
+      "owner": "防災科学技術研究所",
+      "latitude": "33.4500",
+      "longitude": "136.2500"
+    },
+    {
+      "area": "和歌山県",
+      "prefecture": "和歌山県",
+      "code": "53082",
+      "name": "和歌山沖４０ｋｍＢ",
+      "kana": "ワカヤマオキ４０ｋｍＢ",
+      "owner": "防災科学技術研究所",
+      "latitude": "33.1500",
+      "longitude": "135.9667"
+    },
+    {
+      "area": "和歌山県",
+      "prefecture": "和歌山県",
+      "code": "53083",
+      "name": "和歌山沖４０ｋｍＣ",
+      "kana": "ワカヤマオキ４０ｋｍＣ",
+      "owner": "防災科学技術研究所",
+      "latitude": "33.1333",
+      "longitude": "135.8667"
+    },
+    {
+      "area": "和歌山県",
+      "prefecture": "和歌山県",
+      "code": "53084",
+      "name": "和歌山沖４０ｋｍＤ",
+      "kana": "ワカヤマオキ４０ｋｍＤ",
+      "owner": "防災科学技術研究所",
+      "latitude": "33.0833",
+      "longitude": "135.7167"
+    },
+    {
+      "area": "和歌山県",
+      "prefecture": "和歌山県",
+      "code": "53085",
+      "name": "和歌山沖４０ｋｍＥ",
+      "kana": "ワカヤマオキ４０ｋｍＥ",
+      "owner": "防災科学技術研究所",
+      "latitude": "33.1333",
+      "longitude": "135.5167"
+    },
+    {
+      "area": "和歌山県",
+      "prefecture": "和歌山県",
+      "code": "53086",
+      "name": "和歌山沖４０ｋｍＦ",
+      "kana": "ワカヤマオキ４０ｋｍＦ",
+      "owner": "防災科学技術研究所",
+      "latitude": "33.1833",
+      "longitude": "135.3333"
+    },
+    {
+      "area": "和歌山県",
+      "prefecture": "和歌山県",
+      "code": "53087",
+      "name": "和歌山沖４０ｋｍＧ",
+      "kana": "ワカヤマオキ４０ｋｍＧ",
+      "owner": "防災科学技術研究所",
+      "latitude": "33.3167",
+      "longitude": "135.0667"
+    },
+    {
+      "area": "和歌山県",
+      "prefecture": "和歌山県",
+      "code": "53088",
+      "name": "和歌山沖３０ｋｍＣ",
+      "kana": "ワカヤマオキ３０ｋｍＣ",
+      "owner": "防災科学技術研究所",
+      "latitude": "33.1667",
+      "longitude": "135.7500"
+    },
+    {
+      "area": "和歌山県",
+      "prefecture": "和歌山県",
+      "code": "53089",
+      "name": "和歌山沖３０ｋｍＤ",
+      "kana": "ワカヤマオキ３０ｋｍＤ",
+      "owner": "防災科学技術研究所",
+      "latitude": "33.2333",
+      "longitude": "135.4667"
+    },
+    {
+      "area": "和歌山県",
+      "prefecture": "和歌山県",
+      "code": "53090",
+      "name": "和歌山白浜沖",
+      "kana": "ワカヤマシラハマオキ",
+      "owner": "近畿地方整備局",
+      "latitude": "33.6500",
+      "longitude": "135.1500"
+    },
+    {
+      "area": "鳥取県",
+      "prefecture": "鳥取県",
+      "code": "54001",
+      "name": "境港市境",
+      "kana": "サカイミナトシサカイ",
+      "owner": "気象庁",
+      "latitude": "35.5500",
+      "longitude": "133.2500"
+    },
+    {
+      "area": "鳥取県",
+      "prefecture": "鳥取県",
+      "code": "54030",
+      "name": "岩美町田後",
+      "kana": "イワミチョウタジリ",
+      "owner": "国土地理院",
+      "latitude": "35.6000",
+      "longitude": "134.3167"
+    },
+    {
+      "area": "島根県出雲・石見",
+      "prefecture": "島根県",
+      "code": "55001",
+      "name": "浜田",
+      "kana": "ハマダ",
+      "owner": "気象庁",
+      "latitude": "34.9000",
+      "longitude": "132.0667"
+    },
+    {
+      "area": "隠岐",
+      "prefecture": "島根県",
+      "code": "55101",
+      "name": "隠岐西郷",
+      "kana": "オキサイゴウ",
+      "owner": "気象庁",
+      "latitude": "36.2000",
+      "longitude": "133.3333"
+    },
+    {
+      "area": "岡山県",
+      "prefecture": "岡山県",
+      "code": "56001",
+      "name": "玉野市宇野",
+      "kana": "タマノシウノ",
+      "owner": "気象庁",
+      "latitude": "34.4833",
+      "longitude": "133.9500"
+    },
+    {
+      "area": "広島県",
+      "prefecture": "広島県",
+      "code": "57001",
+      "name": "広島",
+      "kana": "ヒロシマ",
+      "owner": "海上保安庁",
+      "latitude": "34.3500",
+      "longitude": "132.4667"
+    },
+    {
+      "area": "広島県",
+      "prefecture": "広島県",
+      "code": "57002",
+      "name": "呉",
+      "kana": "クレ",
+      "owner": "海上保安庁",
+      "latitude": "34.2333",
+      "longitude": "132.5500"
+    },
+    {
+      "area": "徳島県",
+      "prefecture": "徳島県",
+      "code": "58001",
+      "name": "小松島",
+      "kana": "コマツシマ",
+      "owner": "気象庁",
+      "latitude": "34.0167",
+      "longitude": "134.5833"
+    },
+    {
+      "area": "徳島県",
+      "prefecture": "徳島県",
+      "code": "58002",
+      "name": "徳島由岐",
+      "kana": "トクシマユキ",
+      "owner": "気象庁",
+      "latitude": "33.7667",
+      "longitude": "134.6000"
+    },
+    {
+      "area": "徳島県",
+      "prefecture": "徳島県",
+      "code": "58070",
+      "name": "徳島沖５０ｋｍＡ",
+      "kana": "トクシマオキ５０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "33.3333",
+      "longitude": "134.8667"
+    },
+    {
+      "area": "徳島県",
+      "prefecture": "徳島県",
+      "code": "58071",
+      "name": "徳島沖５０ｋｍＢ",
+      "kana": "トクシマオキ５０ｋｍＢ",
+      "owner": "防災科学技術研究所",
+      "latitude": "33.2500",
+      "longitude": "134.7667"
+    },
+    {
+      "area": "徳島県",
+      "prefecture": "徳島県",
+      "code": "58080",
+      "name": "徳島沖４０ｋｍＡ",
+      "kana": "トクシマオキ４０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "33.4167",
+      "longitude": "134.7500"
+    },
+    {
+      "area": "徳島県",
+      "prefecture": "徳島県",
+      "code": "58081",
+      "name": "徳島沖４０ｋｍＢ",
+      "kana": "トクシマオキ４０ｋｍＢ",
+      "owner": "防災科学技術研究所",
+      "latitude": "33.3167",
+      "longitude": "134.6667"
+    },
+    {
+      "area": "徳島県",
+      "prefecture": "徳島県",
+      "code": "58090",
+      "name": "徳島海陽沖",
+      "kana": "トクシマカイヨウオキ",
+      "owner": "四国地方整備局",
+      "latitude": "33.4667",
+      "longitude": "134.4833"
+    },
+    {
+      "area": "香川県",
+      "prefecture": "香川県",
+      "code": "59001",
+      "name": "高松",
+      "kana": "タカマツ",
+      "owner": "気象庁",
+      "latitude": "34.3500",
+      "longitude": "134.0500"
+    },
+    {
+      "area": "香川県",
+      "prefecture": "香川県",
+      "code": "59020",
+      "name": "坂出市与島港",
+      "kana": "サカイデシヨシマコウ",
+      "owner": "四国地方整備局",
+      "latitude": "34.3833",
+      "longitude": "133.8167"
+    },
+    {
+      "area": "香川県",
+      "prefecture": "香川県",
+      "code": "59022",
+      "name": "多度津港",
+      "kana": "タドツコウ",
+      "owner": "四国地方整備局",
+      "latitude": "34.2833",
+      "longitude": "133.7500"
+    },
+    {
+      "area": "愛媛県宇和海沿岸",
+      "prefecture": "愛媛県",
+      "code": "60001",
+      "name": "宇和島",
+      "kana": "ウワジマ",
+      "owner": "気象庁",
+      "latitude": "33.2333",
+      "longitude": "132.5500"
+    },
+    {
+      "area": "愛媛県瀬戸内海沿岸",
+      "prefecture": "愛媛県",
+      "code": "60101",
+      "name": "松山",
+      "kana": "マツヤマ",
+      "owner": "気象庁",
+      "latitude": "33.8667",
+      "longitude": "132.7167"
+    },
+    {
+      "area": "愛媛県瀬戸内海沿岸",
+      "prefecture": "愛媛県",
+      "code": "60121",
+      "name": "今治市馬島",
+      "kana": "イマバリシウマシマ",
+      "owner": "四国地方整備局",
+      "latitude": "34.1167",
+      "longitude": "132.9833"
+    },
+    {
+      "area": "高知県",
+      "prefecture": "高知県",
+      "code": "61001",
+      "name": "室戸市室戸岬",
+      "kana": "ムロトシムロトミサキ",
+      "owner": "気象庁",
+      "latitude": "33.2667",
+      "longitude": "134.1667"
+    },
+    {
+      "area": "高知県",
+      "prefecture": "高知県",
+      "code": "61002",
+      "name": "高知",
+      "kana": "コウチ",
+      "owner": "気象庁",
+      "latitude": "33.5000",
+      "longitude": "133.5667"
+    },
+    {
+      "area": "高知県",
+      "prefecture": "高知県",
+      "code": "61003",
+      "name": "土佐清水",
+      "kana": "トサシミズ",
+      "owner": "気象庁",
+      "latitude": "32.7833",
+      "longitude": "132.9667"
+    },
+    {
+      "area": "高知県",
+      "prefecture": "高知県",
+      "code": "61020",
+      "name": "須崎港",
+      "kana": "スサキコウ",
+      "owner": "",
+      "latitude": "33.3833",
+      "longitude": "133.3000"
+    },
+    {
+      "area": "高知県",
+      "prefecture": "高知県",
+      "code": "61030",
+      "name": "中土佐町久礼港",
+      "kana": "ナカトサチョウクレコウ",
+      "owner": "国土地理院",
+      "latitude": "33.3333",
+      "longitude": "133.2500"
+    },
+    {
+      "area": "高知県",
+      "prefecture": "高知県",
+      "code": "61061",
+      "name": "高知沖８０ｋｍＡ",
+      "kana": "コウチオキ８０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "32.6333",
+      "longitude": "134.5167"
+    },
+    {
+      "area": "高知県",
+      "prefecture": "高知県",
+      "code": "61062",
+      "name": "高知沖７０ｋｍＢ",
+      "kana": "コウチオキ７０ｋｍＢ",
+      "owner": "防災科学技術研究所",
+      "latitude": "32.7167",
+      "longitude": "134.6000"
+    },
+    {
+      "area": "高知県",
+      "prefecture": "高知県",
+      "code": "61063",
+      "name": "高知沖７０ｋｍＣ",
+      "kana": "コウチオキ７０ｋｍＣ",
+      "owner": "防災科学技術研究所",
+      "latitude": "32.6833",
+      "longitude": "134.4333"
+    },
+    {
+      "area": "高知県",
+      "prefecture": "高知県",
+      "code": "61070",
+      "name": "高知沖６０ｋｍＡ",
+      "kana": "コウチオキ６０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "32.7667",
+      "longitude": "134.5167"
+    },
+    {
+      "area": "高知県",
+      "prefecture": "高知県",
+      "code": "61090",
+      "name": "高知足摺岬沖",
+      "kana": "コウチアシズリミサキオキ",
+      "owner": "四国地方整備局",
+      "latitude": "32.6333",
+      "longitude": "133.1500"
+    },
+    {
+      "area": "高知県",
+      "prefecture": "高知県",
+      "code": "61091",
+      "name": "高知室戸岬沖",
+      "kana": "コウチムロトミサキオキ",
+      "owner": "四国地方整備局",
+      "latitude": "33.0833",
+      "longitude": "134.1833"
+    },
+    {
+      "area": "山口県日本海沿岸",
+      "prefecture": "山口県",
+      "code": "70021",
+      "name": "下関市南風泊港",
+      "kana": "シモノセキシハエドマリコウ",
+      "owner": "九州地方整備局",
+      "latitude": "33.9500",
+      "longitude": "130.8833"
+    },
+    {
+      "area": "山口県瀬戸内海沿岸",
+      "prefecture": "山口県",
+      "code": "70101",
+      "name": "下関市彦島弟子待",
+      "kana": "シモノセキシヒコシマデシマツ",
+      "owner": "九州地方整備局",
+      "latitude": "33.9333",
+      "longitude": "130.9333"
+    },
+    {
+      "area": "山口県瀬戸内海沿岸",
+      "prefecture": "山口県",
+      "code": "70102",
+      "name": "徳山",
+      "kana": "トクヤマ",
+      "owner": "海上保安庁",
+      "latitude": "34.0333",
+      "longitude": "131.8000"
+    },
+    {
+      "area": "山口県瀬戸内海沿岸",
+      "prefecture": "山口県",
+      "code": "70120",
+      "name": "宇部港",
+      "kana": "ウベコウ",
+      "owner": "中国地方整備局",
+      "latitude": "33.9333",
+      "longitude": "131.2500"
+    },
+    {
+      "area": "山口県瀬戸内海沿岸",
+      "prefecture": "山口県",
+      "code": "70121",
+      "name": "三田尻中関港",
+      "kana": "ミタジリナカノセキコウ",
+      "owner": "",
+      "latitude": "34.0333",
+      "longitude": "131.5833"
+    },
+    {
+      "area": "山口県瀬戸内海沿岸",
+      "prefecture": "山口県",
+      "code": "70122",
+      "name": "下関港長府",
+      "kana": "シモノセキコウチョウフ",
+      "owner": "九州地方整備局",
+      "latitude": "34.0167",
+      "longitude": "131.0000"
+    },
+    {
+      "area": "福岡県瀬戸内海沿岸",
+      "prefecture": "福岡県",
+      "code": "71002",
+      "name": "北九州市門司",
+      "kana": "キタキュウシュウシモジ",
+      "owner": "九州地方整備局",
+      "latitude": "33.9500",
+      "longitude": "130.9500"
+    },
+    {
+      "area": "福岡県瀬戸内海沿岸",
+      "prefecture": "福岡県",
+      "code": "71021",
+      "name": "苅田港",
+      "kana": "カンダコウ",
+      "owner": "九州地方整備局",
+      "latitude": "33.8000",
+      "longitude": "131.0000"
+    },
+    {
+      "area": "福岡県瀬戸内海沿岸",
+      "prefecture": "福岡県",
+      "code": "71022",
+      "name": "北九州港青浜",
+      "kana": "キタキュウシュウコウアオハマ",
+      "owner": "九州地方整備局",
+      "latitude": "33.9500",
+      "longitude": "131.0167"
+    },
+    {
+      "area": "福岡県日本海沿岸",
+      "prefecture": "福岡県",
+      "code": "71101",
+      "name": "福岡市博多",
+      "kana": "フクオカシハカタ",
+      "owner": "海上保安庁",
+      "latitude": "33.6167",
+      "longitude": "130.4000"
+    },
+    {
+      "area": "福岡県日本海沿岸",
+      "prefecture": "福岡県",
+      "code": "71120",
+      "name": "北九州港日明",
+      "kana": "キタキュウシュウコウヒアガリ",
+      "owner": "九州地方整備局",
+      "latitude": "33.9167",
+      "longitude": "130.8833"
+    },
+    {
+      "area": "有明・八代海",
+      "prefecture": "福岡県",
+      "code": "71201",
+      "name": "大牟田市三池",
+      "kana": "オオムタシミイケ",
+      "owner": "",
+      "latitude": "33.0167",
+      "longitude": "130.4167"
+    },
+    {
+      "area": "有明・八代海",
+      "prefecture": "佐賀県",
+      "code": "71202",
+      "name": "太良町大浦野崎",
+      "kana": "タラチョウオオウラノザキ",
+      "owner": "気象庁",
+      "latitude": "32.9833",
+      "longitude": "130.2167"
+    },
+    {
+      "area": "有明・八代海",
+      "prefecture": "熊本県",
+      "code": "71203",
+      "name": "三角",
+      "kana": "ミスミ",
+      "owner": "",
+      "latitude": "32.6167",
+      "longitude": "130.4500"
+    },
+    {
+      "area": "有明・八代海",
+      "prefecture": "熊本県",
+      "code": "71220",
+      "name": "八代港",
+      "kana": "ヤツシロコウ",
+      "owner": "九州地方整備局",
+      "latitude": "32.5167",
+      "longitude": "130.5667"
+    },
+    {
+      "area": "有明・八代海",
+      "prefecture": "熊本県",
+      "code": "71221",
+      "name": "天草市本渡港",
+      "kana": "アマクサシホンドコウ",
+      "owner": "九州地方整備局",
+      "latitude": "32.4333",
+      "longitude": "130.2167"
+    },
+    {
+      "area": "有明・八代海",
+      "prefecture": "熊本県",
+      "code": "71222",
+      "name": "熊本港",
+      "kana": "クマモトコウ",
+      "owner": "九州地方整備局",
+      "latitude": "32.7500",
+      "longitude": "130.5667"
+    },
+    {
+      "area": "佐賀県北部",
+      "prefecture": "佐賀県",
+      "code": "72020",
+      "name": "唐津港",
+      "kana": "カラツコウ",
+      "owner": "九州地方整備局",
+      "latitude": "33.4667",
+      "longitude": "129.9667"
+    },
+    {
+      "area": "佐賀県北部",
+      "prefecture": "佐賀県",
+      "code": "72030",
+      "name": "玄海町仮屋",
+      "kana": "ゲンカイチョウカリヤ",
+      "owner": "国土地理院",
+      "latitude": "33.4667",
+      "longitude": "129.8500"
+    },
+    {
+      "area": "長崎県西方",
+      "prefecture": "長崎県",
+      "code": "73001",
+      "name": "長崎",
+      "kana": "ナガサキ",
+      "owner": "気象庁",
+      "latitude": "32.7333",
+      "longitude": "129.8667"
+    },
+    {
+      "area": "長崎県西方",
+      "prefecture": "長崎県",
+      "code": "73002",
+      "name": "口之津",
+      "kana": "クチノツ",
+      "owner": "気象庁",
+      "latitude": "32.6000",
+      "longitude": "130.2000"
+    },
+    {
+      "area": "長崎県西方",
+      "prefecture": "長崎県",
+      "code": "73003",
+      "name": "福江島福江港",
+      "kana": "フクエジマフクエコウ",
+      "owner": "気象庁",
+      "latitude": "32.7000",
+      "longitude": "128.8500"
+    },
+    {
+      "area": "長崎県西方",
+      "prefecture": "長崎県",
+      "code": "73004",
+      "name": "佐世保",
+      "kana": "サセボ",
+      "owner": "海上保安庁",
+      "latitude": "33.1500",
+      "longitude": "129.7167"
+    },
+    {
+      "area": "長崎県西方",
+      "prefecture": "長崎県",
+      "code": "73020",
+      "name": "長崎港皇后",
+      "kana": "ナガサキコウコウゴウ",
+      "owner": "九州地方整備局",
+      "latitude": "32.7167",
+      "longitude": "129.8333"
+    },
+    {
+      "area": "長崎県西方",
+      "prefecture": "長崎県",
+      "code": "73021",
+      "name": "平戸市田平港",
+      "kana": "ヒラドシタビラコウ",
+      "owner": "九州地方整備局",
+      "latitude": "33.3667",
+      "longitude": "129.5833"
+    },
+    {
+      "area": "壱岐・対馬",
+      "prefecture": "長崎県",
+      "code": "73102",
+      "name": "対馬比田勝",
+      "kana": "ツシマヒタカツ",
+      "owner": "気象庁",
+      "latitude": "34.6500",
+      "longitude": "129.4833"
+    },
+    {
+      "area": "壱岐・対馬",
+      "prefecture": "長崎県",
+      "code": "73110",
+      "name": "対馬市厳原",
+      "kana": "ツシマシイヅハラ",
+      "owner": "海上保安庁",
+      "latitude": "34.2000",
+      "longitude": "129.3000"
+    },
+    {
+      "area": "壱岐・対馬",
+      "prefecture": "長崎県",
+      "code": "73120",
+      "name": "壱岐島郷ノ浦港",
+      "kana": "イキノシマゴウノウラコウ",
+      "owner": "九州地方整備局",
+      "latitude": "33.7500",
+      "longitude": "129.6833"
+    },
+    {
+      "area": "熊本県天草灘沿岸",
+      "prefecture": "熊本県",
+      "code": "74000",
+      "name": "苓北町都呂々",
+      "kana": "レイホクマチトロロ",
+      "owner": "気象庁",
+      "latitude": "32.4667",
+      "longitude": "130.0333"
+    },
+    {
+      "area": "大分県瀬戸内海沿岸",
+      "prefecture": "大分県",
+      "code": "75001",
+      "name": "大分",
+      "kana": "オオイタ",
+      "owner": "海上保安庁",
+      "latitude": "33.2667",
+      "longitude": "131.6833"
+    },
+    {
+      "area": "大分県瀬戸内海沿岸",
+      "prefecture": "大分県",
+      "code": "75020",
+      "name": "別府港",
+      "kana": "ベップコウ",
+      "owner": "九州地方整備局",
+      "latitude": "33.3000",
+      "longitude": "131.5000"
+    },
+    {
+      "area": "大分県豊後水道沿岸",
+      "prefecture": "大分県",
+      "code": "75100",
+      "name": "佐伯市松浦",
+      "kana": "サイキシマツウラ",
+      "owner": "気象庁",
+      "latitude": "32.9500",
+      "longitude": "131.9667"
+    },
+    {
+      "area": "宮崎県",
+      "prefecture": "宮崎県",
+      "code": "76001",
+      "name": "日向市細島",
+      "kana": "ヒユウガシホソシマ",
+      "owner": "宮崎県",
+      "latitude": "32.4500",
+      "longitude": "131.6667"
+    },
+    {
+      "area": "宮崎県",
+      "prefecture": "宮崎県",
+      "code": "76002",
+      "name": "日南市油津",
+      "kana": "ニチナンシアブラツ",
+      "owner": "気象庁",
+      "latitude": "31.5833",
+      "longitude": "131.4167"
+    },
+    {
+      "area": "宮崎県",
+      "prefecture": "宮崎県",
+      "code": "76020",
+      "name": "宮崎港",
+      "kana": "ミヤザキコウ",
+      "owner": "九州地方整備局",
+      "latitude": "31.9000",
+      "longitude": "131.4500"
+    },
+    {
+      "area": "宮崎県",
+      "prefecture": "宮崎県",
+      "code": "76090",
+      "name": "宮崎日向沖",
+      "kana": "ミヤザキヒュウガオキ",
+      "owner": "九州地方整備局",
+      "latitude": "32.3833",
+      "longitude": "131.9167"
+    },
+    {
+      "area": "鹿児島県東部",
+      "prefecture": "鹿児島県",
+      "code": "77002",
+      "name": "南大隅町大泊",
+      "kana": "ミナミオオスミチョウオオドマリ",
+      "owner": "海上保安庁",
+      "latitude": "31.0167",
+      "longitude": "130.6833"
+    },
+    {
+      "area": "鹿児島県東部",
+      "prefecture": "鹿児島県",
+      "code": "77020",
+      "name": "志布志港",
+      "kana": "シブシコウ",
+      "owner": "九州地方整備局",
+      "latitude": "31.4833",
+      "longitude": "131.1167"
+    },
+    {
+      "area": "種子島・屋久島地方",
+      "prefecture": "鹿児島県",
+      "code": "77102",
+      "name": "種子島西之表",
+      "kana": "タネガシマニシノオモテ",
+      "owner": "海上保安庁",
+      "latitude": "30.7333",
+      "longitude": "131.0000"
+    },
+    {
+      "area": "種子島・屋久島地方",
+      "prefecture": "鹿児島県",
+      "code": "77103",
+      "name": "種子島熊野",
+      "kana": "タネガシマクマノ",
+      "owner": "気象庁",
+      "latitude": "30.4667",
+      "longitude": "130.9667"
+    },
+    {
+      "area": "奄美群島・トカラ列島",
+      "prefecture": "鹿児島県",
+      "code": "77203",
+      "name": "中之島",
+      "kana": "ナカノシマ",
+      "owner": "海上保安庁",
+      "latitude": "29.8500",
+      "longitude": "129.8500"
+    },
+    {
+      "area": "奄美群島・トカラ列島",
+      "prefecture": "鹿児島県",
+      "code": "77204",
+      "name": "奄美市小湊",
+      "kana": "アマミシコミナト",
+      "owner": "気象庁",
+      "latitude": "28.3167",
+      "longitude": "129.5333"
+    },
+    {
+      "area": "奄美群島・トカラ列島",
+      "prefecture": "鹿児島県",
+      "code": "77205",
+      "name": "奄美市名瀬",
+      "kana": "アマミシナゼ",
+      "owner": "海上保安庁",
+      "latitude": "28.4000",
+      "longitude": "129.5000"
+    },
+    {
+      "area": "鹿児島県西部",
+      "prefecture": "鹿児島県",
+      "code": "77302",
+      "name": "枕崎",
+      "kana": "マクラザキ",
+      "owner": "気象庁",
+      "latitude": "31.2667",
+      "longitude": "130.3000"
+    },
+    {
+      "area": "鹿児島県西部",
+      "prefecture": "鹿児島県",
+      "code": "77303",
+      "name": "鹿児島",
+      "kana": "カゴシマ",
+      "owner": "気象庁",
+      "latitude": "31.6000",
+      "longitude": "130.5667"
+    },
+    {
+      "area": "鹿児島県西部",
+      "prefecture": "鹿児島県",
+      "code": "77330",
+      "name": "阿久根",
+      "kana": "アクネ",
+      "owner": "国土地理院",
+      "latitude": "32.0167",
+      "longitude": "130.1833"
+    },
+    {
+      "area": "沖縄本島地方",
+      "prefecture": "沖縄県",
+      "code": "80001",
+      "name": "那覇",
+      "kana": "ナハ",
+      "owner": "気象庁",
+      "latitude": "26.2167",
+      "longitude": "127.6667"
+    },
+    {
+      "area": "沖縄本島地方",
+      "prefecture": "沖縄県",
+      "code": "80002",
+      "name": "久米島",
+      "kana": "クメジマ",
+      "owner": "",
+      "latitude": "26.3333",
+      "longitude": "126.7500"
+    },
+    {
+      "area": "沖縄本島地方",
+      "prefecture": "沖縄県",
+      "code": "80003",
+      "name": "沖縄市中城湾港",
+      "kana": "オキナワシナカグスクワンコウ",
+      "owner": "沖縄総合事務局",
+      "latitude": "26.3333",
+      "longitude": "127.8333"
+    },
+    {
+      "area": "沖縄本島地方",
+      "prefecture": "沖縄県",
+      "code": "80030",
+      "name": "南城市安座真",
+      "kana": "ナンジョウシアザマ",
+      "owner": "国土地理院",
+      "latitude": "26.1833",
+      "longitude": "127.8167"
+    },
+    {
+      "area": "大東島地方",
+      "prefecture": "沖縄県",
+      "code": "80102",
+      "name": "南大東漁港",
+      "kana": "ミナミダイトウギョコウ",
+      "owner": "気象庁",
+      "latitude": "25.8667",
+      "longitude": "131.2333"
+    },
+    {
+      "area": "宮古島・八重山地方",
+      "prefecture": "沖縄県",
+      "code": "80203",
+      "name": "西表島",
+      "kana": "イリオモテジマ",
+      "owner": "",
+      "latitude": "24.3500",
+      "longitude": "123.7500"
+    },
+    {
+      "area": "宮古島・八重山地方",
+      "prefecture": "沖縄県",
+      "code": "80204",
+      "name": "与那国島久部良",
+      "kana": "ヨナグニジマクブラ",
+      "owner": "気象庁",
+      "latitude": "24.4500",
+      "longitude": "122.9500"
+    },
+    {
+      "area": "宮古島・八重山地方",
+      "prefecture": "沖縄県",
+      "code": "80205",
+      "name": "石垣島石垣港",
+      "kana": "イシガキジマイシガキコウ",
+      "owner": "気象庁",
+      "latitude": "24.3333",
+      "longitude": "124.1667"
+    },
+    {
+      "area": "宮古島・八重山地方",
+      "prefecture": "沖縄県",
+      "code": "80206",
+      "name": "宮古島平良",
+      "kana": "ミヤコジマヒララ",
+      "owner": "沖縄総合事務局",
+      "latitude": "24.8167",
+      "longitude": "125.2833"
+    },
+    {
+      "area": null,
+      "prefecture": "北海道",
+      "code": "91010",
+      "name": "釧路沖１１０ｋｍＡ",
+      "kana": "クシロオキ１１０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "42.0667",
+      "longitude": "145.4333"
+    },
+    {
+      "area": null,
+      "prefecture": "北海道",
+      "code": "91011",
+      "name": "十勝沖１１０ｋｍＡ",
+      "kana": "トカチオキ１１０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "41.9000",
+      "longitude": "144.7000"
+    },
+    {
+      "area": null,
+      "prefecture": "北海道",
+      "code": "91012",
+      "name": "十勝沖１２０ｋｍＡ",
+      "kana": "トカチオキ１２０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "41.6500",
+      "longitude": "144.6667"
+    },
+    {
+      "area": null,
+      "prefecture": "北海道",
+      "code": "91020",
+      "name": "釧路沖１３０ｋｍＡ",
+      "kana": "クシロオキ１３０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "41.8833",
+      "longitude": "145.6500"
+    },
+    {
+      "area": null,
+      "prefecture": "北海道",
+      "code": "91021",
+      "name": "釧路沖１３０ｋｍＢ",
+      "kana": "クシロオキ１３０ｋｍＢ",
+      "owner": "防災科学技術研究所",
+      "latitude": "42.1000",
+      "longitude": "146.2333"
+    },
+    {
+      "area": null,
+      "prefecture": "北海道",
+      "code": "91030",
+      "name": "釧路沖１５０ｋｍＡ",
+      "kana": "クシロオキ１５０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "41.6667",
+      "longitude": "145.5333"
+    },
+    {
+      "area": null,
+      "prefecture": "北海道",
+      "code": "91031",
+      "name": "十勝沖１５０ｋｍＡ",
+      "kana": "トカチオキ１５０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "41.5167",
+      "longitude": "144.9000"
+    },
+    {
+      "area": null,
+      "prefecture": "北海道",
+      "code": "91032",
+      "name": "釧路沖１６０ｋｍＡ",
+      "kana": "クシロオキ１６０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "41.5333",
+      "longitude": "145.2500"
+    },
+    {
+      "area": null,
+      "prefecture": "北海道",
+      "code": "91033",
+      "name": "釧路沖１７０ｋｍＡ",
+      "kana": "クシロオキ１７０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "41.6667",
+      "longitude": "146.1667"
+    },
+    {
+      "area": null,
+      "prefecture": "北海道",
+      "code": "91040",
+      "name": "釧路沖１８０ｋｍＡ",
+      "kana": "クシロオキ１８０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "41.3667",
+      "longitude": "145.6000"
+    },
+    {
+      "area": null,
+      "prefecture": "青森県",
+      "code": "92010",
+      "name": "青森東方沖１２０ｋｍＡ",
+      "kana": "アオモリトウホウオキ１２０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "40.4500",
+      "longitude": "143.2000"
+    },
+    {
+      "area": null,
+      "prefecture": "青森県",
+      "code": "92030",
+      "name": "青森東方沖１６０ｋｍＡ",
+      "kana": "アオモリトウホウオキ１６０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "40.9667",
+      "longitude": "143.4500"
+    },
+    {
+      "area": null,
+      "prefecture": "青森県",
+      "code": "92040",
+      "name": "青森東方沖１８０ｋｍＡ",
+      "kana": "アオモリトウホウオキ１８０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "40.8833",
+      "longitude": "143.7667"
+    },
+    {
+      "area": null,
+      "prefecture": "青森県",
+      "code": "92041",
+      "name": "青森東方沖２００ｋｍＡ",
+      "kana": "アオモリトウホウオキ２００ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "40.7833",
+      "longitude": "144.0833"
+    },
+    {
+      "area": null,
+      "prefecture": "青森県",
+      "code": "92042",
+      "name": "青森東方沖２００ｋｍＢ",
+      "kana": "アオモリトウホウオキ２００ｋｍＢ",
+      "owner": "防災科学技術研究所",
+      "latitude": "40.5500",
+      "longitude": "144.1333"
+    },
+    {
+      "area": null,
+      "prefecture": "青森県",
+      "code": "92060",
+      "name": "青森東方沖２６０ｋｍＡ",
+      "kana": "アオモリトウホウオキ２６０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "40.5333",
+      "longitude": "144.9333"
+    },
+    {
+      "area": null,
+      "prefecture": "青森県",
+      "code": "92070",
+      "name": "青森東方沖３１０ｋｍＡ",
+      "kana": "アオモリトウホウオキ３１０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "40.9000",
+      "longitude": "145.4000"
+    },
+    {
+      "area": null,
+      "prefecture": "岩手県",
+      "code": "92110",
+      "name": "岩手沖１１０ｋｍＡ",
+      "kana": "イワテオキ１１０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "39.7000",
+      "longitude": "143.3667"
+    },
+    {
+      "area": null,
+      "prefecture": "岩手県",
+      "code": "92111",
+      "name": "岩手沖１２０ｋｍＡ",
+      "kana": "イワテオキ１２０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "40.0667",
+      "longitude": "143.3167"
+    },
+    {
+      "area": null,
+      "prefecture": "岩手県",
+      "code": "92112",
+      "name": "岩手沖１２０ｋｍＢ",
+      "kana": "イワテオキ１２０ｋｍＢ",
+      "owner": "防災科学技術研究所",
+      "latitude": "39.3000",
+      "longitude": "143.4500"
+    },
+    {
+      "area": null,
+      "prefecture": "岩手県",
+      "code": "92120",
+      "name": "岩手沖１４０ｋｍＡ",
+      "kana": "イワテオキ１４０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "40.4333",
+      "longitude": "143.5500"
+    },
+    {
+      "area": null,
+      "prefecture": "岩手県",
+      "code": "92121",
+      "name": "岩手沖１４０ｋｍＢ",
+      "kana": "イワテオキ１４０ｋｍＢ",
+      "owner": "防災科学技術研究所",
+      "latitude": "40.0833",
+      "longitude": "143.6500"
+    },
+    {
+      "area": null,
+      "prefecture": "岩手県",
+      "code": "92122",
+      "name": "岩手沖１４０ｋｍＣ",
+      "kana": "イワテオキ１４０ｋｍＣ",
+      "owner": "防災科学技術研究所",
+      "latitude": "39.6333",
+      "longitude": "143.7167"
+    },
+    {
+      "area": null,
+      "prefecture": "岩手県",
+      "code": "92130",
+      "name": "岩手沖１５０ｋｍＡ",
+      "kana": "イワテオキ１５０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "39.1833",
+      "longitude": "143.7500"
+    },
+    {
+      "area": null,
+      "prefecture": "岩手県",
+      "code": "92131",
+      "name": "岩手沖１６０ｋｍＡ",
+      "kana": "イワテオキ１６０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "39.7667",
+      "longitude": "143.9333"
+    },
+    {
+      "area": null,
+      "prefecture": "岩手県",
+      "code": "92132",
+      "name": "岩手沖１７０ｋｍＡ",
+      "kana": "イワテオキ１７０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "40.4333",
+      "longitude": "143.8833"
+    },
+    {
+      "area": null,
+      "prefecture": "岩手県",
+      "code": "92133",
+      "name": "岩手沖１７０ｋｍＢ",
+      "kana": "イワテオキ１７０ｋｍＢ",
+      "owner": "防災科学技術研究所",
+      "latitude": "40.0333",
+      "longitude": "143.9500"
+    },
+    {
+      "area": null,
+      "prefecture": "岩手県",
+      "code": "92134",
+      "name": "岩手沖１７０ｋｍＣ",
+      "kana": "イワテオキ１７０ｋｍＣ",
+      "owner": "防災科学技術研究所",
+      "latitude": "39.0500",
+      "longitude": "143.9333"
+    },
+    {
+      "area": null,
+      "prefecture": "岩手県",
+      "code": "92150",
+      "name": "岩手沖２２０ｋｍＡ",
+      "kana": "イワテオキ２２０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "39.0000",
+      "longitude": "144.5833"
+    },
+    {
+      "area": null,
+      "prefecture": "岩手県",
+      "code": "92151",
+      "name": "岩手沖２３０ｋｍＡ",
+      "kana": "イワテオキ２３０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "39.5167",
+      "longitude": "144.7167"
+    },
+    {
+      "area": null,
+      "prefecture": "岩手県",
+      "code": "92152",
+      "name": "岩手沖２４０ｋｍＡ",
+      "kana": "イワテオキ２４０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "40.0333",
+      "longitude": "144.8167"
+    },
+    {
+      "area": null,
+      "prefecture": "宮城県",
+      "code": "92210",
+      "name": "宮城沖１１０ｋｍＡ",
+      "kana": "ミヤギオキ１１０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "38.7667",
+      "longitude": "143.1500"
+    },
+    {
+      "area": null,
+      "prefecture": "宮城県",
+      "code": "92211",
+      "name": "宮城沖１１０ｋｍＢ",
+      "kana": "ミヤギオキ１１０ｋｍＢ",
+      "owner": "防災科学技術研究所",
+      "latitude": "38.4500",
+      "longitude": "142.8333"
+    },
+    {
+      "area": null,
+      "prefecture": "宮城県",
+      "code": "92212",
+      "name": "宮城沖１２０ｋｍＡ",
+      "kana": "ミヤギオキ１２０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "37.9833",
+      "longitude": "142.9000"
+    },
+    {
+      "area": null,
+      "prefecture": "宮城県",
+      "code": "92220",
+      "name": "宮城沖１３０ｋｍＡ",
+      "kana": "ミヤギオキ１３０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "38.4333",
+      "longitude": "143.1667"
+    },
+    {
+      "area": null,
+      "prefecture": "宮城県",
+      "code": "92221",
+      "name": "宮城沖１４０ｋｍＡ",
+      "kana": "ミヤギオキ１４０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "38.7833",
+      "longitude": "143.4833"
+    },
+    {
+      "area": null,
+      "prefecture": "宮城県",
+      "code": "92230",
+      "name": "宮城沖１５０ｋｍＡ",
+      "kana": "ミヤギオキ１５０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "37.9667",
+      "longitude": "143.2500"
+    },
+    {
+      "area": null,
+      "prefecture": "宮城県",
+      "code": "92231",
+      "name": "宮城沖１６０ｋｍＡ",
+      "kana": "ミヤギオキ１６０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "38.8333",
+      "longitude": "143.7833"
+    },
+    {
+      "area": null,
+      "prefecture": "宮城県",
+      "code": "92232",
+      "name": "宮城沖１６０ｋｍＢ",
+      "kana": "ミヤギオキ１６０ｋｍＢ",
+      "owner": "防災科学技術研究所",
+      "latitude": "38.4000",
+      "longitude": "143.5167"
+    },
+    {
+      "area": null,
+      "prefecture": "宮城県",
+      "code": "92240",
+      "name": "宮城沖１８０ｋｍＡ",
+      "kana": "ミヤギオキ１８０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "38.3000",
+      "longitude": "143.7833"
+    },
+    {
+      "area": null,
+      "prefecture": "宮城県",
+      "code": "92241",
+      "name": "宮城沖１８０ｋｍＢ",
+      "kana": "ミヤギオキ１８０ｋｍＢ",
+      "owner": "防災科学技術研究所",
+      "latitude": "37.9333",
+      "longitude": "143.5667"
+    },
+    {
+      "area": null,
+      "prefecture": "宮城県",
+      "code": "92242",
+      "name": "宮城沖１９０ｋｍＡ",
+      "kana": "ミヤギオキ１９０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "38.0667",
+      "longitude": "143.7500"
+    },
+    {
+      "area": null,
+      "prefecture": "宮城県",
+      "code": "92250",
+      "name": "宮城沖２３０ｋｍＡ",
+      "kana": "ミヤギオキ２３０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "38.5000",
+      "longitude": "144.4500"
+    },
+    {
+      "area": null,
+      "prefecture": "宮城県",
+      "code": "92251",
+      "name": "宮城沖２４０ｋｍＡ",
+      "kana": "ミヤギオキ２４０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "37.9833",
+      "longitude": "144.3333"
+    },
+    {
+      "area": null,
+      "prefecture": "福島県",
+      "code": "92500",
+      "name": "福島沖１００ｋｍＡ",
+      "kana": "フクシマオキ１００ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "37.2000",
+      "longitude": "142.2000"
+    },
+    {
+      "area": null,
+      "prefecture": "福島県",
+      "code": "92510",
+      "name": "福島沖１２０ｋｍＡ",
+      "kana": "フクシマオキ１２０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "37.6000",
+      "longitude": "142.6167"
+    },
+    {
+      "area": null,
+      "prefecture": "福島県",
+      "code": "92520",
+      "name": "福島沖１３０ｋｍＡ",
+      "kana": "フクシマオキ１３０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "37.1000",
+      "longitude": "142.5000"
+    },
+    {
+      "area": null,
+      "prefecture": "福島県",
+      "code": "92521",
+      "name": "福島沖１４０ｋｍＡ",
+      "kana": "フクシマオキ１４０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "37.5333",
+      "longitude": "142.9333"
+    },
+    {
+      "area": null,
+      "prefecture": "福島県",
+      "code": "92530",
+      "name": "福島沖１６０ｋｍＡ",
+      "kana": "フクシマオキ１６０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "37.0667",
+      "longitude": "142.8167"
+    },
+    {
+      "area": null,
+      "prefecture": "福島県",
+      "code": "92531",
+      "name": "福島沖１７０ｋｍＡ",
+      "kana": "フクシマオキ１７０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "37.4333",
+      "longitude": "143.2333"
+    },
+    {
+      "area": null,
+      "prefecture": "福島県",
+      "code": "92540",
+      "name": "福島沖１８０ｋｍＡ",
+      "kana": "フクシマオキ１８０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "37.2167",
+      "longitude": "143.0667"
+    },
+    {
+      "area": null,
+      "prefecture": "福島県",
+      "code": "92550",
+      "name": "福島沖２４０ｋｍＡ",
+      "kana": "フクシマオキ２４０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "37.4833",
+      "longitude": "144.1833"
+    },
+    {
+      "area": null,
+      "prefecture": "福島県",
+      "code": "92551",
+      "name": "福島沖２５０ｋｍＡ",
+      "kana": "フクシマオキ２５０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "37.0167",
+      "longitude": "143.9500"
+    },
+    {
+      "area": null,
+      "prefecture": "茨城県",
+      "code": "93010",
+      "name": "茨城沖１１０ｋｍＡ",
+      "kana": "イバラキオキ１１０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "36.6833",
+      "longitude": "142.1500"
+    },
+    {
+      "area": null,
+      "prefecture": "茨城県",
+      "code": "93011",
+      "name": "茨城沖１２０ｋｍＡ",
+      "kana": "イバラキオキ１２０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "35.9667",
+      "longitude": "142.1167"
+    },
+    {
+      "area": null,
+      "prefecture": "茨城県",
+      "code": "93020",
+      "name": "茨城沖１４０ｋｍＡ",
+      "kana": "イバラキオキ１４０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "36.6000",
+      "longitude": "142.4333"
+    },
+    {
+      "area": null,
+      "prefecture": "茨城県",
+      "code": "93021",
+      "name": "茨城沖１４０ｋｍＢ",
+      "kana": "イバラキオキ１４０ｋｍＢ",
+      "owner": "防災科学技術研究所",
+      "latitude": "35.9500",
+      "longitude": "142.4000"
+    },
+    {
+      "area": null,
+      "prefecture": "茨城県",
+      "code": "93030",
+      "name": "茨城沖１６０ｋｍＡ",
+      "kana": "イバラキオキ１６０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "36.3833",
+      "longitude": "142.6167"
+    },
+    {
+      "area": null,
+      "prefecture": "茨城県",
+      "code": "93031",
+      "name": "茨城沖１６０ｋｍＢ",
+      "kana": "イバラキオキ１６０ｋｍＢ",
+      "owner": "防災科学技術研究所",
+      "latitude": "36.1500",
+      "longitude": "142.5500"
+    },
+    {
+      "area": null,
+      "prefecture": "茨城県",
+      "code": "93050",
+      "name": "茨城沖２２０ｋｍＡ",
+      "kana": "イバラキオキ２２０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "36.1333",
+      "longitude": "143.2833"
+    },
+    {
+      "area": null,
+      "prefecture": "茨城県",
+      "code": "93051",
+      "name": "茨城沖２４０ｋｍＡ",
+      "kana": "イバラキオキ２４０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "36.5667",
+      "longitude": "143.6000"
+    },
+    {
+      "area": null,
+      "prefecture": "千葉県",
+      "code": "93100",
+      "name": "千葉東方沖１００ｋｍＡ",
+      "kana": "チバトウホウオキ１００ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "35.2333",
+      "longitude": "141.8667"
+    },
+    {
+      "area": null,
+      "prefecture": "千葉県",
+      "code": "93110",
+      "name": "千葉東方沖１１０ｋｍＡ",
+      "kana": "チバトウホウオキ１１０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "35.4000",
+      "longitude": "142.0500"
+    },
+    {
+      "area": null,
+      "prefecture": "千葉県",
+      "code": "93111",
+      "name": "千葉南東沖１１０ｋｍＡ",
+      "kana": "チバナントウオキ１１０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "34.2333",
+      "longitude": "140.7333"
+    },
+    {
+      "area": null,
+      "prefecture": "千葉県",
+      "code": "93112",
+      "name": "千葉南東沖１２０ｋｍＡ",
+      "kana": "チバナントウオキ１２０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "34.5333",
+      "longitude": "141.3500"
+    },
+    {
+      "area": null,
+      "prefecture": "千葉県",
+      "code": "93113",
+      "name": "千葉南東沖１２０ｋｍＢ",
+      "kana": "チバナントウオキ１２０ｋｍＢ",
+      "owner": "防災科学技術研究所",
+      "latitude": "34.2667",
+      "longitude": "141.0333"
+    },
+    {
+      "area": null,
+      "prefecture": "千葉県",
+      "code": "93114",
+      "name": "千葉南東沖１２０ｋｍＣ",
+      "kana": "チバナントウオキ１２０ｋｍＣ",
+      "owner": "防災科学技術研究所",
+      "latitude": "33.9500",
+      "longitude": "140.5167"
+    },
+    {
+      "area": null,
+      "prefecture": "千葉県",
+      "code": "93120",
+      "name": "千葉南東沖１４０ｋｍＡ",
+      "kana": "チバナントウオキ１４０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "34.3667",
+      "longitude": "141.5333"
+    },
+    {
+      "area": null,
+      "prefecture": "千葉県",
+      "code": "93121",
+      "name": "千葉南東沖１４０ｋｍＢ",
+      "kana": "チバナントウオキ１４０ｋｍＢ",
+      "owner": "防災科学技術研究所",
+      "latitude": "34.2000",
+      "longitude": "141.3333"
+    },
+    {
+      "area": null,
+      "prefecture": "千葉県",
+      "code": "93130",
+      "name": "千葉南東沖１６０ｋｍＡ",
+      "kana": "チバナントウオキ１６０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "33.8667",
+      "longitude": "141.1333"
+    },
+    {
+      "area": null,
+      "prefecture": "千葉県",
+      "code": "93131",
+      "name": "千葉東方沖１７０ｋｍＡ",
+      "kana": "チバトウホウオキ１７０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "35.2167",
+      "longitude": "142.6833"
+    },
+    {
+      "area": null,
+      "prefecture": "千葉県",
+      "code": "93140",
+      "name": "千葉南東沖１８０ｋｍＡ",
+      "kana": "チバナントウオキ１８０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "33.9667",
+      "longitude": "141.7333"
+    },
+    {
+      "area": null,
+      "prefecture": "千葉県",
+      "code": "93141",
+      "name": "千葉東方沖１８０ｋｍＡ",
+      "kana": "チバトウホウオキ１８０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "34.7167",
+      "longitude": "142.5167"
+    },
+    {
+      "area": null,
+      "prefecture": "千葉県",
+      "code": "93142",
+      "name": "千葉東方沖１９０ｋｍＡ",
+      "kana": "チバトウホウオキ１９０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "35.6667",
+      "longitude": "142.9667"
+    },
+    {
+      "area": null,
+      "prefecture": "千葉県",
+      "code": "93143",
+      "name": "千葉東方沖２００ｋｍＡ",
+      "kana": "チバトウホウオキ２００ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "34.2667",
+      "longitude": "142.2333"
+    },
+    {
+      "area": null,
+      "prefecture": "和歌山県",
+      "code": "95300",
+      "name": "和歌山沖１００ｋｍＡ",
+      "kana": "ワカヤマオキ１００ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "33.1333",
+      "longitude": "136.8167"
+    },
+    {
+      "area": null,
+      "prefecture": "和歌山県",
+      "code": "95301",
+      "name": "和歌山沖１００ｋｍＢ",
+      "kana": "ワカヤマオキ１００ｋｍＢ",
+      "owner": "防災科学技術研究所",
+      "latitude": "33.0667",
+      "longitude": "136.8333"
+    },
+    {
+      "area": null,
+      "prefecture": "和歌山県",
+      "code": "95302",
+      "name": "和歌山沖１００ｋｍＣ",
+      "kana": "ワカヤマオキ１００ｋｍＣ",
+      "owner": "防災科学技術研究所",
+      "latitude": "33.0000",
+      "longitude": "136.7833"
+    },
+    {
+      "area": null,
+      "prefecture": "和歌山県",
+      "code": "95303",
+      "name": "和歌山沖１００ｋｍＤ",
+      "kana": "ワカヤマオキ１００ｋｍＤ",
+      "owner": "防災科学技術研究所",
+      "latitude": "32.9500",
+      "longitude": "136.7333"
+    },
+    {
+      "area": null,
+      "prefecture": "和歌山県",
+      "code": "95310",
+      "name": "和歌山沖１１０ｋｍＡ",
+      "kana": "ワカヤマオキ１１０ｋｍＡ",
+      "owner": "防災科学技術研究所",
+      "latitude": "33.0500",
+      "longitude": "136.9333"
+    }
+  ]
+}

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="description" content="Webアプリアップデートのお知らせ - Webアプリお知らせ一覧">
+    <!--SNSでのサイト表示-->
+    <meta property="twitter:card" content="summary">
+    <meta property="twitter:site" content="@MiyakoCam">
+    <meta property="twitter:description" content="Webアプリアップデートのお知らせ - Webアプリお知らせ一覧">
+    <meta property="og:title" content="Webアプリアップデートのお知らせ">
+    <meta property="og:image" content="https://kottaro123456.com/webapps/shindobunpu/source/og.png">
+    <meta property="og:site_name" content="Webアプリアップデートのお知らせ">
+    <title>Webアプリアップデートのお知らせ - Webアプリお知らせ一覧</title>
+
+    <link rel="stylesheet" href="../index.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/localforage/1.10.0/localforage.min.js"></script><script src="../../../static/font/fonts.php"></script><script></script>
+    
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZL8HPL24E7"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-ZL8HPL24E7');
+    </script>
+    <style>
+        
+    </style>
+</head>
+<body>
+    <div class="title"><img src="../../shindobunpu/source/og.png" style="height: 2em;"> Webアプリアップデートのお知らせ</div>
+    <div class="date">2025/03/09</div>
+    <a href="../" class="backhome">← 一覧へ戻る</a>
+    <p class="content"><span class="material-symbols-rounded" style="color: #8800ff;">earthquake</span> 震度分布図 / <span class="material-symbols-rounded" style="color: #ff6600;">sunny</span> 警報注意報Viewer</p>
+    <div class="content">
+        <a href="../../shindobunpu/" target="_blank" rel="noopener noreferrer">震度分布図 for MiyakoCam</a> ならびに <a href="../../warning/" target="_blank" rel="noopener noreferrer">警報注意報Viewer for MiyakoCam</a> をアップデートしました！
+        <br><br>これらのアップデート内容は<span class="goikenbako_link small"><a href="https://forms.gle/Ut4yv4tf1X6Yn3hEA" target="_blank" rel="noopener noreferrer"><span class="material-symbols-rounded">assignment</span> Webアプリご意見箱</a></span>からいただいたものです。
+        <br>ぜひ、Webアプリにご意見・ご要望等ございましたらこちらのフォームにご回答をお願いいたします。
+        <br><br>アップデートの詳細は以下のとおりです。
+        <ul>
+            <li>
+                新機能
+                <ul>
+                    <li>
+                        <span class="material-symbols-rounded" style="color: #8800ff;">earthquake</span> 震度分布図
+                        <br>
+                        震源情報を描画する際に、同じ地震の震度速報を描画することができるようになりました。
+                        <br>同じ地震の震度速報を描画するには、震度速報が直前の情報であり、発生日時が一致している必要があります。
+                        <br>震度速報の条件を満たしていない場合は、右上に条件を満たしていない旨のエラーが出力されます。
+                        <div style="display: flex;gap: 1em;"><img src="1.png" alt=""><img src="2.png" alt=""></div>
+                    </li>
+                    <br>
+                    <li>
+                        <span class="material-symbols-rounded" style="color: #ff6600;">sunny</span> 警報注意報Viewer
+                        <br>
+                        スクロール速度を変更することができるようにしました。
+                        <br>スクロールボタンの上のテキストボックスの数字を変更することで、スクロール速度を変更することができます。
+                        <br>速度は「値×50px / s」となります。
+                        <br><img src="3.png" alt="">
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+    
+</body>
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="description" content="アメダス天気Viewerのバグ修正・機能追加のお知らせです。">
+    <meta property="twitter:card" content="summary">
+    <meta property="twitter:site" content="@kottaro123456">
+    <meta property="twitter:description" content="アメダス天気Viewerのバグ修正・機能追加のお知らせです。">
+    <meta property="og:title" content="バグ修正・機能追加のお知らせ">
+    <meta property="og:image" content="https://kottaro123456.com/webapps/og.png">
+    <meta property="og:site_name" content="バグ修正・機能追加のお知らせ">
+    <title>バグ修正・機能追加のお知らせ - Webアプリお知らせ一覧</title>
+
+    <link rel="stylesheet" href="https://kottaro123456.com/webapps/news/index.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/localforage/1.10.0/localforage.min.js"></script>
+    <script src="https://kottaro123456.com/static/font/fonts.php"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZL8HPL24E7"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-ZL8HPL24E7');
+    </script>
+    <style>
+    </style>
+</head>
+<body>
+    <div class="title"><img src="https://kottaro123456.com/webapps/amedas/source/og.png" style="height: 2em;"> バグ修正・機能追加のお知らせ</div>
+    <div class="date">2026/04/13</div>
+    <a href="../" class="backhome">← 一覧へ戻る</a>
+    <p class="content"><span class="material-symbols-rounded" style="color: #ff6600;">sunny</span> アメダス天気Viewer</p>
+    <div class="content">
+        <p> <a href="https://kottaro123456.com/webapps/amedas/" target="_blank" class="normallink" rel="noopener noreferrer">アメダス天気Viewer for kottaro123456</a> をアップデートしました！</p>
+        <p> <a href="https://docs.google.com/forms/d/e/1FAIpQLSfoFtkpiSCtaz9AqIbZ1himdmXbtQrAi4lsAhmtXBGOy4snEQ/viewform?usp=header" target="_blank" class="normallink" rel="noopener noreferrer">Webアプリご意見箱</a> よりこれらの機能追加・機能改善リクエストをいただきました。ありがとうございました。</p>
+        <p>アップデートの詳細は以下のとおりです。</p>
+        <p>①　レンダーをLeafletからMapLibreへ変更<br>震度分布図に続き、地図の描画システムを Leaflet から MapLibre へ移行しました。<br>多数のオブジェクトを表示している地図の拡大・縮小やスクロール時の動作がこれまで以上に滑らかになり、表示速度が大幅に向上しています。また、スマートフォンのブラウザからも、よりストレスなく詳細な地点の確認が可能になりました。</p>
+        <p>②　「表示」パネルを再デザインしました。<br>従来の「表示」パネルは設定項目や表示項目が多くごちゃごちゃした印象となっていましたが、「表示」と「設定」の2つのパネルに設定項目や表示項目を分散させることで機能の多さを軽減したこと、またパネルを黒を基調としたモダンなデザインとしました。</p>
+        <figure style="display: inline-table; margin: 0; vertical-align: top;">
+            <img src="combine_images.webp" alt="パネル" style="margin-bottom: 0.25em;">
+            <figcaption style="display: table-caption; caption-side: bottom; font-size: 0.75em; color: #555; line-height: 1.2; padding-bottom: 0.75em;">
+                「表示」と「設定」
+            </figcaption>
+        </figure>
+        <p>③　風向風速モードでの間引き表示<br>風向風速モードにおいて、地図を引いて広域表示をした際に、観測点マーカーが多数重なり全体的な風向や風速の概観をつかみずらくなっておりました。<br>そのため、設定から広域表示にした際に風向風速の観測点マーカーを自動で間引いて表示する設定や、間引く観測点の種類・ズームレベル設定を追加しました。</p>
+        <img src="image_shousaikouikihyouji_fuukoufuusoku.webp" alt="">
+        <p>④　観測点タップでグラフ描画のオンオフ<br>従来、観測点をタップすることにより、現在のモードでのその観測点の過去48時間の記録をグラフとして見られるようになっていましたが、スマホなどで観測点の現在の値を知るためのポップアップを表示する際にタップとして誤反応しグラフが描画されてしまうということがありました。<br>そのため、「設定」パネル内に観測点をタップすることによってグラフを描画するかしないかの設定を設けました。</p>
+        <p>⑤　雷レーダー表示不具合の改修<br>雷レーダーについて、MapLibreに移行した際に観測点追加の処理を誤って記述したことにより、雷レーダーが描画されていませんでした。<br>現在はすでに復旧しており、正常に描画されることを確認しております。</p>
+        <p>⑥　国交省雨量計のパフォーマンス向上<br>国交省雨量計について、MapLibreに移行した際に、DOM要素として追加（HTML上で一つ一つの要素として描画）していたため、計算量が膨大になり、パフォーマンスの低下の原因となっておりました。<br>現在はMapLibreのマーカーとして描画しておりパフォーマンスを向上させました。</p>
+        <p>最後に、その他のアプリもMapLibreへの移行をすすめておりますので、公開までもう少々お待ちください。<br>これからもWebアプリ一覧をよろしくお願いいたします。</p>
+
+    </div>
+</body>
+</html>

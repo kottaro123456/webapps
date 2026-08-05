@@ -1,0 +1,718 @@
+html {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    margin: 0;
+    font-size: 14px;
+    font-family: "ヒラギノ角ゴ-Pro", sans-serif;
+}
+body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    font-size: 14px;
+}
+select, input, button {
+    outline: none;
+}
+input[type="number"]::-webkit-outer-spin-button, 
+input[type="number"]::-webkit-inner-spin-button { 
+    -webkit-appearance: none; 
+    margin: 0; 
+} 
+input[type="number"] { 
+    -moz-appearance:textfield; 
+    appearance:textfield; 
+} 
+#map {
+    width: 100%;
+    height: 100%;
+}
+#map.background_nerv {
+    background: #1d1d1d;
+}
+#title {
+    position: absolute;
+    top: 30px;
+    left: -10px;
+    z-index: 10000;
+    font-family: "ヒラギノ角ゴ-Pro", sans-serif;
+    font-weight: 600;
+    user-select: none;
+    display: none;
+}
+#title.display {
+    display: block;
+}
+#title_text {
+    padding: 10px;
+    padding-left: 20px;
+    font-size: 1.6rem;
+    border: #1f57be 4px solid;
+    background: #ffffff;
+    color: #1f57be;
+    vertical-align: bottom;
+}
+#title_time {
+    padding: 10px;
+    padding-left: 25px;
+    font-size: 1.4rem;
+    background: #00000088;
+    color: white;
+}
+#title_time .small {
+    font-size: 80%;
+    letter-spacing: 2px;
+}
+.btns {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    z-index: 10000;
+    user-select: none;
+}
+.setsumei, #quakelist, #reload, #map_ichi, #test, #btn_shindo_ichiran, #autoreload, #menu-open-btn {
+    display: inline-block;
+    background: #00000088;
+    border: white 2.5px solid;
+    border-radius: 5px;
+    color: white;
+    padding: 5px;
+    font-family: "ヒラギノ角ゴ-Pro", sans-serif;
+    font-weight: 500;
+    font-size: 0.9rem;
+    cursor: pointer;
+}
+#reload_num, #autoreload_num {
+    background: #00000000;
+    border: 0;
+    width: 2rem;
+    font-family: "ヒラギノ角ゴ-Pro", sans-serif;
+    font-weight: 500;
+    font-size: 0.9rem;
+    color: white;
+    border-bottom: #ffffff 1px solid;
+}
+.autoreload_setsumei.on {
+    background: #ffffff;
+    color: black;
+}
+.autoreload_setsumei.on button, .autoreload_setsumei.on input {
+    color: black!important;
+}
+.autoreload_setsumei.on input {
+    border-bottom: #000000 1px solid!important;
+}
+
+.leaflet-popup {
+    margin-bottom: 0;
+}
+.leaflet-popup-content-wrapper, .leaflet-popup-tip {
+    background-color: rgba(255, 255, 255, 0.85);
+    box-shadow: 0px 3px 7px 2px rgba(0, 0, 0, 0.4);
+    border-radius: 0!important;
+    font-family: "ヒラギノ角ゴ-Pro", sans-serif;
+    font-weight: 500;
+    user-select: none;
+}
+.leaflet-popup-content {
+    color: black !important;
+    font-size: 1.4rem;
+    margin: 10px 8px 8px 8px;
+}
+.leaflet-popup-tip {
+    display: none;
+}
+.leaflet-fade-anim .leaflet-popup {
+    transition: 0s;
+}
+select, input, button {
+    outline: none;
+}
+input[type="number"]::-webkit-outer-spin-button, 
+input[type="number"]::-webkit-inner-spin-button { 
+    -webkit-appearance: none; 
+    margin: 0; 
+} 
+input[type="number"] { 
+    -moz-appearance:textfield; 
+} 
+#map {
+    width: 100%;
+    height: 100%;
+}
+#map.background_nerv {
+    background: #1d1d1d;
+}
+#map.background_wni {
+    background: linear-gradient(180deg, rgba(113,163,198,1) 0%, rgba(43,70,119,1) 100%);
+}
+#map.background_quarog {
+    background: #78A0C8;
+}
+.leaflet-popup {
+    margin-bottom: 0;
+}
+.leaflet-popup-content-wrapper, .leaflet-popup-tip {
+    background-color: rgba(255, 255, 255, 0.85);
+    box-shadow: 0px 3px 7px 2px rgba(0, 0, 0, 0.4);
+    border-radius: 0!important;
+    font-family: "ヒラギノ角ゴ-Pro", sans-serif;
+    font-weight: 500;
+    user-select: none;
+}
+.leaflet-popup-content {
+    color: black !important;
+    font-size: 1.4rem;
+    margin: 10px 8px 8px 8px;
+}
+.leaflet-popup-tip {
+    display: none;
+}
+.leaflet-fade-anim .leaflet-popup {
+    transition: 0s;
+}
+#title {
+    position: absolute;
+    top: 30px;
+    left: -10px;
+    z-index: 10000;
+    font-family: "ヒラギノ角ゴ-Pro", sans-serif;
+    font-weight: 600;
+    user-select: none;
+}
+#title_text {
+    padding: 10px;
+    padding-left: 20px;
+    font-size: 1.6rem;
+    border: #1f57be 4px solid;
+    background: #ffffff;
+    color: #1f57be;
+    vertical-align: bottom;
+}
+#title_time {
+    padding: 10px;
+    padding-left: 25px;
+    font-size: 1.4rem;
+    background: #00000088;
+    color: white;
+}
+#title_time .small {
+    font-size: 80%;
+    letter-spacing: 2px;
+}
+#info {
+    position: absolute;
+    top: calc(30px + 40px + 1.6rem + 1.4rem + 30px);
+    left: 15px;
+    z-index: 10000;
+    padding: 10px;
+    font-size: 1.4rem;
+    background: #00000088;
+    color: white;
+    font-family: "ヒラギノ角ゴ-Pro", sans-serif;
+    font-weight: 500;
+    line-height: 1.8rem;
+    min-width: 13em;
+}
+#info .maxint {
+    font-size: 2rem;
+    text-align: center;
+    line-height: 2.2rem;
+}
+#info .maxint img, .shindo_ichiran_kakutitle img {
+    height: 1em;
+    transform: translateY(8%);
+    margin-left: 5px;
+}
+.shindo_ichiran_kakutitle .kasho_small, #shindo_ichiran .small {
+    font-size: 80%;
+}
+.btns {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    z-index: 10000;
+    user-select: none;
+}
+.setsumei, #quakelist, #reload, #map_ichi, #test, #btn_shindo_ichiran, #autoreload, #display_onoff_point_check, #view_info {
+    display: inline-block;
+    background: #00000088;
+    border: white 2.5px solid;
+    border-radius: 5px;
+    color: white;
+    padding: 5px;
+    font-family: "ヒラギノ角ゴ-Pro", sans-serif;
+    font-weight: 500;
+    font-size: 0.9rem;
+    cursor: pointer;
+}
+#reload_num, #autoreload_num {
+    background: #00000000;
+    border: 0;
+    width: 2rem;
+    font-family: "ヒラギノ角ゴ-Pro", sans-serif;
+    font-weight: 500;
+    font-size: 0.9rem;
+    color: white;
+    border-bottom: #ffffff 1px solid;
+}
+.setsumei {
+    cursor: default;
+}
+.autoreload_setsumei.on {
+    background: #ffffff;
+    color: black;
+}
+.autoreload_setsumei.on button, .autoreload_setsumei.on input {
+    color: black!important;
+}
+.autoreload_setsumei.on input {
+    border-bottom: #000000 1px solid!important;
+}
+#shindo_ichiran {
+    width: 30rem;
+    height: 80%;
+    position: absolute;
+    right: 3rem;
+    top: 3%;
+    font-family: "ヒラギノ角ゴ-Pro", sans-serif;
+    font-weight: 500;
+    font-size: 1.5rem;
+    padding: 1%;
+    color: #000000;
+    background: #ffffff;
+    border: #1f57be 3px solid;
+    border-radius: 5px;
+    z-index: 10000;
+    overflow-y: auto;
+    overflow-x: hidden;
+    display: none;
+}
+#shindo_ichiran.display {
+    display: initial;
+    animation: shindo_ichiran_display 0.5s ease-in-out 0s;
+}
+#shindo_ichiran.display_none {
+    animation-fill-mode: forwards;
+    animation: shindo_ichiran_display_back 0.5s ease-in-out 0s;
+}
+
+#shindo_ichiran ruby {
+    white-space: nowrap;
+}
+#shindo_ichiran rt {
+    font-size: 0.7em;
+}
+#shindo_ichiran .display {
+    display: none;
+}
+#shindo_ichiran .shindo_ichiran_title {
+    position: relative;
+    text-align: center;
+    font-size: 2rem;
+    color: #1f57be;
+    padding: 0 calc(100% - 10em);
+}
+#shindo_ichiran #shindoichiran_title_num {
+    text-align: center;
+    margin: 0.25em 0;
+    font-size: 1.5rem;
+    color: #1f57be;
+}
+#shindo_ichiran .shindo_ichiran_title::before,
+#shindo_ichiran .shindo_ichiran_title::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    display: inline-block;
+    width: calc(100% - 11em);
+    height: 3px;
+    border-top: 3px solid #1f57be;
+}
+#shindo_ichiran .shindo_ichiran_title::before {left:0;}
+#shindo_ichiran .shindo_ichiran_title::after {right: 0;}
+#shindo__article, #shindo7_article, #shindo65_article, #shindo60_article, #shindo55_article, #shindo50_article, #shindo4_article, #shindo3_article, #shindo2_article, #shindo1_article {
+    margin-top: 0.3em;
+    margin-bottom: 0.7em;
+    font-size: 0.8em;
+    margin-left: 0.5em;
+}
+#shindo_ichiran hr {
+    border-bottom: #1f57be 2px solid;
+    margin: 0.5em 0;
+}
+#shindo_ichiran::-webkit-scrollbar {
+    width: 14px;
+}
+#shindo_ichiran::-webkit-scrollbar-track {
+    background: #e4e4e4;
+}
+#shindo_ichiran::-webkit-scrollbar-thumb {
+    background: #5a5a5a;
+    border: transparent 3.5px solid;
+    border-radius: 16px;
+    background-clip: content-box;
+}
+#theme_set input[type=radio], #icon_theme_set input[type=radio], #display_onoff input[type=checkbox], #ui_display_onoff input[type=checkbox] {
+    display: none;
+}
+#theme_set label, #icon_theme_set label, #display_onoff label, #ui_display_onoff label {
+    display: inline-block;
+    background: #00000000;
+    border: white 2.5px solid;
+    border-radius: 5px;
+    color: white;
+    padding: 3px 5px;
+    font-family: "ヒラギノ角ゴ-Pro", sans-serif;
+    font-weight: 500;
+    font-size: 0.9rem;
+    cursor: pointer;
+}
+#theme_set label:first-of-type, #icon_theme_set label:first-of-type, #display_onoff label:first-of-type, #ui_display_onoff label:first-of-type {
+    margin-left: 3px;
+}
+#theme_set input[type=radio]:checked+label, #icon_theme_set input[type=radio]:checked+label, #display_onoff input[type=checkbox]:checked+label, #ui_display_onoff input[type=checkbox]:checked+label {
+    background: #ffffff;
+    color: black;
+}
+.shindoichiran input[type=checkbox], #shindoiconbig_check {
+    display: none;
+}
+.shindoichiran label, #shindoiconbig_check+label {
+    display: inline-block;
+    background: #00000088;
+    border: white 2.5px solid;
+    border-radius: 5px;
+    color: white;
+    padding: 5px;
+    font-family: "ヒラギノ角ゴ-Pro", sans-serif;
+    font-weight: 500;
+    font-size: 0.9rem;
+    cursor: pointer;
+}
+.shindoichiran input[type=checkbox]:checked+label, #shindoiconbig_check:checked+label {
+    background: #ffffff;
+    color: black;
+}
+
+@keyframes shindo_ichiran_display {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+@keyframes shindo_ichiran_display_back {
+    0% { opacity: 1; }
+    100% { opacity: 0; 
+    }
+}
+#appinfo {
+    display: none;
+    position: absolute;
+    width: 70vw;
+    height: 80vh;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    background-color: #116637;
+    border-radius: 10px;
+    box-shadow: 0px 0px 15px 5px #5c5c5c;
+    padding: 5vh 10vw;
+    font-family: 'Noto Sans JP';
+    font-size: 1.5rem;
+    color: #ffffff;
+    overflow-y: scroll;
+    z-index: 20000000;
+}
+#appinfo.display {
+    display: block;
+}
+#info_closebtn {
+    position: absolute;
+    font-size: 35px;
+    right: 2rem;
+    top: 2rem;
+    cursor: pointer;
+    user-select: none;
+    transition: transform 0.25s ease-in-out 0s;
+}
+#info_closebtn:hover {
+    background-color: #80808080;
+    border-radius: 5px;
+    transform: rotate(-90deg);
+}
+.inyomoto td {
+    padding: 0 5px;
+}
+
+.info {
+    position: absolute;
+    top: calc(30px + 40px + 1.6rem + 1.4rem + 30px);
+    left: 15px;
+    z-index: 10000;
+    padding: 10px;
+    font-size: 1.6rem;
+    background: #00000088;
+    color: white;
+    font-family: "ヒラギノ角ゴ-Pro", sans-serif;
+    font-weight: 500;
+    line-height: 2rem;
+    display: none;
+}
+.info.display {
+    display: block;
+}
+.leaflet-tooltip {
+    background-color: rgba(255, 255, 255);
+    box-shadow: 0px 3px 5px 1px rgba(0, 0, 0, 0.2);
+    border-radius: 0!important;
+    font-family: "ヒラギノ角ゴ-Pro", sans-serif;
+    font-weight: 600;
+    font-size: 1.4rem;
+    padding: 20px 5px 0px 5px;
+}
+.leaflet-tooltip:before, .leaflet-tooltip:after {
+    content: "";
+}
+
+.tooltip_wbgt1 {
+    color: #FFFFFF;
+    background: #FF1100;
+    border: #FFFFFF 2px solid!important;
+}
+.tooltip_wbgt2 {
+    color: #000000;
+    background: #FF8800;
+    border: #000000 2px solid!important;
+}
+.tooltip_wbgt3 {
+    color: #000000;
+    background: #FAF000;
+    border: #000000 2px solid!important;
+}
+.tooltip_wbgt4 {
+    color: #000000;
+    background: #7BD0FF;
+    border: #000000 2px solid!important;
+}
+.tooltip_wbgt5 {
+    color: #FFFFFF;
+    background: #1952ff;
+    border: #FFFFFF 2px solid!important;
+}
+.wbgt1 {
+    color: #FFFFFF;
+    background: #FF1100;
+}
+.wbgt2 {
+    color: #000000;
+    background: #FF8800;
+}
+.wbgt3 {
+    color: #000000;
+    background: #FAF000;
+}
+.wbgt4 {
+    color: #000000;
+    background: #7BD0FF;
+}
+.wbgt5 {
+    color: #FFFFFF;
+    background: #1952ff;
+}
+
+.leaflet-popup-content-wrapper, .leaflet-popup-tip {
+    background-color: rgba(255, 255, 255, 0.9);
+    box-shadow: 0px 3px 5px 1px rgba(0, 0, 0, 0.2);
+    border-radius: 0!important;
+    font-family: "ヒラギノ角ゴ-Pro", sans-serif;
+    font-weight: 500;
+    padding: 5px;
+}
+.leaflet-tooltip rt {
+    font-size: 0.7em;
+}
+.center_circle_tooltip {
+    line-height: 1.2em;
+    font-weight: 500;
+    padding: 7px;
+    padding-top: calc(7px + 0.7em);
+}
+#info2 {
+    top: calc(30px + 40px + 1.6rem * 6 + 1.4rem + 30px);
+}
+#info2 td {
+    padding: 0 3px;
+}
+#info3 {max-width: 14em;font-size: 1.4rem;line-height: 1.7rem;}
+#text_yososhindo {
+    width: 100%;
+    height: 100%;
+    z-index: 15000;
+    background-color: #00000099;
+    position: absolute;
+    top: 0;
+    left: 0;
+    font-family: "ヒラギノ角ゴ-Pro", sans-serif;
+    font-weight: 500;
+    display: none;
+    backdrop-filter: blur(5px);
+}
+#text_yososhindo.display {display: block;}
+#close_text_yososhindo, #close_mikata_text_yososhindo {position: absolute;font-size: 1.3rem;color: white;top: 0px;right: 0px;cursor: pointer;padding: 5px;}
+#btn_mikata_text_yososhindo {font-weight: 500;font-family: "ヒラギノ角ゴ-Pro", sans-serif;position: absolute;font-size: 1rem;color: white;bottom: 3px;left: 3px;background-color: #00000000;border: white 2px solid;border-radius: 5px;padding: 3px;cursor: pointer;}
+#text_yososhindo div.mihon {width: 90%;margin: auto;font-size: 1.5rem;text-align: center;}
+#text_yososhindo div.mihon div {width: calc(25% - 16px);margin: 10px 3px;display: inline-block;padding: 5px;outline: #ffffff 2px solid;}
+#text_yososhindo table {
+    width: 90%;
+    height: 90%;
+    margin: auto;
+    table-layout: fixed;
+    border-spacing: 5px;
+    font-size: 1.5rem;
+    overflow-y: scroll;
+    display: block;
+    z-index: 15000;
+    position: relative;
+}
+#text_yososhindo table::-webkit-scrollbar{width: 5px;}
+#text_yososhindo table::-webkit-scrollbar-track{background-color: #00000000;}
+#text_yososhindo table::-webkit-scrollbar-thumb{background-color: #ffffff55;}
+#text_yososhindo table tbody:nth-child(1) tr:nth-child(1) {
+    text-align: center;
+    position: sticky;
+    top: 0;
+}
+#text_yososhindo table tr {width: 100%;}
+#text_yososhindo table tr td {
+    padding: 5px 8px;
+    background-color: #242424;
+    border: #ffffff 2px solid;
+    color: white;
+}
+#text_yososhindo table tr td:nth-child(1) {
+    width: 40vw;
+    padding-top: calc(0.6em + 3px);
+}
+#text_yososhindo table tr td:nth-child(2) {width: 10vw;}
+#text_yososhindo table tr td:nth-child(3) {width: 26vw;}
+#text_yososhindo table tr td:nth-child(4) {width: 14vw;}
+#text_yososhindo tr.color1 {& td {background-color: #dd00dd;color: #ffffff;}}
+#text_yososhindo tr.color2 {& td {background-color: #ff1400;color: #ffffff;}}
+#text_yososhindo tr.color3 {& td {background-color: #faf500;color: #000000;}}
+#text_yososhindo tr.color4 {& td {background-color: #00ccff;color: #000000;}}
+#text_yososhindo tr.color5 {& td {background-color: #ff140088;color: #ffffff;}}
+#text_yososhindo tr.color6 {& td {background-color: #faf50088;color: #000000;}}
+rt {font-size: 0.6em;}
+
+#mikata_text_yososhindo {
+    width: 100%;
+    height: 100%;
+    z-index: 17000;
+    background-color: #00000099;
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: none;
+    backdrop-filter: blur(5px);
+}
+#mikata_text_yososhindo.display {display: block;}
+#mikata_text_yososhindo img {max-width: 90%;max-height: calc(100% - (2.6rem + 16px));margin: calc(1.3rem + 8px) auto;display: block;}
+#menu-close {
+    position: absolute;
+    left: 10px;
+    top: 10px;
+    font-size: 40px;
+    z-index: 100;
+    user-select: none;
+    cursor: pointer;
+    color: white;
+}
+.hanrei {
+    background: #00000088;
+    color: #ffffff;
+    z-index: 5000;
+    padding: 5px;
+    font-size: 1.1rem;
+    border: #ffffff 1px solid;
+    position: absolute;
+    top: calc(30px + 40px + 1.6rem + 1.4rem + 40px);
+    left: 15px;
+}
+.hanrei.display {
+    display: none;
+}
+.hanrei_td1 {
+    width: 1.4rem;
+}
+.hanrei_td2 {
+    text-align: right;
+    padding: 0 1px;
+}
+.hanrei_td3 {
+    width: 1.6rem;
+    text-align: center;
+}
+.hanrei_td4 {
+    text-align: left;
+    padding: 0 2px;
+}
+#menu {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: -100vh;
+    left: 0;
+    background: #105dd1aa;
+    color: white;
+    backdrop-filter: blur(5px);
+    font-size: 1.5rem;
+    font-family: "ヒラギノ角ゴ-Pro", sans-serif;
+    transition: all 0.7s ease-in-out;
+    z-index: 50000;
+}
+#menu.display {
+    top: 0;
+}
+#menu a {color: white;}
+#menu table {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+}
+#menu table td {
+    padding: 5px;
+}
+#menu table td:nth-child(1) {
+    padding-left: 1.5em;
+}
+#menu table td.header {
+    padding-left: 0.5em;
+}
+
+#noinfo {
+    font-family: "ヒラギノ角ゴ-Pro", sans-serif;
+    font-weight: 500;
+    color: white;
+    font-size: 1.5rem;
+    background-color: #000000aa;
+    z-index: 10000;
+    width: 70%;
+    height: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: none;
+}
+#noinfo span {
+    text-align: center;
+    width: 90%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+#noinfo.display {
+    display: block;
+}

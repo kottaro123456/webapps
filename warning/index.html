@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>警報注意報Viewer for MiyakoCam</title>
+        <meta charset="UTF-8" lang="ja">
+        <meta name="viewport" content="width=device-width,initial-scale=1">
+        <meta name="description" content="警報注意報Viewer for MiyakoCam">
+        <!--自前のCSS読み込み-->
+        
+        <!--SNSでのサイト表示-->
+        <meta property="twitter:card" content="summary">
+        <meta property="twitter:site" content="@MiyakoCam">
+        <meta property="twitter:description" content="警報注意報Viewer for MiyakoCam">
+        <meta property="og:title" content="警報注意報Viewer for MiyakoCam">
+        <meta property="og:image" content="https://kottaro123456.com/webapps/warning/source/og.png">
+        <meta property="og:site_name" content="警報注意報Viewer for MiyakoCam">
+        <!--MapLibre GL JS読み込み-->
+        <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" />
+        <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/localforage/1.10.0/localforage.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js"></script>
+        <script src="https://unpkg.com/@popperjs/core@2"></script>
+        <script src="source/tippy-bundle.umd.min.js"></script>
+        <link rel="stylesheet" href="https://unpkg.com/tippy.js@6.3.7/animations/perspective.css">
+        <link rel="stylesheet" href="https://unpkg.com/tippy.js@6.3.7/themes/material.css">
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZL8HPL24E7"></script>
+        <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-ZL8HPL24E7');
+        </script>
+    </head>
+    <body>
+        <div id="map"></div>
+        <div id="title">
+            <div id="title_text">注意報・警報</div>
+            <div id="title_time">00<span class="small">月</span>00<span class="small">日</span> 00<span class="small">時</span>00<span class="small">分</span>更新</div>
+        </div>
+        <div class="btns">
+            <div class="ranking">
+                <button id="reload" class="button">情報更新</button>
+                <button id="autoReload" class="button check">自動更新</button>
+                <button id="ichiranAll" class="button">全国一覧表</button>
+                <button id="filter" class="button">種別絞り込み</button>
+                <button id="overviewBtn" class="button check on">ツールチップ</button>
+                <button id="lightMode" class="button check">表示軽量化</button>
+            </div>
+        </div>
+
+
+        <div id="overview"></div>
+
+
+        <div id="text_yososhindo">
+            <span id="close_text_yososhindo">×</span>
+            <div class="scrollParent">
+                <span>S:<input type="number" id="scroll_num" value="1" step="0.1" min="0.1" max="10" title="スクロール速度を設定します。値×50px/s でスクロールします。"></span>
+                <button id="btn_scroll_text_yososhindo">ｽｸﾛｰﾙ</button>
+            </div>
+            <span id="text_yososhindo_autoreload_onoff" title="自動更新">AR:×</span>
+            <div class="mihon">
+                <div style="background-color: #000000;color: #ffffff;">特別警報</div><div style="background-color: #aa00dd;color: #ffffff;">危険警報</div><div style="background-color: #dd0000;color: #ffffff;">警報</div><div style="background-color: #ffd000;color: #000000;">注意報</div>
+            </div>
+            <table id="table_text_yososhindo">
+                <tr><td colspan="2" style="background-color: #000000;color: #ffffff;">警戒レベル５相当</td></tr>
+                <tr><td class="cityName"><ruby>市区町村名<rt>しくちょうそんめい</rt></ruby></td><td class="cityName">発表警報・注意報</td></tr>
+                <tr><td><ruby>大阪市<rt>おおさかし</rt></ruby></td><td><span class="color3">暴風雨</span><span class="color2">暴風</span><span class="color1">大雨</span><span class="color1">強風</span><span class="color1">雷</span></td></tr>
+                <tr><td colspan="2" class="nowarning">現在発表されている警報・注意報はありません。</td></tr>
+            </table>
+        </div>
+
+        <!-- 種別絞り込みモーダル -->
+        <div id="filterModal" class="modal">
+            <div class="modalContent">
+                <div class="modalHeader">
+                    <span class="modalTitle">発表警報・注意報の種別絞り込み</span>
+                    <span id="closeFilterModal" class="closeBtn">&times;</span>
+                </div>
+                <div class="filterPresets">
+                    <button id="btnFilterSelectAll" class="presetBtn">全選択</button>
+                    <button id="btnFilterClearAll" class="presetBtn">全解除</button>
+                    <button id="btnFilterLevel3Up" class="presetBtn">警報以上のみ</button>
+                    <span class="presetDivider">|</span>
+                    <button id="btnShortcutRain" class="presetBtn categoryBtn" data-category="rain">大雨</button>
+                    <button id="btnShortcutLandslide" class="presetBtn categoryBtn" data-category="landslide">土砂</button>
+                    <button id="btnShortcutFlood" class="presetBtn categoryBtn" data-category="flood">洪水</button>
+                    <button id="btnShortcutStorm" class="presetBtn categoryBtn" data-category="storm">暴風・強風</button>
+                    <button id="btnShortcutSnow" class="presetBtn categoryBtn" data-category="snow">雪</button>
+                    <button id="btnShortcutWave" class="presetBtn categoryBtn" data-category="wave">波浪・高潮</button>
+                </div>
+                <div id="filterListContainer" class="filterListContainer">
+                    <!-- JSで警報・注意報チェックボックスを生成 -->
+                </div>
+                <div class="modalFooter">
+                    <button id="btnFilterReset" class="modalFooterBtn">リセット</button>
+                    <button id="btnFilterApply" class="modalFooterBtn primary">適用して閉じる</button>
+                </div>
+            </div>
+        </div>
+
+    </body>
+    <link rel="stylesheet" href="warning.css">
+    <script src="../../static/font/fonts.php"></script>
+    <script src="citycode.js"></script>
+    <script src="warning.js"></script>
+</html>

@@ -1,0 +1,176 @@
+[
+    {
+        "id": "0028",
+        "date": "2026\/07\/21",
+        "appHtml": "<span class=\"material-symbols-rounded\" style=\"color: #ff6600;\">sunny<\/span> 警報注意報Viewer",
+        "title": "アップデートのお知らせ"
+    },
+    {
+        "id": "0027",
+        "date": "2026\/06\/04",
+        "appHtml": "<span class=\"material-symbols-rounded\" style=\"color: #ff6600;\">sunny<\/span> 警報注意報Viewer",
+        "title": "アプリ使用再開のお知らせ"
+    },
+    {
+        "id": "0026",
+        "date": "2026\/05\/29",
+        "appHtml": "<span class=\"material-symbols-rounded\" style=\"color: #ff6600;\">sunny<\/span> 警報注意報Viewer",
+        "title": "アプリ使用中止のお知らせとお詫び"
+    },
+    {
+        "id": "0025",
+        "date": "2026\/04\/26",
+        "appHtml": "<span class=\"material-symbols-rounded\" style=\"color: #ff6600;\">sunny<\/span> アメダス天気Viewer",
+        "title": "3D表示搭載のお知らせ"
+    },
+    {
+        "id": "0024",
+        "date": "2026\/04\/13",
+        "appHtml": "<span class=\"material-symbols-rounded\" style=\"color: #ff6600;\">sunny<\/span> アメダス天気Viewer",
+        "title": "バグ修正・機能追加のお知らせ"
+    },
+    {
+        "id": "0023",
+        "date": "2026\/02\/27",
+        "appHtml": "<span class=\"material-symbols-rounded\" style=\"color: #8800ff;\">earthquake<\/span> 震度分布図",
+        "title": "震度分布図アップデートのお知らせ"
+    },
+    {
+        "id": "0022",
+        "date": "2025\/12\/11",
+        "appHtml": "<span class=\"material-symbols-rounded\" style=\"color: #8800ff;\">earthquake<\/span> 震度分布図",
+        "title": "津波表示改善のお知らせ"
+    },
+    {
+        "id": "0021",
+        "date": "2025\/03\/09",
+        "appHtml": "<span class=\"material-symbols-rounded\" style=\"color: #8800ff;\">earthquake<\/span> 震度分布図 \/ <span class=\"material-symbols-rounded\" style=\"color: #ff6600;\">sunny<\/span> 警報注意報Viewer",
+        "title": "Webアプリアップデートのお知らせ"
+    },
+    {
+        "id": "0020",
+        "date": "2025\/02\/10",
+        "appHtml": "全体",
+        "title": "ご意見箱設置のお知らせ"
+    },
+    {
+        "id": "0019",
+        "date": "2025\/01\/13",
+        "appHtml": "全体",
+        "title": "読み込み改善のお知らせ"
+    },
+    {
+        "id": "0018",
+        "date": "2024\/12\/31",
+        "appHtml": "<span class=\"material-symbols-rounded\" style=\"color: #8800ff;\">earthquake<\/span> 震度分布図",
+        "title": "読み込み改善・アイコン変更のお知らせ"
+    },
+    {
+        "id": "0017",
+        "date": "2024\/11\/17",
+        "appHtml": "<span class=\"material-symbols-rounded\" style=\"color: #8800ff;\">earthquake<\/span> 震度分布図",
+        "title": "津波情報表示機能追加のお知らせ"
+    },
+    {
+        "id": "0016",
+        "date": "2024\/11\/04",
+        "appHtml": "<span class=\"material-symbols-rounded\" style=\"color: #ff6600;\">sunny<\/span> 警報注意報Viewer",
+        "title": "機能追加のお知らせ②"
+    },
+    {
+        "id": "0015",
+        "date": "2024\/11\/04",
+        "appHtml": "<span class=\"material-symbols-rounded\" style=\"color: #ff6600;\">sunny<\/span> 警報注意報Viewer",
+        "title": "機能追加のお知らせ"
+    },
+    {
+        "id": "0014",
+        "date": "2024\/11\/03",
+        "appHtml": "<span class=\"material-symbols-rounded\" style=\"color: #ff6600;\">sunny<\/span> 警報注意報Viewer",
+        "title": "警報注意報Viewer公開のお知らせ"
+    },
+    {
+        "id": "0013",
+        "date": "2024\/10\/24",
+        "appHtml": "<span class=\"material-symbols-rounded\" style=\"color: #ff6600;\">sunny<\/span> アメダス天気Viewer",
+        "title": "バグ修正・機能追加のお知らせ"
+    },
+    {
+        "id": "0012",
+        "date": "2024\/10\/06",
+        "appHtml": "<span class=\"material-symbols-rounded\" style=\"color: #ff6600;\">sunny<\/span> アメダス天気Viewer",
+        "title": "バグ修正・各種改善のお知らせ"
+    },
+    {
+        "id": "0011",
+        "date": "2024\/10\/06",
+        "appHtml": "<span class=\"material-symbols-rounded\" style=\"color: #8800ff;\">earthquake<\/span> 震度分布図",
+        "title": "アイコン描画位置改善のお知らせ"
+    },
+    {
+        "id": "0010",
+        "date": "2024\/10\/04",
+        "appHtml": "<span class=\"material-symbols-rounded\" style=\"color: #ff6600;\">sunny<\/span> アメダス天気Viewer",
+        "title": "雷レーダー機能改善のお知らせ"
+    },
+    {
+        "id": "0009",
+        "date": "2024\/09\/22",
+        "appHtml": "<span class=\"material-symbols-rounded\" style=\"color: #ff6600;\">sunny<\/span> アメダス天気Viewer",
+        "title": "雷レーダー機能追加のお知らせ"
+    },
+    {
+        "id": "0008",
+        "date": "2024\/08\/15",
+        "appHtml": "<span class=\"material-symbols-rounded\" style=\"color: #8800ff;\">earthquake<\/span> 震度分布図",
+        "title": "ズーム処理改善のお知らせ"
+    },
+    {
+        "id": "0007",
+        "date": "2024\/08\/12",
+        "appHtml": "<span class=\"material-symbols-rounded\" style=\"color: #ff6600;\">sunny<\/span> 台風情報図",
+        "title": "台風情報描画修正のお知らせ"
+    },
+    {
+        "id": "0006",
+        "date": "2024\/06\/27",
+        "appHtml": "<span class=\"material-symbols-rounded\" style=\"color: #ff6600;\">sunny<\/span> アメダス天気Viewer",
+        "title": "グラフ描画更新のお知らせ"
+    },
+    {
+        "id": "0005",
+        "date": "2024\/02\/12",
+        "appHtml": "<span class=\"material-symbols-rounded\" style=\"color: #ff6600;\">sunny<\/span> 台風情報図",
+        "title": "台風情報図 更新のお知らせ"
+    },
+    {
+        "id": "0004",
+        "date": "2024\/01\/31",
+        "appHtml": "<span class=\"material-symbols-rounded\" style=\"color: #ff6600;\">sunny<\/span> アメダス天気Viewer",
+        "title": "更新のお知らせ"
+    },
+    {
+        "id": "0003",
+        "date": "2024\/01\/01",
+        "appHtml": "<span class=\"material-symbols-rounded\" style=\"color: #8800ff;\">earthquake<\/span> 津波情報図",
+        "title": "津波情報図の利用再開について"
+    },
+    {
+        "id": "0002",
+        "date": "2023\/12\/31",
+        "appHtml": "<span class=\"material-symbols-rounded\" style=\"color: #ff6600;\">sunny<\/span> アメダス天気Viewer",
+        "title": "更新のお知らせ"
+    },
+    {
+        "id": "0001",
+        "date": "2023\/11\/16",
+        "appHtml": "<span class=\"material-symbols-rounded\" style=\"color: #8800ff;\">earthquake<\/span> 津波情報図",
+        "title": "津波情報図の利用停止について"
+    },
+    {
+        "id": "0000",
+        "date": "2023\/10\/31",
+        "appHtml": "全体",
+        "title": "Webアプリ一覧開設のお知らせ"
+    }
+]

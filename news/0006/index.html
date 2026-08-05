@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>更新のお知らせ</title>
+    <link rel="stylesheet" href="../index.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/localforage/1.10.0/localforage.min.js"></script><script src="../../../static/font/fonts.php"></script><script></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZL8HPL24E7"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-ZL8HPL24E7');
+    </script>
+    <style>
+    </style>
+</head>
+<body>
+    <div class="title"><img src="../../amedas/source/og.png" style="height: 2em;"> グラフ描画更新のお知らせ</div>
+    <div class="date">2024/06/27</div>
+    <a href="../" class="backhome">← 一覧へ戻る</a>
+    <p class="content"><span class="material-symbols-rounded" style="color: #ff6600;">sunny</span> アメダス天気Viewer</p>
+    <div class="content">
+        アメダス天気Viewer for MiyakoCamをアップデートしました！
+        <br><br>アップデートの詳細は以下のとおりです。
+        <ul>
+            <li>
+                以前の問題点
+                <br>① 毎日00:00にグラフ描画を実行しようとすると、左上の最高最低の文字表示の部分のテキストが存在せず、エラーが発生し、グラフの描画ができなかったこと。
+                <img src="1.png">
+                <br>② 日付を超えた時間移動操作後にグラフを描画を実行しようとすると、日付情報が反映されず、時間移動操作前の日時でグラフの描画をしていたこと。
+                <br>　(下の場合だと時間移動操作後の時刻は23:40なのに対して、今日の気温のグラフが00:40(撮影時)までしか描画されていない。つまり、昨日に時間移動したはずなのに、今日のグラフが描画されている。)
+                <img src="3.png">
+            </li>
+            <br>
+            <li>
+                改善点
+                <br>① 毎日00:00にアクセスしてもグラフを描画できるようにコードを見直しました。
+                <img src="2.png">
+                <br>② 時間移動操作後の時間をグラフ描画の時間にするようコードを見直しました。
+                <br>　(下の場合だと、先程と違い時間移動操作後の時刻は23:40なので、23:40の部分もグラフが描画されている。)
+                <img src="4.png">
+            </li>
+        </ul>
+    </div>
+</body>
+</html>

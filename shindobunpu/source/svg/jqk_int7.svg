@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 500 500" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+    <g id="レイヤー-1" serif:id="レイヤー 1">
+        <g id="path1509">
+            <circle cx="250" cy="250" r="250" style="fill:rgb(93,0,144);"/>
+            <path d="M250,0C387.979,0 500,112.021 500,250C500,387.979 387.979,500 250,500C112.021,500 0,387.979 0,250C0,112.021 112.021,0 250,0ZM250,25C125.819,25 25,125.819 25,250C25,374.181 125.819,475 250,475C374.181,475 475,374.181 475,250C475,125.819 374.181,25 250,25Z" style="fill:rgb(54,3,82);"/>
+        </g>
+        <g transform="matrix(500.001,0,0,500.001,109.619,427.735)">
+            <g id="text1513">
+                <g>
+                    <path d="M0.532,-0.632L0.257,-0L0.108,-0L0.383,-0.597L0.03,-0.597L0.03,-0.711L0.532,-0.711L0.532,-0.632Z" style="fill:white;fill-rule:nonzero;"/>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

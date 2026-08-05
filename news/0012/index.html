@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>更新のお知らせ</title>
+    <link rel="stylesheet" href="../index.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/localforage/1.10.0/localforage.min.js"></script><script src="../../../static/font/fonts.php"></script><script></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZL8HPL24E7"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-ZL8HPL24E7');
+    </script>
+    <style>
+    </style>
+</head>
+<body>
+    <div class="title"><img src="../../amedas/source/og.png" style="height: 2em;"> バグ修正・各種改善のお知らせ</div>
+    <div class="date">2024/10/06</div>
+    <a href="../" class="backhome">← 一覧へ戻る</a>
+    <p class="content"><span class="material-symbols-rounded" style="color: #ff6600;">sunny</span> アメダス天気Viewer</p>
+    <div class="content">
+        <a href="../../amedas/" target="_blank" rel="noopener noreferrer">アメダス天気Viewer for MiyakoCam</a>をアップデートしました！
+        <br><br><a href="https://twitter.com/Subyumin531963" target="_blank" rel="noopener noreferrer">yuminさん</a>から、これらのバグや機能追加の情報提供をしていただきました！　ありがとうございました！
+        <br><br>アップデートの詳細は以下のとおりです。
+        <ul>
+            <li>
+                バグ修正
+                <ul>
+                    <li>雨雲レーダーの描画ができていなかったバグを修正しました。</li>
+                    <li>ズームレベルを上げていくと、雨雲レーダーが消えてしまうバグを修正しました。</li>
+                </ul>
+            </li>
+            <li>
+                新機能
+                <ul>
+                    <li>
+                        雷レーダーが「全期間」モードの際、雷データの読み込みが描画に間に合わず画面に表示されないことがありました。
+                        <br>これについては、読み込みが終わるまで描画を待たせるという解決策はありますが、毎回待たせていると表示完了まで時間がかかりすぎますので、解決策は適用しないこととしました。
+                        <br>そこで、雷レーダー設定の「期間選択」と「雷レーダーの再描画」の上にマウスをホバーした際に、「雷レーダーが表示されない場合は再描画をしてください」というツールチップを設置することで一旦の解決策としました。
+                        <br>さらなる解決策がありましたら、また更新いたします。
+                        <img src="1.png"><br>
+                    </li>
+                    <li>
+                        自動更新の設定が画面上のボタンからできるようになりました。
+                        <br>従来のURLパラメータによる設定も引き続き可能としています。
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</body>
+</html>

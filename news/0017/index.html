@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="description" content="津波情報表示機能追加のお知らせ - Webアプリお知らせ一覧">
+    <!--SNSでのサイト表示-->
+    <meta property="twitter:card" content="summary">
+    <meta property="twitter:site" content="@MiyakoCam">
+    <meta property="twitter:description" content="警報注意報Viewer - Webアプリお知らせ一覧">
+    <meta property="og:title" content="津波情報表示機能追加のお知らせ">
+    <meta property="og:image" content="https://kottaro123456.com/webapps/og.png">
+    <meta property="og:site_name" content="津波情報表示機能追加のお知らせ">
+    <title>津波情報表示機能追加のお知らせ - Webアプリお知らせ一覧</title>
+
+    <link rel="stylesheet" href="../index.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/localforage/1.10.0/localforage.min.js"></script><script src="../../../static/font/fonts.php"></script><script></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZL8HPL24E7"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-ZL8HPL24E7');
+    </script>
+    <style>
+    </style>
+</head>
+<body>
+    <div class="title"><img src="../../shindobunpu/source/og.png" style="height: 2em;"> 津波情報表示機能追加のお知らせ</div>
+    <div class="date">2024/11/17</div>
+    <a href="../" class="backhome">← 一覧へ戻る</a>
+    <p class="content"><span class="material-symbols-rounded" style="color: #8800ff;">earthquake</span> 震度分布図</p>
+    <div class="content">
+        <a href="../../shindobunpu/" target="_blank" rel="noopener noreferrer">震度分布図 for MiyakoCam</a>をアップデートしました！
+        <br><br>今後もさらに機能を追加したり、デザインを改良する予定です。
+        <br><br>アップデートの詳細は以下のとおりです。
+        <ul>
+            <li>
+                新機能
+                <ul>
+                    <li>
+                        今まで<a href="../../tsunami/" target="_blank" rel="noopener noreferrer"><span class="material-symbols-rounded" style="color: #8800ff;">earthquake</span> 津波情報図</a>でしか見られなかった津波情報を、この<a href="../../shindobunpu/" target="_blank" rel="noopener noreferrer"><span class="material-symbols-rounded" style="color: #8800ff;">earthquake</span> 震度分布図</a>でも見られるようになりました！
+                        <br>地震情報と津波情報の「震源名」と「地震の発生時刻」の両方が一致しているときに、津波情報を表示することができます。
+                        <br>津波観測点を描画してしまうと、震度観測点と混ざりますので、津波観測点は描画しないようにしています。
+                        <br>また、情報表示欄の「津波の心配」欄に、津波予報、注意報、警報が発表されている際は、背景色を変更し見逃さないように強調しています。<br><br>
+                        <img src="1.png" alt=""><br>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</body>
+</html>

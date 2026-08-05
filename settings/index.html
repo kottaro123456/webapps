@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>設定 - Webアプリ</title>
+    <link rel="stylesheet" href="index.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/localforage/1.10.0/localforage.min.js" integrity="sha512-+BMamP0e7wn39JGL8nKAZ3yAQT2dL5oaXWr4ZYlTGkKOaoXM/Yj7c4oy50Ngz5yoUutAG17flueD4F6QpTlPng==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
+<body>
+    <h1 style="margin-left: 0.5em;">設定 - Webアプリ</h1>
+
+    <div class="acc_title"><span class="material-symbols-rounded">text_fields</span> フォント</div>
+    <div class="acc_content switch" id="set_font1">
+        <div class="acc_content_switch_div1">
+            <div class="acc_content_icon"><span class="material-symbols-rounded" id="font1_icon">download_for_offline</span></div>
+            <div class="acc_content_text">
+                フォント保存
+                <div style="font-size: 0.75em;margin-top: 0.5em;">
+                    通信量削減のため、フォントファイルをお使いの端末のブラウザ内のストレージに保存し、フォントを適用する際に読み出します。
+                    <br>フォントの読み出しには負荷がかかりますので、ページの読み込みができない・遅い等の問題が発生する場合はオフにしてください。
+                    <br>この設定がオフで、下の「<span class="material-symbols-rounded">text_fields</span> Webフォント使用」がオンの場合は、ページを読み込むたびにフォントを読み込み、大量の通信が発生いたしますのでご注意ください。
+                </div>
+            </div>
+        </div>
+        <div>
+            <label for="set_font1_switch" class="acc_content_switch_label">
+                <input type="checkbox" class="acc_content_switch" id="set_font1_switch">
+                <div class="acc_content_switch_back" id="set_font1_switch_back"></div>
+                <div class="acc_content_switch_front" id="set_font1_switch_front"></div>
+            </label>
+        </div>
+    </div>
+
+    <!-- <div class="acc_content switch" id="set_font2" style="margin-left: calc(12.5%);    width: calc(95% - 10px - 10%);">
+        <div class="acc_content_switch_div1">
+            <div class="acc_content_icon"><span class="material-symbols-rounded" id="font2_icon">text_fields</span></div>
+            <div class="acc_content_text">
+                Webフォント使用
+                <div style="font-size: 0.75em;margin-top: 0.5em;">
+                    表示の崩れや操作性向上のためにサイト上の文字に同じフォントを適用します。
+                    <br>オフにしても機能に変わりはありませんが、表示が崩れて一部機能が操作できなくなる可能性があります。
+                    <br>上の「<span class="material-symbols-rounded">download_for_offline</span> フォント保存」がオンの場合はこの設定に関係なく、お使いの端末のブラウザ内のストレージからフォントを読み込みます。
+                </div>
+            </div>
+        </div>
+        <div>
+            <label for="set_font2_switch" class="acc_content_switch_label">
+                <input type="checkbox" class="acc_content_switch" id="set_font2_switch">
+                <div class="acc_content_switch_back" id="set_font2_switch_back"></div>
+                <div class="acc_content_switch_front" id="set_font2_switch_front"></div>
+            </label>
+        </div>
+    </div> -->
+
+    <div class="acc_content" id="acc_logout" onclick="newFont()">
+        <div class="acc_content_icon"><span class="material-symbols-rounded">cloud_download</span></div>
+        <div class="acc_content_text">
+            フォント読み込み
+            <div style="font-size: 0.75em;margin-top: 0.5em;">
+                必要なフォントである「ヒラギノ角ゴ-Pro」を端末に保存します。
+                <br>すでに保存されている場合でも強制的に上書きします。
+                <br>実行すると約6MBの通信が行われます。Wi-Fi環境での実行をおすすめします。
+            </div>
+        </div>
+    </div>
+    <div class="acc_content acc_content_delete" id="acc_deleteAll" onclick="deleteFont()">
+        <div class="acc_content_icon"><span class="material-symbols-rounded">delete_forever</span></div>
+        <div class="acc_content_text">
+            フォント削除
+            <div style="font-size: 0.75em;margin-top: 0.5em;">
+                下表のフォントファイルをお使いの端末から全て削除します。
+                <br>フォントを端末に保存したくない場合は上の「フォント保存」をオフにしてください。
+                <br>「フォント保存」をオフにしていないと、次回ページ読み込み時にフォントファイルが読み込まれ保存されます。
+            </div>
+        </div>
+    </div>
+
+    <div id="fontTable">
+        <table class="table_1">
+            <thead>
+                <tr align="center">
+                    <th>フォント名</th>
+                    <th>管理名</th>
+                    <th>太さ</th>
+                    <th>サイズ</th>
+                </tr>
+            </thead>
+            <tbody id="font-table-body">
+            </tbody>
+    </table>
+    </div>
+
+    <div class="acc_title"><span class="material-symbols-rounded">map</span> 地図データ</div>
+
+    <div class="acc_content" onclick="newMap()">
+        <div class="acc_content_icon"><span class="material-symbols-rounded">cloud_download</span></div>
+        <div class="acc_content_text">
+            地図データ読み込み
+            <div style="font-size: 0.75em;margin-top: 0.5em;">
+                Webアプリで使用している全ての地図データを保存します。
+                <br>すでに保存されている場合でも強制的に上書きします。
+                <br>実行すると約31.4MBの通信が行われます。Wi-Fi環境での実行をおすすめします。
+            </div>
+        </div>
+    </div>
+    <div class="acc_content acc_content_delete" onclick="deleteMap()">
+        <div class="acc_content_icon"><span class="material-symbols-rounded">delete_forever</span></div>
+        <div class="acc_content_text">
+            地図データ削除
+            <div style="font-size: 0.75em;margin-top: 0.5em;">
+                下表の地図データをお使いの端末から全て削除します。
+                <br>次回読み込み時に地図データが読み込まれ保存されます。
+            </div>
+        </div>
+    </div>
+
+    <div id="mapTable">
+        <table class="table_1">
+            <tr align="center">
+                <td>地図名</td>
+                <td>管理名</td>
+                <td>サイズ</td>
+            </tr>
+        </table>
+    </div>
+
+
+
+    <div id="data_reload_bg"></div>
+    <div id="data_reload">
+        <div class="material-symbols-rounded data_reload_icon">sync</div>
+        <div class="data_reload_text"><span style="font-size: 22px;">データ更新中</span><br><span style="font-size: 16px;">サーバーと通信中…</span></div>
+    </div>
+    
+    <script src="../../static/font/fonts.php"></script>
+    <script src="index.js"></script>
+</body>
+</html>

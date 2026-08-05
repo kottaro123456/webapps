@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="description" content="読み込み機能改善・アイコン変更のお知らせ - Webアプリお知らせ一覧">
+    <!--SNSでのサイト表示-->
+    <meta property="twitter:card" content="summary">
+    <meta property="twitter:site" content="@MiyakoCam">
+    <meta property="twitter:description" content="読み込み改善・アイコン変更のお知らせ - Webアプリお知らせ一覧">
+    <meta property="og:title" content="読み込み改善・アイコン変更のお知らせ">
+    <meta property="og:image" content="https://kottaro123456.com/webapps/og.png">
+    <meta property="og:site_name" content="読み込み改善・アイコン変更のお知らせ">
+    <title>読み込み改善・アイコン変更のお知らせ - Webアプリお知らせ一覧</title>
+
+    <link rel="stylesheet" href="../index.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/localforage/1.10.0/localforage.min.js"></script><script src="../../../static/font/fonts.php"></script><script></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZL8HPL24E7"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-ZL8HPL24E7');
+    </script>
+    <style>
+    </style>
+</head>
+<body>
+    <div class="title"><img src="../../shindobunpu/source/og.png" style="height: 2em;"> 読み込み改善・アイコン変更のお知らせ</div>
+    <div class="date">2024/12/31</div>
+    <a href="../" class="backhome">← 一覧へ戻る</a>
+    <p class="content"><span class="material-symbols-rounded" style="color: #8800ff;">earthquake</span> 震度分布図</p>
+    <div class="content">
+        まもなく新年2025年がやってまいります。
+        <br>今年ではみなさまのたくさんのご支援をいただきました。本当にありがとうございました。
+        <br>そしてこれからも暖かく見守っていただけますと幸いです。
+        <br><br>
+        <a href="../../shindobunpu/" target="_blank" rel="noopener noreferrer">震度分布図 for MiyakoCam</a>をアップデートしました！
+        <br><br>今後もさらに機能を追加したり、デザインを改良する予定です。
+        <br><br>アップデートの詳細は以下のとおりです。
+        <ul>
+            <li>
+                新機能
+                <ul>
+                    <li>
+                        読み込みの削減をしました。
+                        <br>地図等の更新する必要がないデータはブラウザに保存しておき、アクセスするたびにデータを取得することがないようにしました。
+                        <br>これにより初回読み込み時と比べて約13MBの通信量の削減をいたしました。(ブラウザ開発者ツールによる測定)
+                        <img src="1.png" alt="">
+                        <br>
+                    </li>
+                    <li>
+                        アイコンの変更をいたしました。
+                        <br>アイコンに外縁をかけることにより、塗りつぶしの中でもアイコンの視認性を向上させました。
+                        <br>また、アイコンをPNGファイルからSVGファイルに変更し、読み込み容量・負荷の削減、高解像度端末での精細な表示に対応しました。
+                        <br><br>
+                        <table style="width: 80%;">
+                            <tr>
+                                <td><img src="../../shindobunpu/source/svg/eqm_int_.svg" alt="震度不明"></td>
+                                <td><img src="../../shindobunpu/source/svg/eqm_int1.svg" alt="震度1"></td>
+                                <td><img src="../../shindobunpu/source/svg/eqm_int2.svg" alt="震度2"></td>
+                                <td><img src="../../shindobunpu/source/svg/eqm_int3.svg" alt="震度3"></td>
+                                <td><img src="../../shindobunpu/source/svg/eqm_int4.svg" alt="震度4"></td>
+                                <td><img src="../../shindobunpu/source/svg/eqm_int50.svg" alt="震度5弱"></td>
+                                <td><img src="../../shindobunpu/source/svg/eqm_int55.svg" alt="震度5強"></td>
+                                <td><img src="../../shindobunpu/source/svg/eqm_int60.svg" alt="震度6弱"></td>
+                                <td><img src="../../shindobunpu/source/svg/eqm_int65.svg" alt="震度6強"></td>
+                                <td><img src="../../shindobunpu/source/svg/eqm_int7.svg" alt="震度7"></td>
+                            </tr>
+                            <tr>
+                                <td><img src="../../shindobunpu/source/svg/jqk_int_.svg" alt="震度不明"></td>
+                                <td><img src="../../shindobunpu/source/svg/jqk_int1.svg" alt="震度1"></td>
+                                <td><img src="../../shindobunpu/source/svg/jqk_int2.svg" alt="震度2"></td>
+                                <td><img src="../../shindobunpu/source/svg/jqk_int3.svg" alt="震度3"></td>
+                                <td><img src="../../shindobunpu/source/svg/jqk_int4.svg" alt="震度4"></td>
+                                <td><img src="../../shindobunpu/source/svg/jqk_int50.svg" alt="震度5弱"></td>
+                                <td><img src="../../shindobunpu/source/svg/jqk_int55.svg" alt="震度5強"></td>
+                                <td><img src="../../shindobunpu/source/svg/jqk_int60.svg" alt="震度6弱"></td>
+                                <td><img src="../../shindobunpu/source/svg/jqk_int65.svg" alt="震度6強"></td>
+                                <td><img src="../../shindobunpu/source/svg/jqk_int7.svg" alt="震度7"></td>
+                            </tr>
+                        </table>
+                        <br>
+                        <img src="2.png" alt="">
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</body>
+</html>
