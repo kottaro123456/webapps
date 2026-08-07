@@ -651,6 +651,7 @@ input[type="number"] {
     box-sizing: border-box;
     user-select: none;
     transition: background-color 0.2s, border-color 0.2s;
+    transform: translateY(-1px);
 }
 
 .custom_quakelist_trigger:hover {
@@ -1000,7 +1001,7 @@ input[type="number"] {
 
 /* 検索コントロール & ページネーション (既存UI #00000088 + 白枠2.5px 統一) */
 #search_controls {
-    display: inline-flex;
+    display: flex;
     align-items: center;
     gap: 4px;
     flex-wrap: wrap;
