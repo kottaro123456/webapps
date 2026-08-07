@@ -1719,7 +1719,7 @@ function switchAppMode(mode) {
     } else {
         if (btnSearch) btnSearch.classList.add('active');
         if (btnLatest) btnLatest.classList.remove('active');
-        if (searchControls) searchControls.style.display = 'inline-flex';
+        if (searchControls) searchControls.style.display = 'flex';
         if (latestControls) latestControls.style.display = 'none';
         if (titleText) titleText.textContent = "震度分布図 - 地震検索モード";
 
