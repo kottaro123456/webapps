@@ -1470,7 +1470,399 @@ document.addEventListener('DOMContentLoaded', () => {
             toggleCustomQuakeDropdown();
         });
     }
+
+    // --- 地震検索 & モード切替のイベント初期化 ---
+    const btnLatest = document.getElementById('mode_btn_latest');
+    const btnSearch = document.getElementById('mode_btn_search');
+    if (btnLatest) btnLatest.addEventListener('click', () => switchAppMode('latest'));
+    if (btnSearch) btnSearch.addEventListener('click', () => switchAppMode('search'));
+
+    const togglePanelBtn = document.getElementById('toggle_search_panel_btn');
+    const closePanelBtn = document.getElementById('close_search_panel_btn');
+    const searchModalOverlay = document.getElementById('search_modal_overlay');
+
+    if (togglePanelBtn && searchModalOverlay) {
+        togglePanelBtn.addEventListener('click', () => {
+            searchModalOverlay.style.display = 'flex';
+        });
+    }
+
+    if (closePanelBtn && searchModalOverlay) {
+        closePanelBtn.addEventListener('click', () => {
+            searchModalOverlay.style.display = 'none';
+        });
+    }
+
+    if (searchModalOverlay) {
+        searchModalOverlay.addEventListener('click', (e) => {
+            if (e.target === searchModalOverlay) {
+                searchModalOverlay.style.display = 'none';
+            }
+        });
+    }
+
+    const searchSubmitBtn = document.getElementById('search_submit_btn');
+    if (searchSubmitBtn) {
+        searchSubmitBtn.addEventListener('click', () => {
+            if (searchModalOverlay) {
+                searchModalOverlay.style.display = 'none';
+            }
+            ExecuteQuakeSearch(0);
+        });
+    }
+
+    const searchResetBtn = document.getElementById('search_reset_btn');
+    if (searchResetBtn) {
+        searchResetBtn.addEventListener('click', () => {
+            document.getElementById('search_since_date').value = '';
+            document.getElementById('search_until_date').value = '';
+            document.getElementById('search_quake_type').value = 'DetailScale';
+            document.getElementById('search_min_scale').value = '';
+            document.getElementById('search_max_scale').value = '';
+            document.getElementById('search_min_m').value = '';
+            document.getElementById('search_max_m').value = '';
+            document.getElementById('search_pref').value = '';
+            document.getElementById('search_pref_min_scale').value = '10';
+            document.getElementById('search_order').value = '-1';
+            document.getElementById('search_limit').value = '10';
+
+            // モーダル上の完全カスタムドロップダウンの見た目(チップ・テキスト・選択状態)も即座に初期状態へクリア
+            initCustomScaleSelects();
+
+            ExecuteQuakeSearch(0);
+        });
+    }
+
+    const searchPrevBtn = document.getElementById('search_prev_btn');
+    const searchNextBtn = document.getElementById('search_next_btn');
+    if (searchPrevBtn) {
+        searchPrevBtn.addEventListener('click', () => {
+            ExecuteQuakeSearch(searchCurrentOffset - searchCurrentLimit);
+        });
+    }
+    if (searchNextBtn) {
+        searchNextBtn.addEventListener('click', () => {
+            ExecuteQuakeSearch(searchCurrentOffset + searchCurrentLimit);
+        });
+    }
+
+    const searchMapIchi = document.getElementById('search_map_ichi');
+    if (searchMapIchi) {
+        searchMapIchi.addEventListener('click', () => {
+            document.getElementById('map_ichi')?.click();
+        });
+    }
+
+    const searchMapSs = document.getElementById('search_map_ss');
+    if (searchMapSs) {
+        searchMapSs.addEventListener('click', () => {
+            document.getElementById('map_ss')?.click();
+        });
+    }
+
+    const searchBigCheck = document.getElementById('shindoiconbig_check_search');
+    const origBigCheck = document.getElementById('shindoiconbig_check');
+    if (searchBigCheck && origBigCheck) {
+        searchBigCheck.addEventListener('change', () => {
+            origBigCheck.checked = searchBigCheck.checked;
+            origBigCheck.dispatchEvent(new Event('change'));
+        });
+    }
+
+    // --- 震度選択カラーチップ連動 & カスタムドロップダウン初期化 ---
+    initCustomScaleSelects();
 });
+
+// 完全カスタム震度選択ドロップダウンの構築と制御
+function initCustomScaleSelects() {
+    const scaleSelectConfigs = [
+        { wrapperId: 'custom_scale_min_wrapper', selectId: 'search_min_scale', textId: 'text_min_scale', chipId: 'chip_min_scale', menuId: 'menu_min_scale' },
+        { wrapperId: 'custom_scale_max_wrapper', selectId: 'search_max_scale', textId: 'text_max_scale', chipId: 'chip_max_scale', menuId: 'menu_max_scale' },
+        { wrapperId: 'custom_scale_pref_min_wrapper', selectId: 'search_pref_min_scale', textId: 'text_pref_min_scale', chipId: 'chip_pref_min_scale', menuId: 'menu_pref_min_scale' }
+    ];
+
+    scaleSelectConfigs.forEach(config => {
+        const wrapper = document.getElementById(config.wrapperId);
+        const select = document.getElementById(config.selectId);
+        const textEl = document.getElementById(config.textId);
+        const chipEl = document.getElementById(config.chipId);
+        const menuEl = document.getElementById(config.menuId);
+
+        if (!wrapper || !select || !menuEl) return;
+
+        menuEl.innerHTML = '';
+
+        Array.from(select.options).forEach(opt => {
+            const item = document.createElement('div');
+            item.className = 'custom_scale_select_item';
+            item.dataset.value = opt.value;
+
+            const chipSpan = document.createElement('span');
+            chipSpan.className = 'quake_chip scale_chip_fixed';
+
+            if (opt.value !== '') {
+                const scaleVal = parseInt(opt.value, 10);
+                const style = getDynamicIntChipStyle(scaleVal);
+                chipSpan.style.backgroundColor = style.bgColor;
+                chipSpan.style.color = style.textColor;
+                chipSpan.textContent = style.label;
+            } else {
+                chipSpan.style.backgroundColor = '#4a5568';
+                chipSpan.style.color = '#ffffff';
+                chipSpan.textContent = '-';
+            }
+
+            const labelSpan = document.createElement('span');
+            labelSpan.textContent = opt.textContent;
+
+            item.appendChild(chipSpan);
+            item.appendChild(labelSpan);
+
+            if (select.value === opt.value) {
+                item.classList.add('selected');
+                if (opt.value !== '') {
+                    const scaleVal = parseInt(opt.value, 10);
+                    const style = getDynamicIntChipStyle(scaleVal);
+                    if (chipEl) {
+                        chipEl.style.display = 'inline-flex';
+                        chipEl.style.backgroundColor = style.bgColor;
+                        chipEl.style.color = style.textColor;
+                        chipEl.textContent = style.label;
+                    }
+                } else {
+                    if (chipEl) chipEl.style.display = 'none';
+                }
+                if (textEl) textEl.textContent = opt.textContent;
+            }
+
+            item.addEventListener('click', (e) => {
+                e.stopPropagation();
+                select.value = opt.value;
+
+                if (opt.value !== '') {
+                    const scaleVal = parseInt(opt.value, 10);
+                    const style = getDynamicIntChipStyle(scaleVal);
+                    if (chipEl) {
+                        chipEl.style.display = 'inline-flex';
+                        chipEl.style.backgroundColor = style.bgColor;
+                        chipEl.style.color = style.textColor;
+                        chipEl.textContent = style.label;
+                    }
+                } else {
+                    if (chipEl) chipEl.style.display = 'none';
+                }
+                if (textEl) textEl.textContent = opt.textContent;
+
+                menuEl.querySelectorAll('.custom_scale_select_item').forEach(el => el.classList.remove('selected'));
+                item.classList.add('selected');
+
+                wrapper.classList.remove('open');
+
+                select.dispatchEvent(new Event('change'));
+            });
+
+            menuEl.appendChild(item);
+        });
+
+        const trigger = wrapper.querySelector('.custom_scale_select_trigger');
+        if (trigger) {
+            trigger.addEventListener('click', (e) => {
+                e.stopPropagation();
+                document.querySelectorAll('.custom_scale_select_wrapper').forEach(w => {
+                    if (w !== wrapper) w.classList.remove('open');
+                });
+                wrapper.classList.toggle('open');
+            });
+        }
+    });
+
+    document.addEventListener('click', (e) => {
+        document.querySelectorAll('.custom_scale_select_wrapper').forEach(w => {
+            if (!w.contains(e.target)) {
+                w.classList.remove('open');
+            }
+        });
+    });
+}
+
+function updateSearchScaleChips() {
+    initCustomScaleSelects();
+}
+
+// ==========================================================================
+// 地震検索機能 & モード切り替え ロジック
+// ==========================================================================
+
+let currentAppMode = 'latest'; // 'latest' または 'search'
+let searchCurrentOffset = 0;
+let searchCurrentLimit = 10;
+
+function switchAppMode(mode) {
+    currentAppMode = mode;
+    const btnLatest = document.getElementById('mode_btn_latest');
+    const btnSearch = document.getElementById('mode_btn_search');
+    const latestControls = document.getElementById('latest_controls');
+    const searchControls = document.getElementById('search_controls');
+    const searchModalOverlay = document.getElementById('search_modal_overlay');
+    const titleText = document.getElementById('title_text');
+
+    if (mode === 'latest') {
+        if (btnLatest) btnLatest.classList.add('active');
+        if (btnSearch) btnSearch.classList.remove('active');
+        if (latestControls) latestControls.style.display = 'block';
+        if (searchControls) searchControls.style.display = 'none';
+        if (searchModalOverlay) searchModalOverlay.style.display = 'none';
+        if (titleText) titleText.textContent = "震度分布図 - 観測点モード";
+
+        let reloadNum = document.getElementById('reload_num') ? document.getElementById('reload_num').value : 20;
+        GetQuake(reloadNum);
+    } else {
+        if (btnSearch) btnSearch.classList.add('active');
+        if (btnLatest) btnLatest.classList.remove('active');
+        if (searchControls) searchControls.style.display = 'inline-flex';
+        if (latestControls) latestControls.style.display = 'none';
+        if (titleText) titleText.textContent = "震度分布図 - 地震検索モード";
+
+        // 最新情報の自動更新がONなら停止
+        if (typeof autoreload_flg !== 'undefined' && autoreload_flg) {
+            if (typeof autoreload !== 'undefined') clearInterval(autoreload);
+            autoreload_flg = false;
+            let autoReloadBtn = document.getElementById('autoreload');
+            if (autoReloadBtn) autoReloadBtn.textContent = '自動更新';
+        }
+
+        ExecuteQuakeSearch(0);
+    }
+}
+
+async function ExecuteQuakeSearch(offset = 0) {
+    searchCurrentOffset = Math.max(0, offset);
+
+    let sinceDateVal = document.getElementById('search_since_date')?.value || '';
+    let untilDateVal = document.getElementById('search_until_date')?.value || '';
+    let quakeTypeVal = document.getElementById('search_quake_type')?.value || 'DetailScale';
+    let minScaleVal = document.getElementById('search_min_scale')?.value || '';
+    let maxScaleVal = document.getElementById('search_max_scale')?.value || '';
+    let minMVal = document.getElementById('search_min_m')?.value || '';
+    let maxMVal = document.getElementById('search_max_m')?.value || '';
+    let prefVal = document.getElementById('search_pref')?.value || '';
+    let prefMinScaleVal = document.getElementById('search_pref_min_scale')?.value || '10';
+    let orderVal = document.getElementById('search_order')?.value || '-1';
+    let limitVal = parseInt(document.getElementById('search_limit')?.value || '10', 10);
+    searchCurrentLimit = limitVal;
+
+    const baseUrl = "https://api.p2pquake.net/v2/jma/quake";
+    const query = new URLSearchParams();
+
+    query.append("limit", limitVal);
+    query.append("offset", searchCurrentOffset);
+    query.append("order", orderVal);
+
+    if (quakeTypeVal) query.append("quake_type", quakeTypeVal);
+    if (sinceDateVal) query.append("since_date", sinceDateVal.replace(/-/g, ''));
+    if (untilDateVal) query.append("until_date", untilDateVal.replace(/-/g, ''));
+    if (minScaleVal !== '') query.append("min_scale", minScaleVal);
+    if (maxScaleVal !== '') query.append("max_scale", maxScaleVal);
+    if (minMVal !== '') query.append("min_magnitude", minMVal);
+    if (maxMVal !== '') query.append("max_magnitude", maxMVal);
+    if (prefVal) query.append("prefectures[]", `${prefVal},${prefMinScaleVal}`);
+
+    let fetchUrl = `${baseUrl}?${query.toString()}`;
+    let fetchedData = [];
+
+    try {
+        let response = await fetch(fetchUrl);
+        fetchedData = await response.json();
+        if (!Array.isArray(fetchedData)) fetchedData = [];
+    } catch (e) {
+        console.error("Earthquake search fetch error:", e);
+        fetchedData = [];
+    }
+
+    QuakeJson = fetchedData;
+
+    // ページネーション表示更新
+    let prevBtn = document.getElementById('search_prev_btn');
+    let nextBtn = document.getElementById('search_next_btn');
+    let pageInfo = document.getElementById('search_page_info');
+
+    if (prevBtn) {
+        prevBtn.disabled = (searchCurrentOffset <= 0);
+        prevBtn.textContent = '◄  前';
+    }
+    if (nextBtn) {
+        nextBtn.disabled = (fetchedData.length < limitVal);
+        nextBtn.textContent = '次 ►';
+    }
+
+    if (pageInfo) {
+        if (fetchedData.length === 0) {
+            pageInfo.textContent = "0件";
+        } else {
+            let startNum = searchCurrentOffset + 1;
+            let endNum = searchCurrentOffset + fetchedData.length;
+            pageInfo.textContent = `${startNum}～${endNum}件目`;
+        }
+    }
+
+    // リストメニュー再構築
+    while (list.lastChild) {
+        list.removeChild(list.lastChild);
+    }
+    let customMenu = document.getElementById('custom_quakelist_menu');
+    if (customMenu) customMenu.innerHTML = "";
+
+    let int = 0;
+    QuakeJson.forEach(element => {
+        let maxScale = (element['earthquake'] && element['earthquake']['maxScale'] !== undefined) ? element['earthquake']['maxScale'] : -1;
+        let chipStyle = getDynamicIntChipStyle(maxScale);
+
+        let timeStr = (element['earthquake'] && element['earthquake']['time']) ? element['earthquake']['time'].slice(0, -3) : "";
+        let hypName = (element['earthquake'] && element['earthquake']['hypocenter'] && element['earthquake']['hypocenter']['name']) ? element['earthquake']['hypocenter']['name'] : "震源地不明";
+
+        let text = timeStr + " " + hypName + " 最大震度:" + chipStyle.label;
+        let optionEl = document.createElement("option");
+        optionEl.value = "" + int + "";
+        optionEl.textContent = text;
+        list.appendChild(optionEl);
+
+        if (customMenu) {
+            let itemIndex = int;
+            let item = document.createElement("div");
+            item.className = "custom_quakelist_item";
+            item.dataset.index = itemIndex;
+
+            let chip = document.createElement("span");
+            chip.className = "quake_chip";
+            chip.style.backgroundColor = chipStyle.bgColor;
+            chip.style.color = chipStyle.textColor;
+            chip.textContent = chipStyle.label;
+
+            let titleDiv = document.createElement("div");
+            titleDiv.className = "custom_quakelist_item_title";
+            let displayTitle = (element['issue'] && element['issue']['type'] === "ScalePrompt" && element['points'] && element['points'][0])
+                ? "【震度速報】" + element['points'][0]['addr'] + "など"
+                : (timeStr + " " + hypName);
+            titleDiv.textContent = displayTitle;
+
+            item.appendChild(chip);
+            item.appendChild(titleDiv);
+
+            item.addEventListener("click", () => {
+                selectQuakeItem(itemIndex);
+            });
+
+            customMenu.appendChild(item);
+        }
+        int++;
+    });
+
+    if (QuakeJson.length > 0) {
+        selectQuakeItem(0);
+    } else {
+        updateCustomQuakeTrigger(-1);
+    }
+}
 
 //地震情報をP2PQuakeより取得
 //引数"option"は情報取得のボタンの件数か熊本県地震のテストデータを取得する文章

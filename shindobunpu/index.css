@@ -162,6 +162,8 @@ input[type="number"] {
 }
 
 .setsumei,
+.btm_btn,
+.search_accent_btn,
 #quakelist,
 #reload,
 #map_ichi,
@@ -181,6 +183,10 @@ input[type="number"] {
     font-weight: var(--fontWeight);
     font-size: 0.9rem;
     cursor: pointer;
+}
+
+.search_accent_btn {
+    background-color: var(--accent-blue);
 }
 
 #reload,
@@ -402,12 +408,14 @@ input[type="number"] {
 }
 
 .shindoichiran input[type=checkbox],
-#shindoiconbig_check {
+#shindoiconbig_check,
+#shindoiconbig_check_search {
     display: none;
 }
 
 .shindoichiran label,
-#shindoiconbig_check+label {
+#shindoiconbig_check+label,
+#shindoiconbig_check_search+label {
     display: inline-block;
     background: #00000088;
     border: white 2.5px solid;
@@ -421,7 +429,8 @@ input[type="number"] {
 }
 
 .shindoichiran input[type=checkbox]:checked+label,
-#shindoiconbig_check:checked+label {
+#shindoiconbig_check:checked+label,
+#shindoiconbig_check_search:checked+label {
     background: #ffffff;
     color: black;
 }
@@ -943,4 +952,317 @@ input[type="number"] {
     transform: scale(1.6) translateY(5%);
     font-weight: 400 !important;
     padding: 0 1px;
+}
+
+/* ==========================================================================
+   地震検索機能 & モード切り替え スタイル (#1f57be Accent Color)
+   ========================================================================== */
+
+:root {
+    --accent-blue: #1f57be;
+    --accent-blue-hover: #17459b;
+    --accent-blue-light: rgba(31, 87, 190, 0.15);
+}
+
+.mode_switcher {
+    display: inline-block;
+    background: #00000088;
+    border: white 2.5px solid;
+    border-radius: 5px;
+    padding: 2px;
+    margin-bottom: 4px;
+    user-select: none;
+}
+
+.mode_btn {
+    background: transparent;
+    color: white;
+    border: none;
+    padding: 4px 10px;
+    font-size: 0.9rem;
+    font-family: var(--fontFamily);
+    font-weight: var(--fontWeight);
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.mode_btn:hover {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.mode_btn.active {
+    background-color: var(--accent-blue);
+    color: #ffffff;
+    font-weight: bold;
+}
+
+/* 検索コントロール & ページネーション (既存UI #00000088 + 白枠2.5px 統一) */
+#search_controls {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    flex-wrap: wrap;
+}
+
+.search_pagination {
+    display: inline-block;
+    background: #00000088;
+    border: white 2.5px solid;
+    border-radius: 5px;
+    color: white;
+    padding: 3px 6px;
+    font-family: var(--fontFamily);
+    font-weight: var(--fontWeight);
+    font-size: 0.9rem;
+}
+
+.search_pagination button {
+    background: transparent;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-family: var(--fontFamily);
+    font-weight: var(--fontWeight);
+    padding: 0 4px;
+}
+
+.search_pagination button:disabled {
+    color: #888888;
+    cursor: not-allowed;
+}
+
+.search_pagination button:not(:disabled):hover {
+    color: #60a5fa;
+}
+
+/* 検索条件設定ダイアログ (画面中央モーダル & 暗いオーバーレイ) */
+.search_modal_overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(4px);
+    z-index: 20000; /* MapLibreポップアップ等の上 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 16px;
+    box-sizing: border-box;
+}
+
+.search_panel_wrapper {
+    position: relative;
+    width: 520px;
+    max-width: 95vw;
+    background: rgba(22, 27, 36, 0.98);
+    border: 1.5px solid var(--accent-blue);
+    border-radius: 12px;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.85);
+    color: #e0e6ed;
+    font-family: var(--fontFamily);
+    font-size: 14px;
+    overflow: hidden;
+    animation: searchModalFadeIn 0.2s ease-out;
+}
+
+@keyframes searchModalFadeIn {
+    from { opacity: 0; transform: scale(0.95) translateY(-10px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.search_panel_header {
+    background: var(--accent-blue);
+    color: #ffffff;
+    padding: 12px 20px;
+    font-weight: bold;
+    font-size: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.search_close_btn {
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 0 4px;
+    line-height: 1;
+    opacity: 0.8;
+    transition: opacity 0.15s;
+}
+
+.search_close_btn:hover {
+    opacity: 1;
+}
+
+.search_panel_body {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    max-height: 78vh;
+    overflow-y: auto;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+.search_panel_body::-webkit-scrollbar {
+    display: none;
+}
+
+.search_field_group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.search_field_group label {
+    font-size: 12px;
+    color: #a0aec0;
+    font-weight: 600;
+}
+
+.search_field_inline {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* 完全カスタム震度選択ドロップダウン (custom_scale_select) */
+.custom_scale_select_wrapper {
+    position: relative;
+    flex: 1;
+    user-select: none;
+}
+
+.custom_scale_select_trigger {
+    display: flex;
+    align-items: center;
+    background: #1a202c;
+    border: 1px solid #303e54;
+    border-radius: 6px;
+    padding: 6px 10px;
+    cursor: pointer;
+    gap: 8px;
+    transition: border-color 0.15s, background 0.15s;
+    min-height: 36px;
+    box-sizing: border-box;
+}
+
+.custom_scale_select_trigger:hover {
+    background: #232a38;
+    border-color: var(--accent-blue);
+}
+
+.custom_scale_select_text {
+    flex: 1;
+    color: #ffffff;
+    font-size: 13px;
+    font-family: var(--fontFamily);
+}
+
+.custom_scale_select_arrow {
+    font-size: 10px;
+    color: #a0aec0;
+    transition: transform 0.2s ease;
+}
+
+.custom_scale_select_wrapper.open .custom_scale_select_arrow {
+    transform: rotate(180deg);
+}
+
+.custom_scale_select_menu {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    width: 100%;
+    max-height: 220px;
+    overflow-y: auto;
+    background: #161b22;
+    border: 1px solid var(--accent-blue);
+    border-radius: 6px;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.8);
+    z-index: 25000;
+    display: none;
+    padding: 4px 0;
+    box-sizing: border-box;
+}
+
+.custom_scale_select_wrapper.open .custom_scale_select_menu {
+    display: block;
+}
+
+.custom_scale_select_item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 4px 12px;
+    cursor: pointer;
+    transition: background 0.15s;
+    color: #e0e6ed;
+    font-size: 13px;
+}
+
+.custom_scale_select_item:hover {
+    background: #253142;
+    color: #ffffff;
+}
+
+.custom_scale_select_item.selected {
+    background: rgba(31, 87, 190, 0.3);
+    font-weight: bold;
+}
+
+.scale_chip_fixed {
+    width: 32px !important;
+    min-width: 32px !important;
+    max-width: 32px !important;
+    height: 20px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    border-radius: 3px;
+    font-weight: bold;
+    font-size: 12px;
+    flex-shrink: 0;
+    box-sizing: border-box;
+    user-select: none;
+}
+
+.search_panel_body input[type="text"],
+.search_panel_body input[type="number"],
+.search_panel_body input[type="date"],
+.search_panel_body select {
+    background: #1a202c;
+    color: #fff;
+    border: 1px solid #303e54;
+    border-radius: 6px;
+    padding: 8px 12px;
+    font-size: 13px;
+    font-family: var(--fontFamily);
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.search_panel_body input:focus,
+.search_panel_body select:focus {
+    border-color: var(--accent-blue);
+    box-shadow: 0 0 0 2px var(--accent-blue-light);
+    outline: none;
+}
+
+.search_panel_actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 10px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
 }

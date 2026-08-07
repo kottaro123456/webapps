@@ -58,28 +58,276 @@
         津波の心配：<span id="tsunami_text_span">情報なし</span>
     </div>
     <div class="btns">
-        <div>
-            <div id="custom_quakelist_wrapper" class="custom_quakelist_wrapper">
-                <div id="custom_quakelist_trigger" class="custom_quakelist_trigger">
-                    <span id="custom_quakelist_chip" class="quake_chip int_">-</span>
-                    <span id="custom_quakelist_text" class="custom_quakelist_text">地震情報の取得中…</span>
-                    <span class="custom_quakelist_arrow">▲</span>
-                </div>
-                <div id="custom_quakelist_menu" class="custom_quakelist_menu"></div>
+        <div class="mode_switcher">
+            <button id="mode_btn_latest" class="mode_btn active">最新地震情報</button>
+            <button id="mode_btn_search" class="mode_btn">地震検索</button>
+        </div>
+        
+        <!-- 地震リスト選択UI (最新/検索共通) -->
+        <div id="custom_quakelist_wrapper" class="custom_quakelist_wrapper">
+            <div id="custom_quakelist_trigger" class="custom_quakelist_trigger">
+                <span id="custom_quakelist_chip" class="quake_chip int_">-</span>
+                <span id="custom_quakelist_text" class="custom_quakelist_text">地震情報の取得中…</span>
+                <span class="custom_quakelist_arrow">▲</span>
             </div>
-            <select id="quakelist" style="display: none;">
-                <option>地震情報の取得中…</option>
-            </select>
+            <div id="custom_quakelist_menu" class="custom_quakelist_menu"></div>
+        </div>
+        <select id="quakelist" style="display: none;">
+            <option>地震情報の取得中…</option>
+        </select>
+
+        <!-- 最新地震情報モード用コントロール -->
+        <div id="latest_controls">
             <span class="setsumei" style="padding: 0;padding-right: 5px;"><button id="reload">情報更新</button> <input
                     type="number" id="reload_num" value="20" min="1" max="500">件</span>
-            <button id="map_ichi">位置初期化</button>
-            <button id="map_ss">画像保存・共有</button>
-            <button id="test">テスト開始</button>
+            <button id="map_ichi" class="btm_btn">位置初期化</button>
+            <button id="map_ss" class="btm_btn">画像保存・共有</button>
+            <button id="test" class="btm_btn">テスト開始</button>
             <span class="setsumei autoreload_setsumei" style="padding: 0;padding-right: 5px;"><button
                     id="autoreload">自動更新</button> <input type="number" id="autoreload_num" value="10">秒</span>
             <input type="checkbox" name="shindoiconbig" id="shindoiconbig_check"><label
                 for="shindoiconbig_check">震度大きく</label>
         </div>
+
+        <!-- 地震検索モード用コントロール -->
+        <div id="search_controls" style="display: none;">
+            <button id="toggle_search_panel_btn" class="search_accent_btn">検索条件を設定</button>
+            
+            <div id="search_pagination_wrapper" class="search_pagination">
+                <button id="search_prev_btn" disabled>◄  前</button>
+                <span id="search_page_info">1～10件目</span>
+                <button id="search_next_btn" disabled>次 ►</button>
+            </div>
+
+            <button id="search_map_ichi" class="btm_btn">位置初期化</button>
+            <button id="search_map_ss" class="btm_btn">画像保存・共有</button>
+            <input type="checkbox" name="shindoiconbig_search" id="shindoiconbig_check_search"><label
+                for="shindoiconbig_check_search">震度大きく</label>
+        </div>
+
+        <div style="margin-top: 5px;">
+            <span class="setsumei" id="theme_set" style="padding: 2px 5px;">テーマ
+                <input type="radio" name="theme" id="theme_nerv" value="nerv" onchange="theme_change(this.value)"
+                    checked><label for="theme_nerv">NERV</label>
+                <input type="radio" name="theme" id="theme_wni" value="wni" onchange="theme_change(this.value)"><label
+                    for="theme_wni">WNI</label>
+                <input type="radio" name="theme" id="theme_quarog" value="quarog"
+                    onchange="theme_change(this.value)"><label for="theme_quarog">Quarog</label>
+            </span>
+            <span class="setsumei" id="icon_theme_set" style="padding: 2px 5px;">アイコン
+                <input type="radio" name="icon_theme" id="icon_theme_eqm" value="eqm"
+                    onchange="icon_theme_change(this.value)" checked><label for="icon_theme_eqm">EQM1</label>
+                <input type="radio" name="icon_theme" id="icon_theme_jqk" value="jqk"
+                    onchange="icon_theme_change(this.value)"><label for="icon_theme_jqk">JQuake</label>
+                <input type="radio" name="icon_theme" id="icon_theme_wni" value="wni"
+                    onchange="icon_theme_change(this.value)"><label for="icon_theme_wni">WNI</label>
+            </span>
+            <span class="setsumei" id="display_onoff" style="padding: 2px 5px;">表示
+                <input type="checkbox" name="shindo_ichiran" id="display_onoff_shingen_check" checked><label
+                    for="display_onoff_shingen_check">震源</label>
+                <input type="checkbox" name="shindo_ichiran" id="display_onoff_point_check" checked><label
+                    for="display_onoff_point_check">観測点</label>
+                <input type="checkbox" name="shindo_ichiran" id="display_onoff_fill_check" checked><label
+                    for="display_onoff_fill_check">塗り</label>
+                <input type="checkbox" name="shindo_ichiran" id="display_onoff_saibun_check"><label
+                    for="display_onoff_saibun_check">市町村</label>
+                <input type="checkbox" name="shindo_ichiran" id="display_onoff_tsunami_check" checked><label
+                    for="display_onoff_tsunami_check">津波</label>
+            </span>
+            <span class="shindoichiran">
+                <input type="checkbox" name="shindo_ichiran" id="shindo_ichiran_check"><label
+                    for="shindo_ichiran_check">各地の震度</label>
+            </span>
+            <button id="view_info" class="btm_btn">情報</button>
+        </div>
+    </div>
+
+    <!-- 地震検索条件ダイアログ (モーダル形式) -->
+    <div id="search_modal_overlay" class="search_modal_overlay" style="display: none;">
+        <div id="search_panel_wrapper" class="search_panel_wrapper">
+            <div class="search_panel_header">
+                <span>地震検索条件の設定</span>
+                <button id="close_search_panel_btn" class="search_close_btn">✕</button>
+            </div>
+            <div class="search_panel_body">
+                <div class="search_field_group">
+                    <label>期間指定</label>
+                    <div class="search_field_inline">
+                        <input type="date" id="search_since_date"> 〜 <input type="date" id="search_until_date">
+                    </div>
+                </div>
+
+                <div class="search_field_group">
+                    <label>情報の種類 (quake_type)</label>
+                    <select id="search_quake_type">
+                        <option value="DetailScale" selected>DetailScale (各地の震度情報)</option>
+                        <option value="ScalePrompt">ScalePrompt (震度速報)</option>
+                        <option value="Destination">Destination (震源に関する情報)</option>
+                        <option value="ScaleAndDestination">ScaleAndDestination (震度・震源)</option>
+                        <option value="Foreign">Foreign (遠地地震)</option>
+                        <option value="Other">Other (その他)</option>
+                    </select>
+                </div>
+
+                <div class="search_field_group">
+                    <label>最大震度範囲</label>
+                    <div class="search_field_inline">
+                        <div class="custom_scale_select_wrapper" id="custom_scale_min_wrapper">
+                            <div class="custom_scale_select_trigger">
+                                <span id="chip_min_scale" class="quake_chip scale_chip_fixed" style="display:none;">-</span>
+                                <span class="custom_scale_select_text" id="text_min_scale">下限なし</span>
+                                <span class="custom_scale_select_arrow">▲</span>
+                            </div>
+                            <div class="custom_scale_select_menu" id="menu_min_scale"></div>
+                            <select id="search_min_scale" style="display: none;">
+                                <option value="">下限なし</option>
+                                <option value="10">震度1</option>
+                                <option value="20">震度2</option>
+                                <option value="30">震度3</option>
+                                <option value="40">震度4</option>
+                                <option value="45">震度5弱</option>
+                                <option value="50">震度5強</option>
+                                <option value="55">震度6弱</option>
+                                <option value="60">震度6強</option>
+                                <option value="70">震度7</option>
+                            </select>
+                        </div>
+                        〜
+                        <div class="custom_scale_select_wrapper" id="custom_scale_max_wrapper">
+                            <div class="custom_scale_select_trigger">
+                                <span id="chip_max_scale" class="quake_chip scale_chip_fixed" style="display:none;">-</span>
+                                <span class="custom_scale_select_text" id="text_max_scale">上限なし</span>
+                                <span class="custom_scale_select_arrow">▲</span>
+                            </div>
+                            <div class="custom_scale_select_menu" id="menu_max_scale"></div>
+                            <select id="search_max_scale" style="display: none;">
+                                <option value="">上限なし</option>
+                                <option value="10">震度1</option>
+                                <option value="20">震度2</option>
+                                <option value="30">震度3</option>
+                                <option value="40">震度4</option>
+                                <option value="45">震度5弱</option>
+                                <option value="50">震度5強</option>
+                                <option value="55">震度6弱</option>
+                                <option value="60">震度6強</option>
+                                <option value="70">震度7</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="search_field_group">
+                    <label>マグニチュード範囲 (M)</label>
+                    <div class="search_field_inline">
+                        <input type="number" id="search_min_m" placeholder="例: 0.0" step="0.1" min="0" max="10">
+                        〜
+                        <input type="number" id="search_max_m" placeholder="例: 9.0" step="0.1" min="0" max="10">
+                    </div>
+                </div>
+
+                <div class="search_field_group">
+                    <label>都道府県・最低震度</label>
+                    <div class="search_field_inline">
+                        <select id="search_pref" style="flex: 1.2;">
+                            <option value="">指定なし</option>
+                            <option value="北海道">北海道</option>
+                            <option value="青森県">青森県</option>
+                            <option value="岩手県">岩手県</option>
+                            <option value="宮城県">宮城県</option>
+                            <option value="秋田県">秋田県</option>
+                            <option value="山形県">山形県</option>
+                            <option value="福島県">福島県</option>
+                            <option value="茨城県">茨城県</option>
+                            <option value="栃木県">栃木県</option>
+                            <option value="群馬県">群馬県</option>
+                            <option value="埼玉県">埼玉県</option>
+                            <option value="千葉県">千葉県</option>
+                            <option value="東京都">東京都</option>
+                            <option value="神奈川県">神奈川県</option>
+                            <option value="新潟県">新潟県</option>
+                            <option value="富山県">富山県</option>
+                            <option value="石川県">石川県</option>
+                            <option value="福井県">福井県</option>
+                            <option value="山梨県">山梨県</option>
+                            <option value="長野県">長野県</option>
+                            <option value="岐阜県">岐阜県</option>
+                            <option value="静岡県">静岡県</option>
+                            <option value="愛知県">愛知県</option>
+                            <option value="三重県">三重県</option>
+                            <option value="滋賀県">滋賀県</option>
+                            <option value="京都府">京都府</option>
+                            <option value="大阪府">大阪府</option>
+                            <option value="兵庫県">兵庫県</option>
+                            <option value="奈良県">奈良県</option>
+                            <option value="和歌山県">和歌山県</option>
+                            <option value="鳥取県">鳥取県</option>
+                            <option value="島根県">島根県</option>
+                            <option value="岡山県">岡山県</option>
+                            <option value="広島県">広島県</option>
+                            <option value="山口県">山口県</option>
+                            <option value="徳島県">徳島県</option>
+                            <option value="香川県">香川県</option>
+                            <option value="愛媛県">愛媛県</option>
+                            <option value="高知県">高知県</option>
+                            <option value="福岡県">福岡県</option>
+                            <option value="佐賀県">佐賀県</option>
+                            <option value="長崎県">長崎県</option>
+                            <option value="熊本県">熊本県</option>
+                            <option value="大分県">大分県</option>
+                            <option value="宮崎県">宮崎県</option>
+                            <option value="鹿児島県">鹿児島県</option>
+                            <option value="沖縄県">沖縄県</option>
+                        </select>
+                        <div class="custom_scale_select_wrapper" id="custom_scale_pref_min_wrapper" style="flex: 1;">
+                            <div class="custom_scale_select_trigger">
+                                <span id="chip_pref_min_scale" class="quake_chip scale_chip_fixed" style="background-color:#1c79a9; color:#fff;">1</span>
+                                <span class="custom_scale_select_text" id="text_pref_min_scale">震度1以上</span>
+                                <span class="custom_scale_select_arrow">▲</span>
+                            </div>
+                            <div class="custom_scale_select_menu" id="menu_pref_min_scale"></div>
+                            <select id="search_pref_min_scale" style="display: none;">
+                                <option value="10">震度1以上</option>
+                                <option value="20">震度2以上</option>
+                                <option value="30">震度3以上</option>
+                                <option value="40">震度4以上</option>
+                                <option value="45">震度5弱以上</option>
+                                <option value="50">震度5強以上</option>
+                                <option value="55">震度6弱以上</option>
+                                <option value="60">震度6強以上</option>
+                                <option value="70">震度7</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="search_field_group">
+                    <div class="search_field_inline">
+                        <div>
+                            <label>並び順</label>
+                            <select id="search_order">
+                                <option value="-1" selected>新しい順 (降順)</option>
+                                <option value="1">古い順 (昇順)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label>1ページの表示件数</label>
+                            <select id="search_limit">
+                                <option value="10" selected>10件表示</option>
+                                <option value="20">20件表示</option>
+                                <option value="50">50件表示</option>
+                                <option value="100">100件表示</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="search_panel_actions">
+                    <button id="search_reset_btn" class="btm_btn">条件クリア</button>
+                    <button id="search_submit_btn" class="search_accent_btn">この条件で検索</button>
+                </div>
+            </div>
+        </div>
+    </div>
         <div style="margin-top: 5px;">
             <span class="setsumei" id="theme_set" style="padding: 2px 5px;">テーマ
                 <input type="radio" name="theme" id="theme_nerv" value="nerv" onchange="theme_change(this.value)"
