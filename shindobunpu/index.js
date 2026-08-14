@@ -1731,7 +1731,18 @@ function switchAppMode(mode) {
             if (autoReloadBtn) autoReloadBtn.textContent = '自動更新';
         }
 
+        // 地震検索モード切り替え時のログ記録
+        logSearchModeUsage();
+
         ExecuteQuakeSearch(0);
+    }
+}
+
+function logSearchModeUsage() {
+    try {
+        fetch('log_search.php', { method: 'POST' }).catch(() => {});
+    } catch(e) {
+        // エラー時はユーザー操作を妨げないようサイレントに処理
     }
 }
 

@@ -245,16 +245,50 @@ function setupMapLayers() {
     });
 }
 
-function getData() {
-    $.getJSON("https://www.jma.go.jp/bosai/warning/data/r8/map.json",function(data) {
+async function getData() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const mode = urlParams.get('mode');
+    let targetUrl = "https://www.jma.go.jp/bosai/warning/data/r8/map.json";
+
+    if (mode) {
+        if (mode.endsWith('.json')) {
+            targetUrl = `test/${mode}`;
+        } else {
+            const candidate1 = `test/${mode}_map.json`;
+            const candidate2 = `test/${mode}.json`;
+            try {
+                const res = await fetch(candidate1, { method: 'HEAD' });
+                if (res.ok) {
+                    targetUrl = candidate1;
+                } else {
+                    targetUrl = candidate2;
+                }
+            } catch (e) {
+                targetUrl = candidate1;
+            }
+        }
+    }
+
+    try {
+        let response = await fetch(targetUrl);
+        if (!response.ok && mode && !mode.endsWith('.json') && targetUrl.endsWith('_map.json')) {
+            const fallbackUrl = `test/${mode}.json`;
+            const fallbackRes = await fetch(fallbackUrl);
+            if (fallbackRes.ok) {
+                response = fallbackRes;
+            }
+        }
+        const data = await response.json();
         JSONdata = data;
         mapDraw();
         if ($('#text_yososhindo').hasClass("display") && $('#text_yososhindo').hasClass("ichiranAll")) {
             document.getElementById('ichiranAll').click();
         } else if ($('#text_yososhindo').hasClass("display") && latestClickPref != "" && latestClickPref != undefined) {
-            createDetail(latestClickPref, prefNameList[prefCodeList.indexOf(latestClickPref)])
+            createDetail(latestClickPref, prefNameList[prefCodeList.indexOf(latestClickPref)]);
         }
-    });
+    } catch (err) {
+        console.error("Error fetching warning map data:", err);
+    }
 }
 
 function mapDraw() {
@@ -515,6 +549,7 @@ function isFilterActive() {
 
 function createOverview(pref, prefName) {
     if (overview_onoff == "on") {
+        var level5 = [];
         var level4 = [];
         var level3 = [];
         var level2 = [];
@@ -522,7 +557,9 @@ function createOverview(pref, prefName) {
         prefToCity[pref].forEach(element => {
             if (filledList[element]) {
                 Object.keys(filledList[element]).forEach(element2 => {
-                    if (warningLevel[element2] == 4) {
+                    if (warningLevel[element2] == 5) {
+                        if (!level5.includes(element2)) {level5.push(element2);}
+                    } else if (warningLevel[element2] == 4) {
                         if (!level4.includes(element2)) {level4.push(element2);}
                     } else if (warningLevel[element2] == 3) {
                         if (!level3.includes(element2)) {level3.push(element2);}
@@ -534,19 +571,21 @@ function createOverview(pref, prefName) {
                 });
             }
         });
+        var level5_text = "";
         var level4_text = "";
         var level3_text = "";
         var level2_text = "";
         var level1_text = "";
+        level5.forEach(L => {level5_text += '<span class="color5">'+warningShortName[L]+'</span>';});
         level4.forEach(L => {level4_text += '<span class="color4">'+warningShortName[L]+'</span>';});
         level3.forEach(L => {level3_text += '<span class="color3">'+warningShortName[L]+'</span>';});
         level2.forEach(L => {level2_text += '<span class="color2">'+warningShortName[L]+'</span>';});
         level1.forEach(L => {level1_text += '<span class="color1">'+warningShortName[L]+'</span>';});
-        if (level4_text === "" && level3_text === "" && level2_text === "" && level1_text === "") {
-            level4_text = "発表されている警報・注意報はありません。";
+        if (level5_text === "" && level4_text === "" && level3_text === "" && level2_text === "" && level1_text === "") {
+            level5_text = "発表されている警報・注意報はありません。";
         }
         var filterNotice = isFilterActive() ? '<div style="font-size: 0.75em; color: #ff9800; font-weight: var(--fontWeightBold); margin-bottom: 2px;">※種別絞り込み適用中</div>' : '';
-        document.getElementById('overview').innerHTML = '<div style="line-height: 1.4em;font-size: 1.1em;margin-bottom: 4px;">'+prefName+filterNotice+'</div>'+level4_text+level3_text+level2_text+level1_text;
+        document.getElementById('overview').innerHTML = '<div style="line-height: 1.4em;font-size: 1.1em;margin-bottom: 4px;">'+prefName+filterNotice+'</div>'+level5_text+level4_text+level3_text+level2_text+level1_text;
         document.getElementById('overview').classList.add("display");
     }
 }
