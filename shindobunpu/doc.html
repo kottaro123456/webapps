@@ -1,221 +1,485 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <title>震度分布図 for MiyakoCam</title>
-        <meta charset="UTF-8" lang="ja">
-        <meta name="viewport" content="width=device-width,initial-scale=1">
-        <meta name="description" content="ドキュメント - 震度分布図 for MiyakoCam">
-        <!--SNSでのサイト表示-->
-        <meta property="twitter:card" content="summary_large_image">
-        <meta property="twitter:site" content="@MiyakoCam">
-        <meta property="twitter:description" content="震度分布図 for MiyakoCamのドキュメントです。">
-        <meta property="og:title" content="ドキュメント - 震度分布図 for MiyakoCam">
-        <meta property="og:site_name" content="ドキュメント - 震度分布図 for MiyakoCam">
-        <meta property="og:image" content="http://nanka.html.xdomain.jp/html/quake/maps/source/shindobunpu.png">
-        <!--その他のCSS・ライブラリ読み込み-->
-        <script src="https://kit.fontawesome.com/e9f92a9dd0.js" crossorigin="anonymous"></script>
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-9SL593EYR6"></script>
-        <script>
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            
-            gtag('config', 'G-9SL593EYR6');
-        </script>
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css" integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ==" crossorigin="" />
-        <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>
-        <script src="../../../html/RealtimeQuakeInfo/static/js/leaflet-src.js"></script>
-        <link rel="stylesheet" href="../../../html/RealtimeQuakeInfo/static/css/font.css">
-        <style>
-            body {
-                font-family: "ヒラギノ角ゴ-Pro", sans-serif;
-                font-weight: 400;
-                
-            }
-            body p {
-                font-size: 1.1rem;
-            }
-            .midashi {
-                border-bottom: 3px solid #4285f4;
-                border-left: 10px solid #4285f4;
-                margin-top: 0.5em;
-                display: inline-block;
-            }
-            h2,h3 {
-                border-bottom: 2px solid #4285f4;
-            }
-            @media (max-width: 767px) {
-                img {
-                    width: 100%;
-                }
-                .midashi1, .midashi2, .midashi3, .midashi4 {
-                    margin-left: 0.5em;
-                }
-            }
-            @media (min-width: 768px) {
-                img {
-                    width: 50%;
-                }
-                .midashi1 {
-                    margin-left: 1.5em;
-                }
-                .midashi2 {
-                    margin-left: 1.5em;
-                }
-                .midashi3 {
-                    margin-left: 2em;
-                }
-                .midashi4 {
-                    margin-left: 2em;
-                }
-            }
-        </style>
-    </head>
-    <body>
-        <h1 style="text-align: center;">震度分布図 for MiyakoCam</h1>
-        <h1 class="midashi" id="tsukaikata">１．使い方</h1>
-        <div class="midashi1">
-            <p>
-                本アプリの画面の見方、使い方について解説していきます。
-                <br>↓下の画像の見たい部分をクリックしてください。
-            </p>
-            <img src="source/doc/1_1.jpg" usemap="#1_ImageMap" alt="">
-            <map name="1_ImageMap">
-                <area shape="rect" coords="3,0,367,368" href="#1-1" alt="" />
-                <area shape="rect" coords="374,4,1602,791" href="#1-2" alt="" />
-                <area shape="rect" coords="4,796,1602,897" href="#1-3" alt="" />
-            </map>
-            <h2 id="1-1">①　情報パネル</h2>
-            <div class="midashi2">
-                <p>
-                    情報パネルの部分について解説します。
-                    <br>↓下の画像の見たい部分をクリックしてください。
-                </p>
-                <img src="source/doc/1_2.jpg" usemap="#1_1_ImageMap" alt="">
-                <map name="1_1_ImageMap">
-                    <area shape="rect" coords="-27,85,1653,224" href="#1-1-1" alt="" />
-                    <area shape="rect" coords="-39,225,1831,334" href="#1-1-2" alt="" />
-                    <area shape="rect" coords="-121,391,2047,826" href="#1-1-3" alt="" />
-                </map>
-                <div class="midashi3">
-                    <h3 id="1-1-1">①　タイトル</h3>
-                    <div class="midashi4">
-                        タイトルを表示します。
-                    </div>
-                    <h3 id="1-1-2">②　取得時刻</h3>
-                    <div class="midashi4">
-                        地震情報の最終取得時間を表示します。
-                    </div>
-                    <h3 id="1-1-3">③　地震の情報</h3>
-                    <div class="midashi4">
-                        最大震度<br>
-                        発生時刻<br>
-                        震源地<br>
-                        地震の規模（マグニチュード）<br>
-                        震源の深さ<br>
-                        を表示します。
-                    </div>
-                </div>
-            </div>
-            <h2 id="1-2">②　地図コンテンツ</h2>
-            <div class="midashi2">
-                <p>
-                    地図コンテンツの部分について解説します。
-                    <br>↓下の画像の見たい部分をクリックしてください。
-                </p>
-                <img src="source/doc/1_3.jpg" usemap="#1_3_ImageMap" alt="">
-                <map name="1_3_ImageMap">
-                    <area shape="rect" coords="125,2,1402,463" href="#1-2-1" alt="" />
-                    <area shape="rect" coords="125,463,588,896" href="#1-2-1" alt="" />
-                    <area shape="rect" coords="587,575,1402,898" href="#1-2-1" alt="" />
-                    <area shape="rect" coords="797,463,1400,577" href="#1-2-1" alt="" />
-                    <area shape="rect" coords="589,465,798,577" href="#1-2-3" alt="" />
-                    <area shape="rect" coords="1404,3,1481,128" href="#1-2-2" alt="" />
-                </map>
-                <div class="midashi3">
-                    <h3 id="1-2-1">①　震度分布</h3>
-                    <div class="midashi4">
-                        地図上に震度1以上を観測した観測点をプロットします。
-                        <br><span style="color: red;font-weight: 600;">※観測点情報の欠落により、<a href="#1-3-7">各地の震度（テキスト）</a> の観測点との数が異なる場合があります。</span>
-                    </div>
-                    <h3 id="1-2-2">②　ズームコントローラー</h3>
-                    <div class="midashi4">
-                        地図のズームをコントロールします。
-                    </div>
-                    <h3 id="1-2-3">③　震源アイコン</h3>
-                    <div class="midashi4">
-                        震源の場所をアイコンでプロットします。
-                    </div>
-                </div>
-            </div>
-            <h2 id="1-3">③　ツールボタン</h2>
-            <div class="midashi2">
-                <p>
-                    ツールボタンの部分について解説します。
-                    <br>↓下の画像の見たい部分をクリックしてください。
-                </p>
-                <img src="source/doc/1_4.jpg" usemap="#1_4_ImageMap" alt="">
-                <map name="1_4_ImageMap">
-                    <area shape="rect" coords="17,381,654,438" href="#1-3-1" alt="" />
-                    <area shape="rect" coords="667,389,902,440" href="#1-3-2" alt="" />
-                    <area shape="rect" coords="918,389,1066,441" href="#1-3-3" alt="" />
-                    <area shape="rect" coords="1083,390,1231,439" href="#1-3-4" alt="" />
-                    <area shape="rect" coords="23,457,615,517" href="#1-3-5" alt="" />
-                    <area shape="rect" coords="629,456,1011,512" href="#1-3-6" alt="" />
-                    <area shape="rect" coords="1030,457,1300,509" href="#1-3-7" alt="" />
-                    <area shape="rect" coords="1316,459,1550,508" href="#1-3-8" alt="" />
-                </map>
-                <div class="midashi3">
-                    <h3 id="1-3-1">①　地震情報選択ボタン</h3>
-                    <div class="midashi4">
-                        表示する地震情報の選択をします。
-                        <br><span style="color: red;font-weight: 600;">※<a href="#1-3-8">自動更新</a> をオフにしないと、自動更新された際に最新の地震情報に切り替わります。</span>
-                    </div>
-                    <h3 id="1-3-2">②　地震情報更新ボタン</h3>
-                    <div class="midashi4">
-                        地震情報を更新します。
-                        <br>横のテキストボックスで何件の地震情報を取得するかを設定できます。（最大100件）
-                        <br><span style="color: red;font-weight: 600;">※リロードしてしまうと、地図の読み込みなどに時間がかかってしまいますので、内部で更新します。</span>
-                    </div>
-                    <h3 id="1-3-3">③　位置初期化ボタン</h3>
-                    <div class="midashi4">
-                        地図を移動させた際に、初期状態の位置に戻します。
-                    </div>
-                    <h3 id="1-3-4">④　テスト開始/停止ボタン</h3>
-                    <div class="midashi4">
-                        2016/04/14に起きた、熊本地震（震度7）の試験描画を開始/終了します。
-                        <br><span style="color: red;font-weight: 600;">※899ヶ所の観測点が登録されていますので、描画にはスペックと時間がかかります。</span>
-                        <br><span style="color: red;font-weight: 600;">※<a href="#1-3-8">自動更新</a> をオフにしないと、自動更新された際に最新の地震情報に切り替わります。</span>
-                    </div>
-                    <h3 id="1-3-5">⑤　テーマ切り替えボタン</h3>
-                    <div class="midashi4">
-                        地図のテーマを変更します。
-                        <br><span style="color: red;font-weight: 600;">※アイコンのテーマを変更したい場合は、次へお進みください。</span>
-                    </div>
-                    <h3 id="1-3-6">⑥　アイコンテーマ切り替えボタン</h3>
-                    <div class="midashi4">
-                        アイコンのテーマを変更します。
-                        <br><span style="color: red;font-weight: 600;">※地図のテーマを変更したい場合は、前へお戻りください。</span>
-                    </div>
-                    <h3 id="1-3-7">⑦　各地の震度表示/非表示ボタン</h3>
-                    <div class="midashi4">
-                        各地の震度をテキストで、震度7から順に表示します。
-                        <br>また、その横に何ヶ所かを表示します。
-                        <br><span style="color: red;font-weight: 600;">※観測点情報の欠落により、<a href="#1-2-1">震度分布</a> の観測点との数が異なる場合があります。</span>
-                    </div>
-                    <h3 id="1-3-8">⑧　自動更新ボタン</h3>
-                    <div class="midashi4">
-                        自動更新をするかどうかを設定できます。
-                        <br>その横のテキストボックスで、何秒ごとに更新するかを設定できます。（最低2秒）
-                        <br>4秒以上の場合は分かりやすいよう更新ボタンを操作します。4秒未満の場合は内部から更新します。
-                        <br><span style="color: red;font-weight: 600;">※この機能をオフにしておかないと、<a href="#1-3-1">地震情報選択</a> や <a href="#1-3-4">テスト開始/停止</a>で予期せぬ動作を起こす場合があります。</span>
-                    </div>
-                </div>
-            </div>
-        </div>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ドキュメント - 震度分布図 for kottaro123456</title>
+    <meta name="description" content="震度分布図 for kottaro123456の操作ヘルプ・ドキュメントです。">
+    <!-- Twitter/OGP -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:site" content="@kottaro123456">
+    <meta property="twitter:description" content="震度分布図 for kottaro123456のドキュメントです。">
+    <meta property="og:title" content="ドキュメント - 震度分布図 for kottaro123456">
+    <meta property="og:site_name" content="ドキュメント - 震度分布図 for kottaro123456">
+    <meta property="og:image" content="https://kottaro123456.com/webapps/shindobunpu/source/og.png">
 
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/image-map-resizer/1.0.10/js/imageMapResizer.min.js"></script>
-        <script>imageMapResize();</script>
-    </body>
+    <!-- GA & External Scripts -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZL8HPL24E7"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-ZL8HPL24E7');
+    </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            font-family: "Helvetica Neue", Arial, "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", メイリオ, Meiryo, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0 15px 60px 15px;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px 30px;
+            box-sizing: border-box;
+        }
+        h1.main-title {
+            text-align: center;
+            font-size: 1.8rem;
+            margin-top: 20px;
+            margin-bottom: 30px;
+            color: #1a73e8;
+        }
+        h2.sec-title {
+            border-left: 6px solid #1a73e8;
+            border-bottom: 2px solid #e0e0e0;
+            padding-left: 10px;
+            padding-bottom: 5px;
+            margin-top: 40px;
+            margin-bottom: 15px;
+            font-size: 1.4rem;
+            color: #202124;
+        }
+        p.intro-desc {
+            font-size: 1rem;
+            margin-bottom: 15px;
+            color: #5f6368;
+        }
+
+        /* 画像＋ピン配置用コンテナ */
+        .img-pin-container {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        .img-pin-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+            border: 1px solid #ccc;
+        }
+
+        /* ピン（数字バッジ）スタイル */
+        .pin {
+            position: absolute;
+            width: 32px;
+            height: 32px;
+            background-color: #e53935;
+            color: #ffffff;
+            border: 2px solid #ffffff;
+            border-radius: 50%;
+            font-weight: bold;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+            transform: translate(-50%, -50%);
+            transition: transform 0.2s ease, background-color 0.2s ease;
+            z-index: 10;
+        }
+        .pin:hover {
+            transform: translate(-50%, -50%) scale(1.25);
+            background-color: #d32f2f;
+        }
+        .pin.blue {
+            background-color: #1976d2;
+        }
+        .pin.blue:hover {
+            background-color: #1565c0;
+        }
+        .pin.green {
+            background-color: #2e7d32;
+        }
+        .pin.green:hover {
+            background-color: #1b5e20;
+        }
+
+        /* クリック可能ガイドテキスト */
+        .click-guide {
+            background-color: #e8f0fe;
+            border-left: 4px solid #1a73e8;
+            padding: 8px 12px;
+            font-size: 0.95rem;
+            margin-bottom: 15px;
+            color: #1967d2;
+        }
+
+        /* モーダルダイアログ */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .modal-content {
+            background-color: #fff;
+            max-width: 550px;
+            width: 100%;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            overflow: hidden;
+            animation: modalFadeIn 0.2s ease-out;
+        }
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .modal-header {
+            background-color: #1a73e8;
+            color: #fff;
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .modal-header h3 {
+            margin: 0;
+            font-size: 1.15rem;
+        }
+        .modal-close-btn {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 1.5rem;
+            cursor: pointer;
+            line-height: 1;
+            padding: 0;
+        }
+        .modal-body {
+            padding: 20px;
+            font-size: 1rem;
+            color: #333;
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+        .modal-note {
+            margin-top: 15px;
+            padding: 10px;
+            background-color: #fff3cd;
+            border: 1px solid #ffeeba;
+            border-radius: 4px;
+            color: #856404;
+            font-size: 0.9rem;
+        }
+
+        /* 目次・クイックナビ */
+        .toc-list {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+        .toc-list li a {
+            display: inline-block;
+            padding: 8px 14px;
+            background-color: #f1f3f4;
+            color: #1a73e8;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 0.95rem;
+            transition: background-color 0.2s;
+        }
+        .toc-list li a:hover {
+            background-color: #e8f0fe;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1 class="main-title">震度分布図 for kottaro123456 操作ヘルプ</h1>
+
+    <div class="click-guide">
+        💡 <strong>使い方:</strong> 下の画面全体図のエリア（①〜⑤）をクリックすると各解説へ移動します。<br>各解説画像の <strong>数字ピン（①②③...）</strong> をタップすると、詳しい説明ダイアログが表示されます。
+    </div>
+
+    <!-- ナビゲーション目次 -->
+    <ul class="toc-list">
+        <li><a href="#section-top">全体の構成</a></li>
+        <li><a href="#section-info">① 情報パネル</a></li>
+        <li><a href="#section-map">② 地図コンテンツ</a></li>
+        <li><a href="#section-latest">③ 最新地震情報モード</a></li>
+        <li><a href="#section-search">④ 地震検索モード</a></li>
+        <li><a href="#section-custom">⑤ テーマ・表示設定</a></li>
+    </ul>
+
+    <!-- セクション：全体の構成 -->
+    <h2 class="sec-title" id="section-top">１．画面全体の構成</h2>
+    <p class="intro-desc">見たい部分の画像領域をクリックすると、該当の解説セクションへ移動します。</p>
+
+    <div class="img-pin-container">
+        <img src="source/doc/1_1.jpg" usemap="#main_map" alt="画面全体のイメージマップ">
+        <map name="main_map">
+            <!-- 情報パネル領域 -->
+            <area shape="rect" coords="0,0,400,370" href="#section-info" alt="情報パネル">
+            <!-- 地図コンテンツ領域 -->
+            <area shape="rect" coords="400,0,1600,790" href="#section-map" alt="地図コンテンツ">
+            <!-- ツールコントロール領域 -->
+            <area shape="rect" coords="0,790,1600,900" href="#section-latest" alt="ツールボタン">
+        </map>
+    </div>
+
+
+    <!-- セクション①：情報パネル -->
+    <h2 class="sec-title" id="section-info">① 情報パネル</h2>
+    <p class="intro-desc">画面左上の情報パネルです。赤数字ピンをタップすると詳細が表示されます。</p>
+
+    <div class="img-pin-container">
+        <img src="source/doc/1_2.jpg" alt="情報パネルの拡大">
+        
+        <!-- ピン配置 -->
+        <div class="pin" style="top: 18%; left: 35%;" onclick="openModal('title')">1</div>
+        <div class="pin" style="top: 30%; left: 35%;" onclick="openModal('time')">2</div>
+        <div class="pin" style="top: 65%; left: 45%;" onclick="openModal('detail')">3</div>
+    </div>
+
+
+    <!-- セクション②：地図コンテンツ -->
+    <h2 class="sec-title" id="section-map">② 地図コンテンツ</h2>
+    <p class="intro-desc">中央の地図表示エリアです。震度観測点や震源地を表示します。</p>
+
+    <div class="img-pin-container">
+        <img src="source/doc/1_3.jpg" alt="地図コンテンツの拡大">
+        
+        <!-- ピン配置 -->
+        <div class="pin blue" style="top: 45%; left: 40%;" onclick="openModal('shindo_plot')">1</div>
+        <div class="pin blue" style="top: 55%; left: 70%;" onclick="openModal('shingen_icon')">2</div>
+        <div class="pin blue" style="top: 8%; left: 95%;" onclick="openModal('zoom_ctrl')">3</div>
+    </div>
+
+
+    <!-- セクション③：最新地震情報モード -->
+    <h2 class="sec-title" id="section-latest">③ 【最新地震情報モード】操作ツール</h2>
+    <p class="intro-desc">最新の地震情報取得・自動更新を行うコントロール群です。</p>
+
+    <div class="img-pin-container">
+        <img src="source/doc/1_4.jpg" alt="ツール操作パネル">
+        
+        <!-- ピン配置 (最新情報用) -->
+        <div class="pin green" style="top: 25%; left: 20%;" onclick="openModal('latest_select')">1</div>
+        <div class="pin green" style="top: 25%; left: 42%;" onclick="openModal('latest_update')">2</div>
+        <div class="pin green" style="top: 25%; left: 88%;" onclick="openModal('latest_auto')">3</div>
+        <div class="pin green" style="top: 25%; left: 78%;" onclick="openModal('latest_test')">4</div>
+    </div>
+
+
+    <!-- セクション④：地震検索モード -->
+    <h2 class="sec-title" id="section-search">④ 【地震検索モード】操作ツール</h2>
+    <p class="intro-desc">過去の地震データを詳細条件（日時・震度・Mなど）で検索する機能です。</p>
+
+    <div class="img-pin-container">
+        <img src="source/doc/1_4.jpg" alt="ツール操作パネル">
+        
+        <!-- ピン配置 (検索用) -->
+        <div class="pin" style="top: 25%; left: 5%;" onclick="openModal('search_mode_btn')">1</div>
+        <div class="pin" style="top: 25%; left: 20%;" onclick="openModal('search_panel')">2</div>
+        <div class="pin" style="top: 25%; left: 35%;" onclick="openModal('search_page')">3</div>
+    </div>
+
+
+    <!-- セクション⑤：テーマ・表示カスタマイズ -->
+    <h2 class="sec-title" id="section-custom">⑤ テーマ・表示カスタマイズ（共通設定）</h2>
+    <p class="intro-desc">地図の配色やアイコンデザイン、表示要素のON/OFFを設定します。</p>
+
+    <div class="img-pin-container">
+        <img src="source/doc/1_4.jpg" alt="ツール操作パネル">
+        
+        <!-- ピン配置 (カスタマイズ用) -->
+        <div class="pin blue" style="top: 25%; left: 58%;" onclick="openModal('ctrl_reset')">1</div>
+        <div class="pin blue" style="top: 25%; left: 68%;" onclick="openModal('ctrl_ss')">2</div>
+        <div class="pin blue" style="top: 75%; left: 10%;" onclick="openModal('custom_icon_big')">3</div>
+        <div class="pin blue" style="top: 75%; left: 25%;" onclick="openModal('custom_theme')">4</div>
+        <div class="pin blue" style="top: 75%; left: 48%;" onclick="openModal('custom_icon_theme')">5</div>
+        <div class="pin blue" style="top: 75%; left: 68%;" onclick="openModal('custom_display')">6</div>
+        <div class="pin blue" style="top: 75%; left: 87%;" onclick="openModal('custom_text_list')">7</div>
+    </div>
+
+</div>
+
+<!-- モーダルダイアログ本体 -->
+<div id="modal-overlay" class="modal-overlay" onclick="closeModalOnBg(event)">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 id="modal-title">項目名</h3>
+            <button class="modal-close-btn" onclick="closeModal()">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div id="modal-desc">説明文</div>
+            <div id="modal-note" class="modal-note" style="display: none;"></div>
+        </div>
+    </div>
+</div>
+
+<!-- imageMapResizer (レスポンシブな<map>対応) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/image-map-resizer/1.0.10/js/imageMapResizer.min.js"></script>
+<script>
+    imageMapResize();
+
+    // モーダル用データ定義
+    const modalData = {
+        // ① 情報パネル
+        'title': {
+            title: '① タイトル表示',
+            desc: '現在表示している画面のタイトルや動作モード（観測点モード・市町村描画など）を表示します。'
+        },
+        'time': {
+            title: '② 取得時刻',
+            desc: '地震情報の最終取得（更新）時刻を表示します。'
+        },
+        'detail': {
+            title: '③ 地震の詳細情報',
+            desc: '直近または選択中地震の「最大震度」「発生時刻」「震源地」「地震の規模（マグニチュード）」「震源の深さ」「津波の有無・津波情報」を表示します。'
+        },
+
+        // ② 地図コンテンツ
+        'shindo_plot': {
+            title: '① 震度分布プロット',
+            desc: '地図上に震度1以上を観測した地点をアイコンや色塗り等で表示します。',
+            note: '※観測点データの欠落等により、「各地の震度（テキスト）」の表示数と若干異なる場合があります。'
+        },
+        'shingen_icon': {
+            title: '② 震源アイコン',
+            desc: '地震の発生場所（震源地）の位置を専用のアイコンで表示します。'
+        },
+        'zoom_ctrl': {
+            title: '③ ズーム・移動操作',
+            desc: 'ドラッグ操作やマウスホイール（スマホではピンチイン/アウト）で、地図の移動や拡大・縮小が自由に行えます。'
+        },
+
+        // ③ 最新地震情報
+        'latest_select': {
+            title: '① 地震選択（最新リスト）',
+            desc: '取得した直近の地震一覧から、地図に表示したい地震情報を選択・切り替えできます。',
+            note: '※自動更新がONの場合は、最新地震データ取得時に画面が最新に切り替わります。'
+        },
+        'latest_update': {
+            title: '② 情報更新ボタン ＆ 取得件数',
+            desc: '地震情報を手動で再取得・更新します。横の入力ボックスで一度に取得する件数（1〜500件）を指定できます。',
+            note: '※ページ全体のリロードを行わず、内部データのみを高速に更新します。'
+        },
+        'latest_auto': {
+            title: '③ 自動更新 ＆ 秒数指定',
+            desc: '定期的に最新情報へ自動更新する機能をON/OFFします。横の入力欄で更新間隔（秒）を自由に設定可能です。'
+        },
+        'latest_test': {
+            title: '④ 熊本地震描画テスト',
+            desc: '過去の大規模地震（2016年4月14日 熊本地震・震度7）のサンプルデータを用いて描画動作のテストを開始/停止します。',
+            note: '※899箇所の観測点を一括描画するため、端末スペックによって処理に時間がかかる場合があります。'
+        },
+
+        // ④ 地震検索
+        'search_mode_btn': {
+            title: '① モード切り替え（最新地震情報 / 地震検索）',
+            desc: '最新の地震を表示する「最新地震情報モード」と、過去の地震を探す「地震検索モード」をワンタップで切り替えます。'
+        },
+        'search_panel': {
+            title: '② 検索条件を設定（ダイアログ）',
+            desc: 'タップすると設定ダイアログが開き、以下の詳細条件で過去の地震を検索できます。',
+            note: '・期間指定（〇月〇日〜〇月〇日）<br>・情報の種類（各地の震度情報、震度速報、遠地地震など）<br>・最大震度範囲（震度1〜震度7）<br>・マグニチュード範囲（M）<br>・都道府県および最低震度'
+        },
+        'search_page': {
+            title: '③ ページネーション（前 / 次）',
+            desc: '検索結果が多数ある場合に、前・次の10件ずつページを移動して確認できます。'
+        },
+
+        // ⑤ 共通カスタマイズ
+        'ctrl_reset': {
+            title: '位置初期化ボタン',
+            desc: '移動や拡大縮小した地図の位置を、初期状態のデフォルト表示位置・ズームに戻します。'
+        },
+        'ctrl_ss': {
+            title: '画像保存・共有ボタン',
+            desc: '現在表示している地図画面を画像（スクリーンショット）として保存・ダウンロードしたり、SNSに共有できます。'
+        },
+        'custom_icon_big': {
+            title: '震度アイコン拡大（震度大きく）',
+            desc: 'チェックを入れると、地図上に表示される震度アイコンが大きくなり、遠目でも見やすくなります。'
+        },
+        'custom_theme': {
+            title: '地図テーマ（配色）',
+            desc: '地図の背景配色テーマ（NERV / WNI / Quarog など）を変更します。'
+        },
+        'custom_icon_theme': {
+            title: 'アイコンテーマ',
+            desc: '震度アイコンのデザインスタイル（EQM1 / JQuake / WNI など）を変更します。'
+        },
+        'custom_display': {
+            title: '表示要素のON/OFF選択',
+            desc: '地図上に重ねて表示する要素（震源アイコン、観測点、色塗り、市町村境界、津波情報など）を個別にON/OFF選択します。'
+        },
+        'custom_text_list': {
+            title: '各地の震度（テキスト表示）',
+            desc: 'チェックを入れると、観測された震度（震度7〜震度1順）と観測地点の一覧をテキスト形式で画面上に表示します。'
+        }
+    };
+
+    function openModal(key) {
+        const data = modalData[key];
+        if (!data) return;
+
+        document.getElementById('modal-title').innerText = data.title;
+        document.getElementById('modal-desc').innerHTML = data.desc;
+
+        const noteEl = document.getElementById('modal-note');
+        if (data.note) {
+            noteEl.innerHTML = data.note;
+            noteEl.style.display = 'block';
+        } else {
+            noteEl.style.display = 'none';
+        }
+
+        document.getElementById('modal-overlay').style.display = 'flex';
+    }
+
+    function closeModal() {
+        document.getElementById('modal-overlay').style.display = 'none';
+    }
+
+    function closeModalOnBg(event) {
+        if (event.target.id === 'modal-overlay') {
+            closeModal();
+        }
+    }
+
+    // ESCキーでモーダル閉じる
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape') {
+            closeModal();
+        }
+    });
+</script>
+</body>
 </html>
