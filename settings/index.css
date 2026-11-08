@@ -6,12 +6,13 @@ body {
     --accent2-text: #ffffff;
     --transition1: all 0.5s;
     --transition2: all 0.3s 0.2s;
-    --main_selector-text: #000000;
-    --main_selector-bg: #eaf3ff;
+    --main_selector-text: #ffffff;
+    --main_selector-bg: #090909;
     --boxShadow1: 0px 5px 10px -5px #777777;
     font-family: var(--fontFamily);
     font-weight: var(--fontWeight);
     margin: 0;
+    padding: 4px 0;
     background: var(--main-bg);
     color: var(--main-text);
     overflow-x: hidden!important;
@@ -19,115 +20,230 @@ body {
     --main-bg: #202020;
     --kirokuBox-text: #ffffff;
     --kirokuBox-text2: #dbdbdb;
-    --kirokuBox-bg: #464646;
+    --kirokuBox-bg: #2d2d2d;
+    --kirokuBox-hover-bg: #363636;
     --kirokuBox-bg2: #747474;
     --addRequired: #ff4141;
     --accent2: #00b7ff;
     --cancel: #ff4141;
     --input-bg: #323232;
-    --switch-bg: #202020;
+    --switch-bg: #1a1a1a;
     --switch-for: #d2d2d2;
-    --main_selector-text: #ffffff;
-    --main_selector-bg: #090909;
+    --border-color: #3f3f3f;
 }
 
-/* アカウント */
+h1 {
+    margin: 6px 0 4px 0.5em;
+    font-size: 1.35rem;
+}
+
+/* アカウント・設定見出し (さらにコンパクト化) */
 .acc_title {
     width: calc(95% - 10px);
-    padding: 5px;
-    margin: 8px auto;
-    margin-top: 1.6rem;
-    border-bottom: var(--accent1) 3px solid;
-    font-size: 1.4rem;
+    padding: 2px 0;
+    margin: 0.6rem auto 0.25rem auto;
+    border-bottom: var(--accent1) 2px solid;
+    font-size: 1.1rem;
     font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
 }
+
+/* リストアイテム (コンパクトタイトレイアウト) */
 .acc_content {
     width: calc(95% - 10px);
-    padding: 10px 5px;
+    padding: 5px 8px;
     background: var(--kirokuBox-bg);
-    border-radius: 8px;
-    margin: 8px auto;
+    border-radius: 5px;
+    margin: 3px auto;
     display: flex;
     align-items: center;
     justify-content: left;
     cursor: pointer;
+    box-sizing: border-box;
+    transition: background 0.2s ease;
 }
+.acc_content:hover {
+    background: var(--kirokuBox-hover-bg);
+}
+
 .acc_content.switch {
     width: calc(95% - 10px);
-    padding: 10px 5px;
+    padding: 5px 8px;
     background: var(--kirokuBox-bg);
-    border-radius: 8px;
-    margin: 8px auto;
+    border-radius: 5px;
+    margin: 3px auto;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    cursor: default;
 }
+.acc_content.switch:hover {
+    background: var(--kirokuBox-bg);
+}
+
 .acc_content_switch_div1 {
     display: flex;
     align-items: center;
     justify-content: left;
 }
 .acc_content_icon {
-    margin: 0 1rem;
-    font-size: 1.6rem;
+    margin: 0 0.5rem 0 0.2rem;
+    font-size: 1.25rem;
+    display: flex;
+    align-items: center;
 }
 .acc_content_text {
-    font-size: 1.2rem;
+    font-size: 0.95rem;
+    line-height: 1.25;
 }
 .acc_content_delete {
     color: var(--addRequired);
 }
 
+/* スイッチ (コンパクト化) */
 .acc_content_switch {
     display: none;
 }
 .acc_content_switch_label {
     position: relative;
     display: inline-block;
-    margin-right: 10px;
+    margin-right: 4px;
+    cursor: pointer;
 }
 .acc_content_switch_back {
-    width: 50px;
-    height: 22px;
+    width: 38px;
+    height: 18px;
     background: var(--switch-bg);
-    border-radius: 25px;
-    border: 3px var(--switch-for) solid;
+    border-radius: 18px;
+    border: 2px var(--switch-for) solid;
     transition: 0.3s;
 }
 .acc_content_switch_front {
     position: absolute;
-    width: 18px;
-    height: 18px;
-    top: 4.5px;
-    left: 4.5px;
-    border-radius: 18px;
+    width: 14px;
+    height: 14px;
+    top: 4px;
+    left: 4px;
+    border-radius: 14px;
     background: var(--switch-for);
     transition: 0.3s;
 }
 .acc_content_switch:checked ~ .acc_content_switch_back {
     background: var(--accent1);
-    border: 3px var(--accent1-text) solid;
+    border: 2px var(--accent1-text) solid;
 }
 .acc_content_switch:checked ~ .acc_content_switch_front {
     background: var(--accent1-text);
-    left: 32px;
+    left: 24px;
 }
 
-.table_1 {
-    margin: 8px auto;
+/* ストレージバー */
+.storage_bar_container {
+    width: 100%;
+    height: 5px;
+    background: #1a1a1a;
+    border-radius: 3px;
+    overflow: hidden;
+    margin-top: 4px;
+}
+.storage_bar_fill {
+    height: 100%;
+    background: linear-gradient(90deg, #0080ff, #00b7ff);
+    transition: width 0.4s ease;
+}
+
+/* テーブルスタイル (タイト・薄型) */
+#fontTable, #mapTable {
     width: calc(95% - 10px);
-    padding: 10px 5px;
-    border-collapse: collapse;
-    font-size: 1rem;
+    margin: 3px auto 0.6rem auto;
+    overflow-x: auto;
 }
-.table_1 tr td, .table_1 tr th, .table_2 tr td {
-    border: var(--main-text) 1px solid;
-    padding: 5px 10px!important;
+.table_1 {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+    text-align: left;
+    background: var(--kirokuBox-bg);
+    border-radius: 5px;
+    overflow: hidden;
+}
+.table_1 th {
+    background: #242424;
+    color: #b0b0b0;
+    font-weight: 600;
+    padding: 4px 8px;
+    border-bottom: 2px solid var(--border-color);
+    text-align: center;
+    white-space: nowrap;
+}
+.table_1 td {
+    padding: 4px 8px;
+    border-bottom: 1px solid var(--border-color);
+    text-align: center;
+    vertical-align: middle;
+    white-space: nowrap;
+}
+.table_1 tr:last-child td {
+    border-bottom: none;
+}
+.table_1 tr:hover td {
+    background: var(--kirokuBox-hover-bg);
 }
 
+/* ステータスバッジ */
+.status-badge {
+    display: inline-block;
+    padding: 1px 6px;
+    border-radius: 8px;
+    font-size: 0.74rem;
+    font-weight: 600;
+}
+.status-badge.saved {
+    background: rgba(0, 200, 83, 0.15);
+    color: #00e676;
+    border: 1px solid rgba(0, 230, 118, 0.3);
+}
+.status-badge.not-saved {
+    background: rgba(255, 255, 255, 0.08);
+    color: #888888;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+/* アクションボタン (個別削除 / 個別取得) */
+.action-btn {
+    background: transparent;
+    border: 1px solid var(--border-color);
+    color: var(--main-text);
+    padding: 2px 6px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 0.75rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    transition: all 0.2s ease;
+}
+.action-btn:hover {
+    background: var(--accent1);
+    border-color: var(--accent1);
+    color: #ffffff;
+}
+.action-btn.del-btn:hover {
+    background: var(--addRequired);
+    border-color: var(--addRequired);
+    color: #ffffff;
+}
+.action-btn .material-symbols-rounded {
+    font-size: 0.9rem;
+    transform: none;
+}
+
+/* オーバーレイ・ローディング (ぼかし保持) */
 #data_reload {
-    width: 180px;
-    height: 180px;
+    width: 200px;
+    padding: 14px 8px;
     position: fixed;
     top: 50%;
     left: 50%;
@@ -135,11 +251,12 @@ body {
     background: #0066ff;
     color: white;
     text-align: center;
-    border-radius: 10px;
+    border-radius: 8px;
     display: none;
     font-family: var(--fontFamily);
     font-weight: var(--fontWeight);
     z-index: 10000000;
+    box-sizing: border-box;
 }
 #data_reload.display {
     display: block;
@@ -153,26 +270,25 @@ body {
     background: #00000099;
     display: none;
     z-index: 9000000;
-    backdrop-filter: blur(4px);
+    backdrop-filter: blur(4px); /* 既存のぼかしを保持 */
 }
 #data_reload_bg.display {
     display: block;
 } 
 .data_reload_text {
     width: 100%;
-    position: absolute;
-    bottom: 0.5rem;
+    margin-top: 75px;
 }
 .data_reload_icon {
-    font-size: 100px!important;
+    font-size: 60px!important;
     width: 100%;
     position: absolute;
-    top: calc(35% - 60px);
+    top: 12px;
     left: 0;
     animation: 1s linear 0s login_check_icon;
     animation-fill-mode: both;
     animation-iteration-count: infinite;
-    transform: rotate(0)
+    transform: rotate(0);
 }
 @keyframes login_check_icon {
     0% {transform: rotate(0);}
@@ -189,7 +305,7 @@ body {
     font-family: 'Material Symbols Rounded';
     -webkit-font-smoothing: antialiased;
     display: inline-block;
-    transform: scale(1.2) translateY(5%);
+    transform: scale(1.05) translateY(2%);
     font-weight: 400!important;
 }
 
@@ -202,9 +318,9 @@ body {
     font-family: 'Material Symbols Rounded Filled';
     -webkit-font-smoothing: antialiased;
     display: inline-block;
-    transform: scale(1.2) translateY(5%);
+    transform: scale(1.05) translateY(2%);
     font-weight: 400!important;
 }
 .icon_yoko {
-    transform: scale(1.2) translateY(5%) rotate(90deg)!important;
+    transform: scale(1.05) translateY(2%) rotate(90deg)!important;
 }

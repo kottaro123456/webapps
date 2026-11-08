@@ -10,6 +10,20 @@
 <body>
     <h1 style="margin-left: 0.5em;">設定 - Webアプリ</h1>
 
+    <div class="acc_title"><span class="material-symbols-rounded">database</span> ストレージ状況</div>
+    <div class="acc_content storage_info_content">
+        <div class="acc_content_icon"><span class="material-symbols-rounded">pie_chart</span></div>
+        <div class="acc_content_text" style="width: 100%; margin-right: 15px;">
+            端末ストレージ使用量
+            <div id="storage_details" style="font-size: 0.85em; margin-top: 0.4em; color: #b0b0b0;">
+                使用量計算中...
+            </div>
+            <div class="storage_bar_container">
+                <div id="storage_bar_fill" class="storage_bar_fill" style="width: 0%;"></div>
+            </div>
+        </div>
+    </div>
+
     <div class="acc_title"><span class="material-symbols-rounded">text_fields</span> フォント</div>
     <div class="acc_content switch" id="set_font1">
         <div class="acc_content_switch_div1">
@@ -56,7 +70,7 @@
     <div class="acc_content" id="acc_logout" onclick="newFont()">
         <div class="acc_content_icon"><span class="material-symbols-rounded">cloud_download</span></div>
         <div class="acc_content_text">
-            フォント読み込み
+            フォント全読み込み
             <div style="font-size: 0.75em;margin-top: 0.5em;">
                 必要なフォントである「ヒラギノ角ゴ-Pro」を端末に保存します。
                 <br>すでに保存されている場合でも強制的に上書きします。
@@ -67,7 +81,7 @@
     <div class="acc_content acc_content_delete" id="acc_deleteAll" onclick="deleteFont()">
         <div class="acc_content_icon"><span class="material-symbols-rounded">delete_forever</span></div>
         <div class="acc_content_text">
-            フォント削除
+            フォント全削除
             <div style="font-size: 0.75em;margin-top: 0.5em;">
                 下表のフォントファイルをお使いの端末から全て削除します。
                 <br>フォントを端末に保存したくない場合は上の「フォント保存」をオフにしてください。
@@ -84,11 +98,13 @@
                     <th>管理名</th>
                     <th>太さ</th>
                     <th>サイズ</th>
+                    <th>状態</th>
+                    <th>操作</th>
                 </tr>
             </thead>
             <tbody id="font-table-body">
             </tbody>
-    </table>
+        </table>
     </div>
 
     <div class="acc_title"><span class="material-symbols-rounded">map</span> 地図データ</div>
@@ -96,7 +112,7 @@
     <div class="acc_content" onclick="newMap()">
         <div class="acc_content_icon"><span class="material-symbols-rounded">cloud_download</span></div>
         <div class="acc_content_text">
-            地図データ読み込み
+            地図データ全読み込み
             <div style="font-size: 0.75em;margin-top: 0.5em;">
                 Webアプリで使用している全ての地図データを保存します。
                 <br>すでに保存されている場合でも強制的に上書きします。
@@ -107,7 +123,7 @@
     <div class="acc_content acc_content_delete" onclick="deleteMap()">
         <div class="acc_content_icon"><span class="material-symbols-rounded">delete_forever</span></div>
         <div class="acc_content_text">
-            地図データ削除
+            地図データ全削除
             <div style="font-size: 0.75em;margin-top: 0.5em;">
                 下表の地図データをお使いの端末から全て削除します。
                 <br>次回読み込み時に地図データが読み込まれ保存されます。
@@ -117,20 +133,27 @@
 
     <div id="mapTable">
         <table class="table_1">
-            <tr align="center">
-                <td>地図名</td>
-                <td>管理名</td>
-                <td>サイズ</td>
-            </tr>
+            <thead>
+                <tr align="center">
+                    <th>地図名</th>
+                    <th>管理名</th>
+                    <th>サイズ</th>
+                    <th>状態</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody id="map-table-body">
+            </tbody>
         </table>
     </div>
-
-
 
     <div id="data_reload_bg"></div>
     <div id="data_reload">
         <div class="material-symbols-rounded data_reload_icon">sync</div>
-        <div class="data_reload_text"><span style="font-size: 22px;">データ更新中</span><br><span style="font-size: 16px;">サーバーと通信中…</span></div>
+        <div class="data_reload_text">
+            <span id="data_reload_title" style="font-size: 22px;">データ更新中</span><br>
+            <span id="data_reload_subtext" style="font-size: 16px;">サーバーと通信中…</span>
+        </div>
     </div>
     
     <script src="../../static/font/fonts.php"></script>

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>観測点 色抽出デモ (Leaflet)</title>
+  <!-- LeafletのCSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <style>
+    body { margin: 0; padding: 0; }
+    #map { height: 100vh; width: 100vw; }
+  </style>
+</head>
+<body>
+
+  <!-- 地図を表示する要素 -->
+  <div id="map"></div>
+
+  <!-- LeafletのJavaScript -->
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script>
+    // 地図の初期化 (日本全体が見えるように設定)
+    const map = L.map('map').setView([38.0, 140.0], 5);
+
+    // 背景地図としてOpenStreetMapを読み込み
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 18,
+      attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+
+    // タイル画像のベースURL
+    const BASE_TILE_URL = "https://www.msil.go.jp/data/tiles/smoni/tileimage/20260731170200/20260731170200/";
+
+    // 抽出・変換済みの観測点データ（サンプルとして数件記載）
+    var groupedData = null;
+
+    async function loadData() {
+        // データが取れるまでここで待機する
+        const response = await fetch("./st_snet.json");
+        groupedData = await response.json();
+
+        // 色抽出用の非表示Canvasを生成
+    const canvas = document.createElement('canvas');
+    canvas.width = 256;
+    canvas.height = 256;
+    const ctx = canvas.getContext('2d', { willReadFrequently: true });
+
+    // 画像ごとに処理を実行
+    for (const [tilePath, stations] of Object.entries(groupedData)) {
+      const img = new Image();
+      
+      // クロスドメイン(CORS)の画像からピクセルデータを読み取るための設定
+      img.crossOrigin = "Anonymous"; 
+      // --- 変更前 ---
+    // img.src = BASE_TILE_URL + tilePath;
+
+    // --- 変更後 ---
+    const targetUrl = BASE_TILE_URL + tilePath;
+    // URLエンコードしてプロキシに渡す
+    img.src = `snet_proxy.php?url=${encodeURIComponent(targetUrl)}`;
+
+      img.onload = () => {
+        // 画像をCanvasに描画
+        ctx.clearRect(0, 0, 256, 256);
+        ctx.drawImage(img, 0, 0);
+
+        // その画像に含まれる観測点をループして色を抽出し、ピンを立てる
+        stations.forEach(station => {
+          // (pixel_x, pixel_y)の1ピクセルの色データを取得 [R, G, B, A]
+          const pixel = ctx.getImageData(station.pixel_x, station.pixel_y, 1, 1).data;
+          const r = pixel[0];
+          const g = pixel[1];
+          const b = pixel[2];
+          const a = pixel[3] / 255; // アルファ値 (透明度)
+
+          // Leafletで使える色形式 (RGB)
+          const rgbColor = `rgb(${r}, ${g}, ${b})`;
+
+          // サークルマーカーを地図に追加（画像から取得した色で塗る）
+          L.circleMarker([station.latitude, station.longitude], {
+            radius: 8,              // マーカーのサイズ
+            fillColor: rgbColor,    // 抽出した色
+            color: '#000',          // 枠線の色 (黒)
+            weight: 1,              // 枠線の太さ
+            opacity: 1,
+            fillOpacity: a > 0 ? 0.9 : 0.2 // 元が透明なら少し薄く表示
+          })
+          .addTo(map)
+          .bindPopup(`<b>${station.station_cd}</b><br>Color: ${rgbColor}<br>Pixel: ${station.pixel_x}, ${station.pixel_y}`);
+        });
+      };
+
+      img.onerror = () => {
+        console.error("画像の読み込みに失敗しました:", img.src);
+      };
+    }
+    }
+    loadData();
+
+    
+  </script>
+</body>
+</html>

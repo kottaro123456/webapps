@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>K-MONI Observation Point Selector</title>
+    <script src="https://unpkg.com/maplibre-gl@4.0.0/dist/maplibre-gl.js"></script>
+    <link href="https://unpkg.com/maplibre-gl@4.0.0/dist/maplibre-gl.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <style>
+        :root {
+            --bg-dark: #121212;
+            --panel-bg: rgba(30, 30, 35, 0.85);
+            --panel-border: rgba(255, 255, 255, 0.1);
+            --text-primary: #ffffff;
+            --text-secondary: #a1a1aa;
+            --accent-blue: #3b82f6;
+            --accent-green: #10b981;
+            --accent-red: #ef4444;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-primary);
+            overflow: hidden;
+        }
+
+        #map {
+            width: 100%;
+            height: 100%;
+        }
+
+        .ui-panel {
+            position: absolute;
+            bottom: 24px;
+            right: 24px;
+            width: 320px;
+            background: var(--panel-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--panel-border);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .panel-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .count-badge {
+            background: var(--accent-blue);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+
+        .selected-list-container {
+            max-height: 200px;
+            overflow-y: auto;
+            background: rgba(0,0,0,0.2);
+            border-radius: 8px;
+            padding: 8px;
+            font-family: 'JetBrains Mono', 'Fira Code', monospace;
+            font-size: 0.85rem;
+            line-height: 1.5;
+            color: var(--text-secondary);
+            word-break: break-all;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+        }
+
+        .btn-primary {
+            background: var(--accent-blue);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #2563eb;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .notification {
+            position: absolute;
+            top: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--accent-green);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            z-index: 100;
+            opacity: 0;
+            transition: opacity 0.3s, transform 0.3s;
+            pointer-events: none;
+        }
+
+        .notification.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(10px);
+        }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+
+    <div class="ui-panel">
+        <div class="panel-header">
+            <span class="panel-title">選択された観測点</span>
+            <span id="selectedCount" class="count-badge">0</span>
+        </div>
+        <div id="selectedList" class="selected-list-container">
+            観測点を選択してください...
+        </div>
+        <div class="button-group">
+            <button id="copyBtn" class="btn btn-primary">
+                <span class="material-symbols-rounded">content_copy</span>
+                コピー
+            </button>
+            <button id="clearBtn" class="btn btn-secondary">
+                <span class="material-symbols-rounded">delete_sweep</span>
+                クリア
+            </button>
+        </div>
+    </div>
+
+    <div id="notification" class="notification">コピーしました！</div>
+
+    <script>
+        const map = new maplibregl.Map({
+            container: 'map',
+            style: {
+                version: 8,
+                sources: {
+                    'osm': {
+                        type: 'raster',
+                        tiles: ['https://tile.openstreetmap.org/{z}/{x}/{y}.png'],
+                        tileSize: 256,
+                        attribution: '&copy; OpenStreetMap contributors'
+                    }
+                },
+                layers: [
+                    {
+                        id: 'osm',
+                        type: 'raster',
+                        source: 'osm',
+                        paint: { 'raster-opacity': 0.3 }
+                    },
+                    {
+                        id: 'background',
+                        type: 'background',
+                        paint: { 'background-color': '#111111' }
+                    }
+                ]
+            },
+            center: [138.0, 36.0],
+            zoom: 5.5,
+            minZoom: 4,
+            maxZoom: 12
+        });
+
+        let selectedPoints = new Set();
+        let kmoniGeoJSON = null;
+
+        map.on('load', async () => {
+            try {
+                const response = await fetch('source/kmoni_points.json');
+                const data = await response.json();
+                
+                kmoniGeoJSON = {
+                    type: 'FeatureCollection',
+                    features: data.map(pt => ({
+                        type: 'Feature',
+                        geometry: {
+                            type: 'Point',
+                            coordinates: [parseFloat(pt.lot), parseFloat(pt.lat)]
+                        },
+                        properties: {
+                            pointName: pt.pointName,
+                            pref: pt.pref,
+                            city: pt.city,
+                            selected: false
+                        }
+                    }))
+                };
+
+                map.addSource('kmoni-points', {
+                    type: 'geojson',
+                    data: kmoniGeoJSON,
+                    generateId: true
+                });
+
+                // Default Points Layer
+                map.addLayer({
+                    id: 'kmoni-points-circle',
+                    type: 'circle',
+                    source: 'kmoni-points',
+                    paint: {
+                        'circle-radius': [
+                            'interpolate', ['linear'], ['zoom'],
+                            5, 2,
+                            10, 6
+                        ],
+                        'circle-color': '#666666',
+                        'circle-stroke-width': 1,
+                        'circle-stroke-color': '#000000',
+                        'circle-opacity': 0.8
+                    }
+                });
+
+                // Highlight Selected Points Layer
+                map.addLayer({
+                    id: 'kmoni-points-selected',
+                    type: 'circle',
+                    source: 'kmoni-points',
+                    filter: ['==', ['get', 'selected'], true],
+                    paint: {
+                        'circle-radius': [
+                            'interpolate', ['linear'], ['zoom'],
+                            5, 4,
+                            10, 10
+                        ],
+                        'circle-color': '#3b82f6',
+                        'circle-stroke-width': 2,
+                        'circle-stroke-color': '#ffffff',
+                        'circle-opacity': 1
+                    }
+                });
+
+                // Click Handler
+                map.on('click', 'kmoni-points-circle', (e) => {
+                    if (e.features.length > 0) {
+                        const feature = e.features[0];
+                        const pointName = feature.properties.pointName;
+                        
+                        // Toggle logic in data structure
+                        const targetFeature = kmoniGeoJSON.features.find(f => f.properties.pointName === pointName);
+                        if (targetFeature) {
+                            targetFeature.properties.selected = !targetFeature.properties.selected;
+                            
+                            if (targetFeature.properties.selected) {
+                                selectedPoints.add(pointName);
+                            } else {
+                                selectedPoints.delete(pointName);
+                            }
+                            
+                            // Update source data with minimal overhead
+                            map.getSource('kmoni-points').setData(kmoniGeoJSON);
+                            updateUI();
+                        }
+                    }
+                });
+
+                // Hover Effects
+                map.on('mouseenter', 'kmoni-points-circle', () => {
+                    map.getCanvas().style.cursor = 'pointer';
+                });
+                map.on('mouseleave', 'kmoni-points-circle', () => {
+                    map.getCanvas().style.cursor = '';
+                });
+
+            } catch (err) {
+                console.error('Failed to load kmoni points:', err);
+            }
+        });
+
+        function updateUI() {
+            const listEl = document.getElementById('selectedList');
+            const countEl = document.getElementById('selectedCount');
+            const sortedNames = Array.from(selectedPoints).sort();
+            
+            countEl.textContent = selectedPoints.size;
+            
+            if (selectedPoints.size === 0) {
+                listEl.textContent = '観測点を選択してください...';
+            } else {
+                listEl.textContent = sortedNames.join(', ');
+            }
+        }
+
+        // Copy Functionality
+        document.getElementById('copyBtn').addEventListener('click', () => {
+            if (selectedPoints.size === 0) return;
+            
+            const textToCopy = Array.from(selectedPoints).sort().join(', ');
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                showNotification();
+            });
+        });
+
+        // Clear Functionality
+        document.getElementById('clearBtn').addEventListener('click', () => {
+            if (selectedPoints.size === 0) return;
+            
+            selectedPoints.clear();
+            kmoniGeoJSON.features.forEach(f => f.properties.selected = false);
+            map.getSource('kmoni-points').setData(kmoniGeoJSON);
+            updateUI();
+        });
+
+        function showNotification() {
+            const notify = document.getElementById('notification');
+            notify.classList.add('show');
+            setTimeout(() => {
+                notify.classList.remove('show');
+            }, 2000);
+        }
+    </script>
+</body>
+</html>

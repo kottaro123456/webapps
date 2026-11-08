@@ -227,8 +227,6 @@ map.on('load', async () => {
     // ソースを追加した後なので、ここでエラーが出なくなるはずです！
     await QuakeSelect(0);
 
-    await fontLoadingPopup();
-
     console.log("Ready to draw Quake info.");
 });
 

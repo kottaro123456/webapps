@@ -538,8 +538,6 @@ console.log(consoletext);
         prefGet()
     ]);
     await TempInfo_get();
-
-    await fontLoadingPopup();
 })();
 
 

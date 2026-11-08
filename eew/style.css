@@ -1,0 +1,1090 @@
+:root {
+    --bg-dark: #121212;
+    --panel-bg: rgba(150, 150, 150, 0.9);
+    --panel-border: rgba(255, 255, 255, 0.1);
+    --text-primary: #ffffff;
+    --text-secondary: #a1a1aa;
+    --accent-red: #ef4444;
+    --accent-yellow: #eab308;
+    --accent-blue: #3b82f6;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'UD新ゴ-Pro', sans-serif;
+    font-weight: 300;
+    line-height: 1.3;
+    background-color: var(--bg-dark);
+    color: var(--text-primary);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+h1,
+h2,
+h3 {
+    font-weight: 500;
+}
+
+.map-container {
+    display: flex;
+    flex-direction: row;
+    flex-grow: 1;
+    width: 100vw;
+    position: relative;
+    overflow: hidden;
+}
+
+#map {
+    position: relative;
+    flex-grow: 1;
+    height: 100%;
+}
+
+.submap-wrapper {
+    position: relative;
+    width: var(--submap-width, 50vw);
+    height: 100%;
+    border-left: 2px solid rgba(255, 255, 255, 0.2);
+    display: flex;
+    flex-direction: column;
+    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s;
+    opacity: 1;
+}
+
+.submap-wrapper.hidden {
+    width: 0;
+    opacity: 0;
+    border-left: none;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+#subMap {
+    flex-grow: 1;
+    width: 100%;
+    height: 100%;
+}
+
+.submap-title {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: rgba(0, 0, 0, 0.7);
+    color: #fff;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    z-index: 2;
+    pointer-events: none;
+    backdrop-filter: blur(4px);
+}
+
+/* Bottom Panel Layout (RealtimeQuakeInfo style based on image) */
+.eew-panel {
+    position: relative;
+    width: 100vw;
+    height: 18vh;
+    min-height: 140px;
+    background: var(--panel-bg);
+    display: flex;
+    z-index: 10;
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s;
+    transform: translateY(0);
+    color: #ffffff;
+    backdrop-filter: blur(5px);
+}
+
+/* 確信度別の縁取り (text-shadow) - 独自検知時の特定要素のみに適用 */
+.eew-panel.confidence-high {
+    --outline-color: #ff7300;
+}
+.eew-panel.confidence-low {
+    --outline-color: #149a4a;
+}
+
+/* 震度エリア、地域名、詳細行の一部に限定適用 */
+.eew-panel.confidence-high .shindo-area *,
+.eew-panel.confidence-high .region-name,
+.eew-panel.confidence-high #magnitudeRow,
+.eew-panel.confidence-high #reportRow,
+.eew-panel.confidence-low .shindo-area *,
+.eew-panel.confidence-low .region-name,
+.eew-panel.confidence-low #magnitudeRow,
+.eew-panel.confidence-low #reportRow {
+    -webkit-text-stroke: 6px var(--outline-color);
+    paint-order: stroke fill;
+}
+
+
+/* 震度エリア (左側) */
+.shindo-area {
+    width: 25vw;
+    min-width: 180px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0 2vw;
+}
+
+.shindo-area .label {
+    font-size: clamp(1.2rem, 2.5vh, 1.5rem);
+    margin-bottom: 1vh;
+    font-weight: 300;
+}
+
+.shindo-area .intensity {
+    font-size: clamp(4.5rem, 11vh, 6rem);
+    font-weight: 500;
+    line-height: 1;
+    letter-spacing: -0.05em;
+}
+
+/* 情報エリア (中間) */
+.info-area {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 1vh 2vw;
+    flex-grow: 1;
+}
+
+.region-name {
+    font-size: clamp(2rem, 5vh, 3rem);
+    font-weight: 500;
+    line-height: 1.1;
+    padding-bottom: 1vh;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.metrics-sub {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2vh;
+}
+
+.metrics-row {
+    font-size: clamp(1.2rem, 2.5vh, 1.5rem);
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Top Right Controls (内包) */
+.controls-top-right {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 20;
+    display: flex;
+    gap: 12px;
+}
+
+.control-btn {
+    background: transparent;
+    border: 3px solid currentColor;
+    color: inherit;
+    width: 44px;
+    height: 44px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.control-btn .material-symbols-rounded {
+    font-size: 32px;
+}
+
+.control-btn:hover {
+    transform: scale(1.05);
+    background: rgba(0, 0, 0, 0.1);
+}
+
+.control-btn.active {
+    background: #ffffff80;
+    color: var(--accent-blue);
+    border-color: var(--accent-blue);
+}
+
+/* クロック右下配置 */
+.bottom-right-clock {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    font-size: clamp(1.2rem, 3vh, 1.5rem);
+    font-weight: 500;
+    color: inherit;
+    z-index: 10;
+    padding: 2px 8px;
+    border-radius: 4px 0 0 0;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+/* データ取得ステータス (生存確認) */
+.fetch-status-container {
+    position: absolute;
+    bottom: calc((clamp(1.2rem, 3vh, 1.5rem) * 1.3) + 4px); /* クロックの高さ分（微調整） */
+    right: 0;
+    display: flex;
+    flex-direction: column; /* 三段重ね */
+    align-items: flex-end; /* 右寄せ */
+    gap: 0px;
+    background: rgba(0, 0, 0, 0.6);
+    padding: 4px 8px;
+    border-radius: 4px 0 0 0; /* 右側は壁に付ける */
+    font-size: 0.7rem;
+    color: #aaaaaa;
+    z-index: 10;
+    pointer-events: none;
+    transition: background-color 0.3s;
+    letter-spacing: 0.05em;
+}
+
+.fetch-item {
+    display: flex;
+    gap: 4px;
+    transition: color 0.3s;
+}
+
+.fetch-item .time {
+    color: #ffffff;
+    font-family: monospace;
+}
+
+/* エラー時の警告色 (赤紅色) */
+.fetch-error {
+    background-color: #ff0033 !important;
+    color: #ffffff !important;
+}
+
+.fetch-error .time {
+    color: #ffffff !important;
+}
+
+@keyframes pulse {
+    0% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.5;
+        transform: scale(1.1);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Animations for the map marker */
+.epicenter-marker {
+    width: 48px;
+    height: 48px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+}
+
+.epicenter-marker::after {
+    content: '';
+    position: absolute;
+    width: 32px;
+    height: 32px;
+    background-image: url('shingen.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    z-index: 12;
+}
+
+.sub-epicenter-marker {
+    color: #ff0000;
+    font-size: 24px;
+    font-weight: bold;
+    text-shadow: 1px 1px 0 #fff, -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff;
+    pointer-events: none;
+    line-height: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: -2px;
+    z-index: 12;
+}
+
+.epicenter-pulse {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 48px;
+    height: 48px;
+    box-sizing: border-box;
+    border: 3px solid var(--accent-red);
+    border-radius: 50%;
+    animation: marker-pulse 1.5s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+}
+
+@keyframes marker-pulse {
+    0% {
+        transform: translate(-50%, -50%) scale(0.5);
+        opacity: 1;
+        border-width: 4px;
+    }
+
+    100% {
+        transform: translate(-50%, -50%) scale(2);
+        opacity: 0;
+        border-width: 1px;
+    }
+}
+
+/* Settings Panel Styles */
+.set-panel {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(30, 30, 35, 0.95);
+    /* 黒基調で目立つように */
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    padding: 0px 24px 24px 24px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.8);
+    z-index: 100;
+    width: 90%;
+    height: 90%;
+    overflow-y: auto;
+    color: var(--text-primary);
+    --submap-width: 32vw;
+}
+
+.set-panel.hidden {
+    display: none;
+}
+
+/* style.css の該当箇所を修正 */
+.set-panel-header {
+    position: sticky;
+    top: 0.5px;
+    z-index: 110;
+    background: rgba(30, 30, 35, 1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 12px 0;
+    margin-bottom: 20px;
+}
+
+.set-panel h3 {
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.settings-group {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 16px;
+}
+
+.settings-group-title {
+    font-size: 1rem;
+    margin-bottom: 12px;
+    color: var(--text-secondary);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 4px;
+    font-weight: 500;
+}
+
+/* 開閉可能な詳細設定グループ (details / summary) */
+details.settings-details {
+    transition: background-color 0.2s ease;
+}
+
+details.settings-details summary.settings-details-summary {
+    list-style: none;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    user-select: none;
+    margin-bottom: 0;
+    transition: color 0.2s ease, margin-bottom 0.2s ease;
+}
+
+details.settings-details summary.settings-details-summary::-webkit-details-marker,
+details.settings-details summary.settings-details-summary::marker {
+    display: none;
+    content: "";
+}
+
+details.settings-details summary.settings-details-summary:hover {
+    color: var(--text-primary);
+}
+
+details.settings-details .details-icon {
+    font-size: 1.2rem;
+    color: var(--text-secondary);
+    transition: transform 0.25s ease, color 0.2s ease;
+}
+
+details.settings-details summary.settings-details-summary:hover .details-icon {
+    color: var(--text-primary);
+}
+
+details[open].settings-details summary.settings-details-summary {
+    margin-bottom: 12px;
+}
+
+details[open].settings-details .details-icon {
+    transform: rotate(180deg);
+}
+
+details.settings-details .settings-details-content {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.sim-controls {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+.sim-controls input {
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid var(--panel-border);
+    color: white;
+    padding: 6px 8px;
+    border-radius: 6px;
+    font-family: inherit;
+    color-scheme: dark;
+}
+
+.sim-controls button {
+    background: var(--accent-blue);
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 700;
+    transition: background 0.2s;
+}
+
+.sim-controls button:hover {
+    background: #2563eb;
+}
+
+.sim-controls button.active {
+    background: var(--accent-red);
+}
+
+.sim-controls button.active:hover {
+    background: #dc2626;
+}
+
+.sim-status {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+}
+
+.maplibregl-ctrl-attrib-inner {
+    color: #ffffff !important;
+    font-family: 'UD新ゴ-Pro', sans-serif !important;
+    font-weight: 300 !important;
+    line-height: 1.5 !important;
+}
+
+/* Settings Additions */
+.setting-item {
+    margin-bottom: 12px;
+}
+
+.setting-item.flex-between {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.setting-label {
+    font-size: 0.9rem;
+    color: var(--text-primary);
+}
+
+.settings-select {
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: 1px solid var(--panel-border);
+    padding: 6px;
+    border-radius: 4px;
+    width: 100%;
+    margin-top: 6px;
+    font-family: inherit;
+    color-scheme: dark;
+}
+
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 40px;
+    height: 22px;
+}
+
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(255, 255, 255, 0.2);
+    transition: .3s;
+    border-radius: 24px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 16px;
+    width: 16px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .3s;
+    border-radius: 50%;
+}
+
+input:checked+.slider {
+    background-color: var(--accent-blue);
+}
+
+input:checked+.slider:before {
+    transform: translateX(18px);
+}
+
+/* Segmented Control (Toggle Switch) */
+.segmented-control {
+    position: relative;
+    display: flex;
+    background-color: rgba(0, 0, 0, 0.4);
+    padding: 6px;
+    border-radius: 4px;
+    border: 1px solid var(--panel-border);
+    width: 50%;
+    margin-top: 4px;
+    user-select: none;
+    overflow: hidden;
+}
+
+.segmented-control input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.segmented-control label {
+    flex: 1;
+    position: relative;
+    z-index: 2;
+    cursor: pointer;
+    padding: 2px 0;
+    text-align: center;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    transition: color 0.35s;
+}
+
+.selection-indicator {
+    position: absolute;
+    top: 4px;
+    left: 6px;
+    bottom: 4px;
+    width: calc((100% - 12px) / 2); /* Default for 2 items */
+    background-color: var(--accent-blue);
+    border-radius: 4px;
+    transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+    z-index: 1;
+}
+
+/* 3 items variant */
+.segmented-control-3 .selection-indicator {
+    width: calc((100% - 12px) / 3);
+}
+
+.segmented-control input:checked + label {
+    color: #ffffff;
+}
+
+/* Logic for 2 items */
+#kmoniType_jma_s:checked ~ .selection-indicator { transform: translateX(0); }
+#kmoniType_acmap_s:checked ~ .selection-indicator { transform: translateX(100%); }
+
+#kmoniRender_image:checked ~ .selection-indicator { transform: translateX(0); }
+#kmoniRender_plot:checked ~ .selection-indicator { transform: translateX(100%); }
+
+#devOptionB_1:checked ~ .selection-indicator { transform: translateX(0); }
+#devOptionB_2:checked ~ .selection-indicator { transform: translateX(100%); }
+
+/* Interaction */
+.segmented-control:active .selection-indicator {
+    transform: scale(0.96);
+}
+
+/* Range Input (Slider) */
+.settings-range {
+    -webkit-appearance: none;
+    appearance: none;
+
+    width: 100%;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+    outline: none;
+    margin: 10px 0;
+}
+
+.settings-range::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    background: var(--accent-blue);
+    cursor: pointer;
+    border-radius: 50%;
+    border: 2px solid #ffffff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    transition: transform 0.2s;
+}
+
+.settings-range::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+}
+
+.settings-range:active::-webkit-slider-thumb {
+    transform: scale(0.9);
+}
+
+.range-wrap {
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.range-value {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    margin-bottom: -4px;
+}
+
+.settings-btn-small {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+}
+
+.settings-btn-small:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: var(--accent-blue);
+}
+
+.settings-btn-small:active {
+    transform: scale(0.95);
+}
+
+/* ==========================================
+   DEBUG INDICATOR PANEL (右上デバッグモニタ)
+   ========================================== */
+.debug-indicator-panel {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: auto;
+    background: rgba(15, 23, 42, 0.88);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 10px;
+    padding: 10px 12px;
+    color: #f1f5f9;
+    font-family: 'Roboto Mono', Consolas, Monaco, monospace, sans-serif;
+    font-size: 0.7rem;
+    z-index: 30;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+    transition: opacity 0.3s ease, transform 0.3s ease, border-color 0.3s ease;
+    user-select: none;
+}
+
+.debug-indicator-panel.hidden {
+    display: none !important;
+}
+
+.debug-indicator-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 6px;
+    margin-bottom: 8px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.debug-title {
+    font-weight: 700;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    color: #38bdf8;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.debug-title .debug-icon {
+    font-size: 16px;
+}
+
+.debug-badge {
+    font-size: 0.65rem;
+    font-weight: 600;
+    padding: 2px 6px;
+    border-radius: 4px;
+    text-transform: uppercase;
+}
+
+.debug-badge.connected {
+    background: rgba(34, 197, 94, 0.2);
+    color: #4ade80;
+    border: 1px solid rgba(34, 197, 94, 0.4);
+}
+
+.debug-badge.disconnected {
+    background: rgba(239, 68, 68, 0.2);
+    color: #f87171;
+    border: 1px solid rgba(239, 68, 68, 0.4);
+}
+
+.debug-badge.connecting {
+    background: rgba(234, 179, 8, 0.2);
+    color: #facc15;
+    border: 1px solid rgba(234, 179, 8, 0.4);
+}
+
+.debug-content {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.debug-section-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #94a3b8;
+    margin-bottom: 3px;
+}
+
+.debug-flash-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #64748b;
+    transition: background-color 0.2s, box-shadow 0.2s;
+}
+
+.debug-flash-dot.active {
+    background: #22c55e;
+    box-shadow: 0 0 10px #22c55e;
+    animation: flashPulse 0.5s ease-out;
+}
+
+@keyframes flashPulse {
+    0% { transform: scale(1.6); opacity: 1; }
+    100% { transform: scale(1); opacity: 0.8; }
+}
+
+.debug-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    line-height: 1.35;
+}
+
+.debug-label {
+    color: #94a3b8;
+}
+
+.debug-value {
+    color: #e2e8f0;
+    font-weight: 500;
+    max-width: 170px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-align: right;
+}
+
+.debug-value.highlight {
+    color: #38bdf8;
+    font-weight: 700;
+}
+
+.debug-value.active-eew {
+    color: #f43f5e;
+    font-weight: 700;
+}
+
+.debug-divider {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.08);
+    margin: 2px 0;
+}
+
+.debug-badge-mini {
+    font-size: 0.62rem;
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-weight: 600;
+}
+
+.debug-badge-mini.valid {
+    background: rgba(34, 197, 94, 0.25);
+    color: #4ade80;
+}
+
+.debug-badge-mini.invalid {
+    background: rgba(148, 163, 184, 0.2);
+    color: #cbd5e1;
+}
+
+/* 受信時の枠線フラッシュ効果 */
+.debug-indicator-panel.flash-ws {
+    border-color: #38bdf8 !important;
+    box-shadow: 0 0 16px rgba(56, 189, 248, 0.5);
+}
+
+/* ==========================================
+   DEVELOPER OPTIONS AUTHENTICATION & MODAL
+   ========================================== */
+.settings-group-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+#devSettingsGroup .settings-group-header {
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 8px;
+}
+
+.dev-auth-container {
+    display: flex;
+    align-items: center;
+}
+
+.dev-auth-btn {
+    background: rgba(56, 189, 248, 0.15);
+    color: #38bdf8;
+    border: 1px solid rgba(56, 189, 248, 0.4);
+    padding: 3px 10px;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+.dev-auth-btn:hover {
+    background: rgba(56, 189, 248, 0.25);
+    border-color: #38bdf8;
+    box-shadow: 0 0 8px rgba(56, 189, 248, 0.3);
+}
+.dev-auth-btn.hidden {
+    display: none !important;
+}
+
+/* 目立ちすぎない落ち着いた緑の「認証完了」バッジ */
+.dev-auth-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: rgba(34, 197, 94, 0.15);
+    color: #4ade80;
+    border: 1px solid rgba(34, 197, 94, 0.3);
+    padding: 3px 10px;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+}
+.dev-auth-badge.hidden {
+    display: none !important;
+}
+
+/* disabled 状態の要素に対する表示スタイル */
+input:disabled + .slider {
+    background-color: rgba(255, 255, 255, 0.05);
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.segmented-control input:disabled + label {
+    cursor: not-allowed;
+    opacity: 0.4;
+}
+
+/* パスワード認証モーダル */
+.dev-auth-modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(6px);
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 1;
+    transition: opacity 0.25s ease;
+}
+
+.dev-auth-modal-backdrop.hidden {
+    display: none !important;
+}
+
+.dev-auth-modal {
+    background: rgba(15, 23, 42, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 12px;
+    width: 320px;
+    max-width: 90vw;
+    padding: 16px;
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.6);
+    color: #ffffff;
+}
+
+.dev-auth-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 8px;
+    margin-bottom: 12px;
+}
+
+.dev-auth-modal-header h3 {
+    margin: 0;
+    font-size: 1.05rem;
+    color: #f8fafc;
+}
+
+.dev-auth-desc {
+    font-size: 0.8rem;
+    color: #94a3b8;
+    margin-bottom: 12px;
+}
+
+.dev-auth-input-group input {
+    width: 100%;
+    padding: 8px 12px;
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 6px;
+    color: #ffffff;
+    font-size: 0.9rem;
+    box-sizing: border-box;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.dev-auth-input-group input:focus {
+    border-color: #38bdf8;
+}
+
+.dev-auth-error {
+    margin-top: 8px;
+    font-size: 0.75rem;
+    color: #f87171;
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.25);
+    padding: 6px 10px;
+    border-radius: 4px;
+}
+
+.dev-auth-error.hidden {
+    display: none !important;
+}
+
+.dev-auth-modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 16px;
+}
+
+.dev-auth-cancel-btn {
+    background: rgba(255, 255, 255, 0.1);
+    color: #cbd5e1;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.8rem;
+}
+
+.dev-auth-submit-btn {
+    background: #0284c7;
+    color: #ffffff;
+    border: none;
+    padding: 6px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    font-weight: 600;
+    transition: background-color 0.2s;
+}
+
+.dev-auth-submit-btn:hover {
+    background: #0369a1;
+}
+
+
+

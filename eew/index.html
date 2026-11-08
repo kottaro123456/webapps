@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>緊急地震速報 (EEW) Map</title>
+
+    <!-- MapLibre GL JS -->
+    <link href="/static/lib/maplibre-gl.css" rel="stylesheet" />
+    <script src="/static/lib/maplibre-gl.js"></script>
+
+    <!-- Turf.js for Circle Generation -->
+    <script src="/static/lib/turf.min.js"></script>
+
+    <!-- LocalForage -> IndexedDB -->
+    <script src="/static/lib/localforage.min.js"></script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <!-- Material Symbols -->
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,400,1,0" />
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="map-container" id="mapContainer">
+        <div id="map"></div>
+        <div id="subMapWrapper" class="submap-wrapper hidden">
+            <div id="subMap"></div>
+            <div class="submap-title">強震モニタ</div>
+        </div>
+    </div>
+
+    <div class="eew-panel" id="eewPanel">
+        <!-- 震度エリア (左側) -->
+        <div class="shindo-area">
+            <span class="label" id="shindoLabel"></span>
+            <span class="intensity" id="calcIntensity"></span>
+        </div>
+
+        <!-- 情報エリア (右側) -->
+        <div class="info-area">
+            <div class="region-name" id="regionName"></div>
+            <div class="metrics-sub">
+                <div class="metrics-row" id="originTimeRow"></div>
+                <div class="metrics-row" id="magnitudeRow"></div>
+                <div class="metrics-row" id="reportRow"></div>
+            </div>
+        </div>
+
+        <!-- トップ右側のコントロールボタン群をパネルに内包 -->
+        <div class="controls-top-right">
+            <button id="goHomeBtn" class="control-btn" title="ホームポジションに戻る">
+                <span class="material-symbols-rounded">home</span>
+            </button>
+            <button id="autoCamBtn" class="control-btn active" title="カメラ自動追従 (ON)">
+                <span class="material-symbols-rounded">my_location</span>
+            </button>
+            <button id="toggleSubMapBtn" class="control-btn" title="強震モニタ表示">
+                <span class="material-symbols-rounded" id="subMapIcon">map</span>
+            </button>
+            <button id="toggleFetchBtn" class="control-btn" title="取得を一時停止/再開">
+                <span class="material-symbols-rounded" id="fetchIcon">pause</span>
+            </button>
+            <button id="settingsBtn" class="control-btn" title="設定を開く">
+                <span class="material-symbols-rounded">settings</span>
+            </button>
+        </div>
+
+        <!-- データ取得ステータス (生存確認) -->
+        <div class="fetch-status-container" id="fetchStatus">
+            <div class="fetch-item" id="status-kmoni"><span id="status-kmoni-label">1W****.WS:</span> <span class="time">--:--:--</span></div>
+            <div class="fetch-item" id="status-yahoo">2Y****.N: <span class="time">--:--:--</span></div>
+            <div class="fetch-item" id="status-img">3I****.N: <span class="time">--:--:--</span></div>
+            <div class="fetch-item" id="status-snet">4S****.N: <span class="time">--:--:--</span></div>
+        </div>
+
+        <!-- クロック (右下) -->
+        <div class="bottom-right-clock" id="currentClock">
+            ----/--/-- --:--:--
+        </div>
+    </div>
+
+    <!-- デバッグ用リアルタイムモニタパネル (右上独立オーバーレイ) -->
+    <div class="debug-indicator-panel hidden" id="debugIndicatorPanel">
+        <div class="debug-indicator-header">
+            <span class="debug-title"><span class="material-symbols-rounded debug-icon">bug_report</span> REALTIME MONITOR</span>
+            <span class="debug-badge disconnected" id="debugWsBadge">WS: DISCONNECTED</span>
+        </div>
+        <div class="debug-content">
+            <div class="debug-section">
+                <div class="debug-section-title">
+                    <span>1. WOLFX WEBSOCKET</span>
+                    <span class="debug-flash-dot" id="debugWsFlashDot"></span>
+                </div>
+                <div class="debug-row"><span class="debug-label">受信時刻:</span><span class="debug-value" id="debugWsRecvTime">--:--:--.--</span></div>
+                <div class="debug-row"><span class="debug-label">受信報数:</span><span class="debug-value highlight" id="debugWsReportNum">--</span></div>
+                <div class="debug-row"><span class="debug-label">Event ID:</span><span class="debug-value" id="debugWsEventId">--</span></div>
+                <div class="debug-row"><span class="debug-label">震原・規模:</span><span class="debug-value" id="debugWsHypoInfo">--</span></div>
+                <div class="debug-row"><span class="debug-label">最大震度:</span><span class="debug-value" id="debugWsIntensity">--</span></div>
+            </div>
+            <div class="debug-divider"></div>
+            <div class="debug-section">
+                <div class="debug-section-title">
+                    <span>2. YAHOO (KYOSHIN) JSON</span>
+                    <span class="debug-badge-mini" id="debugYahooBadge">UNKNOWN</span>
+                </div>
+                <div class="debug-row"><span class="debug-label">取得時刻:</span><span class="debug-value" id="debugYahooFetchTime">--:--:--.--</span></div>
+                <div class="debug-row"><span class="debug-label">有効データ:</span><span class="debug-value highlight" id="debugYahooValidStatus">--</span></div>
+                <div class="debug-row"><span class="debug-label">hypoInfo:</span><span class="debug-value" id="debugYahooHypo">null</span></div>
+                <div class="debug-row"><span class="debug-label">psWave:</span><span class="debug-value" id="debugYahooPsWave">null</span></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 設定モーダル -->
+    <div class="set-panel hidden" id="setPanel">
+        <div class="set-panel-header">
+            <h3>設定</h3>
+            <span class="material-symbols-rounded" id="closeSettingsBtn" style="cursor: pointer;">close</span>
+        </div>
+
+        <div class="settings-content">
+            <div class="settings-group">
+                <h4 class="settings-group-title">基本設定</h4>
+                <div class="setting-item flex-between">
+                    <span class="setting-label">API遅延 (秒)</span>
+                    <input type="number" id="realtimeDelayInput" value="2" min="1" max="10" style="width: 50px; background: rgba(0,0,0,0.5); color: white; border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; padding: 2px; text-align: center;">
+                </div>
+                <div class="setting-item flex-between">
+                    <span class="setting-label">ホームポジション</span>
+                    <button id="setHomePosBtn" class="settings-btn-small">現在地をホームに設定</button>
+                </div>
+                <div class="setting-item flex-between">
+                    <span class="setting-label" id="homePosStatus">ホーム: 未設定</span>
+                    <label class="toggle-switch"><input type="checkbox" id="autoReturnHomeToggle" checked><span class="slider"></span></label>
+                </div>
+                <div class="setting-item" style="font-size: 0.75rem; color: var(--text-secondary); margin-top: -8px;">
+                    ※放送終了後にホームへ自動で戻る
+                </div>
+            </div>
+
+            <div class="settings-group">
+                <h4 class="settings-group-title">強震モニタ</h4>
+                <div class="setting-item flex-between">
+                    <span class="setting-label">表示データ</span>
+                    <div class="segmented-control">
+                        <input type="radio" name="kmoniType" id="kmoniType_jma_s" value="jma_s" checked>
+                        <label for="kmoniType_jma_s">震度</label>
+                        <input type="radio" name="kmoniType" id="kmoniType_acmap_s" value="acmap_s">
+                        <label for="kmoniType_acmap_s">加速度</label>
+                        <div class="selection-indicator"></div>
+                    </div>
+                </div>
+                <div class="setting-item flex-between">
+                    <span class="setting-label">描画モード</span>
+                    <div class="segmented-control">
+                        <input type="radio" name="kmoniRender" id="kmoniRender_image" value="image">
+                        <label for="kmoniRender_image">画像</label>
+                        <input type="radio" name="kmoniRender" id="kmoniRender_plot" value="plot" checked>
+                        <label for="kmoniRender_plot">プロット</label>
+                        <div class="selection-indicator"></div>
+                    </div>
+                </div>
+                <div class="setting-item flex-between">
+                    <span class="setting-label">EEW時自動ズーム</span>
+                    <label class="toggle-switch"><input type="checkbox" id="autoZoomEEWToggle" checked><span class="slider"></span></label>
+                </div>
+                <div class="setting-item flex-between">
+                    <span class="setting-label">独自検知時自動ズーム</span>
+                    <label class="toggle-switch"><input type="checkbox" id="autoZoomCustomToggle" checked><span class="slider"></span></label>
+                </div>
+                <div class="setting-item flex-between">
+                    <span class="setting-label">EEW発表時自動表示</span>
+                    <label class="toggle-switch"><input type="checkbox" id="autoOpenSubMapToggle" checked><span class="slider"></span></label>
+                </div>
+                <div class="setting-item flex-between">
+                    <span class="setting-label">サブ地図の幅</span>
+                    <div class="range-wrap">
+                        <span class="range-value" id="subMapWidthValue">50%</span>
+                        <input type="range" id="subMapWidthSlider" class="settings-range" min="25" max="75" value="50">
+                    </div>
+                </div>
+            </div>
+
+            <div class="settings-group">
+                <h4 class="settings-group-title">S-NET（海底地震計）</h4>
+                <div class="setting-item flex-between">
+                    <span class="setting-label">S-NET観測点表示</span>
+                    <label class="toggle-switch"><input type="checkbox" id="enableSnetToggle" checked><span class="slider"></span></label>
+                </div>
+            </div>
+
+            <div class="settings-group">
+                <h4 class="settings-group-title">独自検知システム</h4>
+                <div class="setting-item flex-between">
+                    <span class="setting-label">EEW発表中も検知継続</span>
+                    <label class="toggle-switch"><input type="checkbox" id="enableCustomDetectionDuringEEW" checked><span class="slider"></span></label>
+                </div>
+            </div>
+
+            <div class="settings-group">
+                <h4 class="settings-group-title">音声通知</h4>
+                <div class="setting-item flex-between">
+                    <span class="setting-label">EEW音声通知</span>
+                    <label class="toggle-switch"><input type="checkbox" id="eewAudioToggle" checked><span class="slider"></span></label>
+                </div>
+                <div class="setting-item flex-between">
+                    <span class="setting-label">独自検知音声通知</span>
+                    <label class="toggle-switch"><input type="checkbox" id="customAudioToggle" checked><span class="slider"></span></label>
+                </div>
+            </div>
+
+            <div class="settings-group">
+                <h4 class="settings-group-title">シミュレーション</h4>
+                <div class="sim-controls">
+                    <input type="datetime-local" id="simTimeInput" step="1" style="font-size: 0.8rem;">
+                    <button id="simToggleBtn">開始</button>
+                </div>
+                <div class="sim-status" id="simStatus">オフ</div>
+            </div>
+
+            <details class="settings-group settings-details">
+                <summary class="settings-group-title settings-details-summary">
+                    <span>詳細設定</span>
+                    <span class="material-symbols-rounded details-icon">expand_more</span>
+                </summary>
+                <div class="settings-details-content">
+                    <div class="setting-item flex-between">
+                        <span class="setting-label">デバッグインジケーター表示</span>
+                        <label class="toggle-switch"><input type="checkbox" id="debugIndicatorToggle"><span class="slider"></span></label>
+                    </div>
+                </div>
+            </details>
+
+            <div class="settings-group" id="devSettingsGroup">
+                <div class="settings-group-header flex-between">
+                    <h4 class="settings-group-title">開発者向けオプション</h4>
+                    <div id="devAuthContainer" class="dev-auth-container">
+                        <span id="devAuthBtn" class="dev-auth-btn">認証する</span>
+                        <span id="devAuthBadge" class="dev-auth-badge hidden">認証完了</span>
+                    </div>
+                </div>
+                <div class="setting-item flex-between">
+                    <span class="setting-label">Option α（ver1.2.23 | 20260711）</span>
+                    <label class="toggle-switch"><input type="checkbox" id="devOptionACheckbox" disabled><span class="slider"></span></label>
+                </div>
+                <div class="setting-item flex-between">
+                    <span class="setting-label">Option β（ver1.0.1 | 20260526）</span>
+                    <div class="segmented-control">
+                        <input type="radio" name="devOptionB" id="devOptionB_1" value="kmn" checked disabled>
+                        <label for="devOptionB_1">1 : kmn</label>
+                        <input type="radio" name="devOptionB" id="devOptionB_2" value="jqk" disabled>
+                        <label for="devOptionB_2">2 : jqk</label>
+                        <div class="selection-indicator"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 開発者パスワード入力モーダル -->
+    <div class="dev-auth-modal-backdrop hidden" id="devAuthModalBackdrop">
+        <div class="dev-auth-modal">
+            <div class="dev-auth-modal-header">
+                <h3>開発者認証</h3>
+                <span class="material-symbols-rounded" id="closeDevAuthModalBtn" style="cursor: pointer;">close</span>
+            </div>
+            <div class="dev-auth-modal-body">
+                <p class="dev-auth-desc">開発者向けオプションの操作にはパスワード認証が必要です。</p>
+                <div class="dev-auth-input-group">
+                    <input type="password" id="devAuthPasswordInput" placeholder="パスワードを入力" autocomplete="off">
+                </div>
+                <div id="devAuthErrorMsg" class="dev-auth-error hidden"></div>
+            </div>
+            <div class="dev-auth-modal-footer">
+                <button id="cancelDevAuthBtn" class="dev-auth-cancel-btn">キャンセル</button>
+                <button id="submitDevAuthBtn" class="dev-auth-submit-btn">認証</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 共有フォントとIndexedDBロジック -->
+    <script src="../../static/font/fonts.php"></script>
+    <script src="app.js"></script>
+</body>
+
+</html>
