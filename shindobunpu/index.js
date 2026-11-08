@@ -805,23 +805,19 @@ function buildNestedListHtml(groupedPoints, listUnits) {
 
             for (const cKey in aNode.cities) {
                 const cNode = aNode.cities[cKey];
-                let cityPart = '';
-                if (hasCity && cKey !== '_all') {
-                    cityPart = `<span class="shindo_nest_city_title"><ruby>${cNode.name}<rt>${cNode.furigana}</rt></ruby></span>`;
-                }
-
-                let stationPart = '';
-                if (hasStation) {
-                    const stList = cNode.stations.map(st => `<ruby>${st.name}<rt>${st.furigana}</rt></ruby>`).join('　');
-                    stationPart = `<span class="shindo_nest_station_list">${stList}</span>`;
-                }
 
                 if (hasCity && hasStation) {
-                    cityHtmlList.push(`<div class="shindo_nest_row">${cityPart}：${stationPart}</div>`);
+                    const cityPart = `<span class="shindo_nest_city_title"><ruby>${cNode.name}<rt>${cNode.furigana}</rt></ruby>：</span>`;
+                    const stList = cNode.stations.map(st => `<span class="shindo_nest_station_item"><ruby>${st.name}<rt>${st.furigana}</rt></ruby></span>`).join('');
+                    const stationPart = `<div class="shindo_nest_station_list">${stList}</div>`;
+                    cityHtmlList.push(`<div class="shindo_nest_row">${cityPart}${stationPart}</div>`);
                 } else if (hasCity) {
-                    cityHtmlList.push(`<span class="shindo_nest_item">${cityPart}</span>`);
+                    const cityPart = `<span class="shindo_nest_item"><ruby>${cNode.name}<rt>${cNode.furigana}</rt></ruby></span>`;
+                    cityHtmlList.push(cityPart);
                 } else if (hasStation) {
-                    cityHtmlList.push(`<span class="shindo_nest_item">${stationPart}</span>`);
+                    const stList = cNode.stations.map(st => `<span class="shindo_nest_station_item"><ruby>${st.name}<rt>${st.furigana}</rt></ruby></span>`).join('');
+                    const stationPart = `<div class="shindo_nest_station_list" style="margin-left: 10px;">${stList}</div>`;
+                    cityHtmlList.push(`<div class="shindo_nest_row">${stationPart}</div>`);
                 }
             }
 

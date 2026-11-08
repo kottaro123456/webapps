@@ -1412,6 +1412,8 @@ input[type="number"] {
     margin-bottom: 6px;
 }
 .shindo_nest_row {
+    display: flex;
+    align-items: baseline;
     margin-top: 3px;
     margin-bottom: 3px;
     line-height: 1.7;
@@ -1447,22 +1449,36 @@ input[type="number"] {
 .shindo_nest_city_title {
     color: #111111 !important;
     font-weight: bold;
-    display: inline-block;
+    flex-shrink: 0;
     margin-left: 10px;
-    margin-right: 2px;
+    margin-right: 4px;
+    white-space: nowrap;
 }
 .shindo_nest_city_title rt {
-    color: #1f57be !important;
+    color: #111111 !important;
 }
 .shindo_nest_station_list {
-    display: inline;
+    flex: 1;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0 10px;
     color: #222222 !important;
 }
-.shindo_nest_station_list rt {
-    color: #1f57be !important;
+.shindo_nest_station_item {
+    display: inline-block;
+    white-space: nowrap;
+    color: #222222 !important;
+}
+.shindo_nest_station_list rt,
+.shindo_nest_station_item rt {
+    color: #222222 !important;
 }
 .shindo_nest_item {
     display: inline-block;
     margin-right: 8px;
+    color: #222222 !important;
+}
+.shindo_nest_item rt {
     color: #222222 !important;
 }
