@@ -36,6 +36,9 @@ map.on('load', async () => {
     await countriesMapGet();
     await asiaMapGet();
     await saibunGet();
+    await prefGet();
+    await initUnitSettings();
+    setupUnitModalEvents();
 
     // 2. アイコンの読み込み
     await loadMapIcons();
@@ -525,6 +528,320 @@ var autoreload_interval;
 var icon_theme = "eqm";
 var this_theme = "nerv";
 var data_japan;
+
+// ==========================================================================
+// 表示単位設定（マップアイコン・塗りつぶし・各地の震度）
+// ==========================================================================
+var pref_data = null;
+var prefCenters = {};
+var cityCenters = {};
+var unitSettings = {
+    mapIconUnit: 'station', // 'station' | 'city' | 'area' | 'pref'
+    mapFillUnit: 'area',    // 'area' | 'pref'
+    listUnits: ['station']  // ['pref', 'area', 'city', 'station']
+};
+
+// ポリゴンまたはマルチポリゴンの重心（中心座標）を計算する関数
+function getFeatureCenter(feature) {
+    if (!feature || !feature.geometry || !feature.geometry.coordinates) return null;
+    const geom = feature.geometry;
+
+    let rings = [];
+    if (geom.type === 'Polygon') {
+        rings = [geom.coordinates[0]];
+    } else if (geom.type === 'MultiPolygon') {
+        rings = geom.coordinates.map(poly => poly[0]);
+    } else {
+        return null;
+    }
+
+    let maxArea = -1;
+    let bestCenter = null;
+
+    rings.forEach(ring => {
+        let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
+        let signedArea = 0;
+        let cx = 0, cy = 0;
+        const n = ring.length;
+
+        for (let i = 0; i < n; i++) {
+            const [x, y] = ring[i];
+            if (x < minX) minX = x;
+            if (x > maxX) maxX = x;
+            if (y < minY) minY = y;
+            if (y > maxY) maxY = y;
+
+            if (i < n - 1) {
+                const [x1, y1] = ring[i + 1];
+                const a = x * y1 - x1 * y;
+                signedArea += a;
+                cx += (x + x1) * a;
+                cy += (y + y1) * a;
+            }
+        }
+
+        signedArea *= 0.5;
+        const absArea = Math.abs(signedArea);
+        let center;
+        if (absArea > 0.000001 && isFinite(cx) && isFinite(cy)) {
+            const factor = 1 / (6 * signedArea);
+            center = [cx * factor, cy * factor];
+            if (center[0] < minX || center[0] > maxX || center[1] < minY || center[1] > maxY) {
+                center = [(minX + maxX) / 2, (minY + maxY) / 2];
+            }
+        } else {
+            center = [(minX + maxX) / 2, (minY + maxY) / 2];
+        }
+
+        if (absArea > maxArea) {
+            maxArea = absArea;
+            bestCenter = center;
+        }
+    });
+
+    return bestCenter;
+}
+
+// 都道府県GeoJSONの読み込みとレイヤー追加
+async function prefGet() {
+    if (pref_data !== null) return pref_data;
+
+    const value = await mapLF.getItem("pref");
+    if (value !== null) {
+        pref_data = value;
+        console.log("Map Loading completed: 'pref', IndexedDB");
+    } else {
+        try {
+            const response = await fetch("https://kottaro123456.com/static/api/geojson/pref.geojson");
+            pref_data = await response.json();
+            console.log("Map Loading completed: 'pref', Network");
+            await mapLF.setItem("pref", pref_data);
+            console.log("Map Saved successfully: 'pref', IndexedDB");
+        } catch (e) {
+            console.error("Failed to load pref.geojson", e);
+            return null;
+        }
+    }
+
+    if (pref_data && pref_data.features) {
+        pref_data.features.forEach(f => {
+            const code = parseInt(f.properties.adm_code ? f.properties.adm_code.slice(0, 2) : (f.properties.code || 0), 10);
+            f.properties.code = code;
+            const center = getFeatureCenter(f);
+            if (center) {
+                prefCenters[code] = center;
+            }
+        });
+    }
+
+    if (pref_data && !map.getSource('pref_source')) {
+        map.addSource('pref_source', {
+            type: 'geojson',
+            data: pref_data
+        });
+
+        const beforeId = map.getLayer('japan_line') ? 'japan_line' :
+            (map.getLayer('cities_line') ? 'cities_line' :
+                (map.getLayer('tsunami_line_solid') ? 'tsunami_line_solid' : undefined));
+
+        map.addLayer({
+            'id': 'pref_fill',
+            'type': 'fill',
+            'source': 'pref_source',
+            'layout': {
+                'visibility': 'none'
+            },
+            'paint': {
+                'fill-color': '#3a3a3a',
+                'fill-opacity': 1
+            }
+        }, beforeId);
+
+        map.addLayer({
+            'id': 'pref_line',
+            'type': 'line',
+            'source': 'pref_source',
+            'layout': {
+                'visibility': 'none',
+                'line-join': 'round',
+                'line-cap': 'round'
+            },
+            'paint': {
+                'line-color': '#ffffff',
+                'line-width': 1.4
+            }
+        }, beforeId);
+    }
+
+    return pref_data;
+}
+
+// 単位設定の読み込み
+async function initUnitSettings() {
+    try {
+        const saved = await shindobunpuLF.getItem('unitSettings');
+        if (saved && typeof saved === 'object') {
+            if (saved.mapIconUnit) unitSettings.mapIconUnit = saved.mapIconUnit;
+            if (saved.mapFillUnit) unitSettings.mapFillUnit = saved.mapFillUnit;
+            if (Array.isArray(saved.listUnits) && saved.listUnits.length > 0) unitSettings.listUnits = saved.listUnits;
+        }
+    } catch (e) {
+        console.error("Failed to load unitSettings from IndexedDB", e);
+    }
+}
+
+// 単位設定モーダルのUI制御
+function setupUnitModalEvents() {
+    const btnOpen = document.getElementById('btn_unit_setting');
+    const modal = document.getElementById('unit_modal_overlay');
+    const btnClose = document.getElementById('close_unit_panel_btn');
+    const btnCancel = document.getElementById('unit_cancel_btn');
+    const btnApply = document.getElementById('unit_apply_btn');
+
+    if (!btnOpen || !modal) return;
+
+    btnOpen.addEventListener('click', () => {
+        const iconRadios = document.querySelectorAll('input[name="map_icon_unit"]');
+        iconRadios.forEach(r => { r.checked = (r.value === unitSettings.mapIconUnit); });
+
+        const fillRadios = document.querySelectorAll('input[name="map_fill_unit"]');
+        fillRadios.forEach(r => { r.checked = (r.value === unitSettings.mapFillUnit); });
+
+        const listChecks = document.querySelectorAll('input[name="list_unit"]');
+        listChecks.forEach(c => { c.checked = unitSettings.listUnits.includes(c.value); });
+
+        modal.style.display = 'flex';
+    });
+
+    const closeModal = () => { modal.style.display = 'none'; };
+    if (btnClose) btnClose.addEventListener('click', closeModal);
+    if (btnCancel) btnCancel.addEventListener('click', closeModal);
+
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+    });
+
+    if (btnApply) {
+        btnApply.addEventListener('click', async () => {
+            const selectedIcon = document.querySelector('input[name="map_icon_unit"]:checked')?.value || 'station';
+            const selectedFill = document.querySelector('input[name="map_fill_unit"]:checked')?.value || 'area';
+            const selectedList = Array.from(document.querySelectorAll('input[name="list_unit"]:checked')).map(c => c.value);
+
+            if (selectedList.length === 0) {
+                alert("各地の震度の表示単位を少なくとも1つ選択してください。");
+                return;
+            }
+
+            unitSettings.mapIconUnit = selectedIcon;
+            unitSettings.mapFillUnit = selectedFill;
+            unitSettings.listUnits = selectedList;
+
+            await shindobunpuLF.setItem('unitSettings', unitSettings);
+            console.log("unitSettings saved:", unitSettings);
+
+            closeModal();
+
+            if (unitSettings.mapIconUnit === 'city' && !cities_data) {
+                await citiesMapGet();
+            }
+            if (unitSettings.mapFillUnit === 'pref' && !pref_data) {
+                await prefGet();
+            }
+
+            const qList = document.getElementById('quakelist');
+            if (qList && qList.selectedIndex >= 0) {
+                QuakeSelect(qList.selectedIndex, true);
+            }
+        });
+    }
+}
+
+// 各地の震度：ネスト表示用HTML生成
+function buildNestedListHtml(groupedPoints, listUnits) {
+    const hasPref = listUnits.includes('pref');
+    const hasArea = listUnits.includes('area');
+    const hasCity = listUnits.includes('city');
+    const hasStation = listUnits.includes('station');
+
+    const tree = {};
+
+    groupedPoints.forEach(p => {
+        const prefKey = hasPref ? (p.pref ? p.pref.name : '不明') : '_all';
+        const prefKana = p.pref ? p.pref.furigana : '';
+        if (!tree[prefKey]) tree[prefKey] = { name: prefKey, furigana: prefKana, areas: {} };
+
+        const areaKey = hasArea ? (p.area ? p.area.name : '不明') : '_all';
+        const areaKana = p.area ? p.area.furigana : '';
+        if (!tree[prefKey].areas[areaKey]) tree[prefKey].areas[areaKey] = { name: areaKey, furigana: areaKana, cities: {} };
+
+        const cityKey = hasCity ? (p.city ? p.city.name : '不明') : '_all';
+        const cityKana = p.city ? p.city.furigana : '';
+        if (!tree[prefKey].areas[areaKey].cities[cityKey]) tree[prefKey].areas[areaKey].cities[cityKey] = { name: cityKey, furigana: cityKana, stations: [] };
+
+        if (hasStation) {
+            tree[prefKey].areas[areaKey].cities[cityKey].stations.push({ name: p.name, furigana: p.furigana });
+        }
+    });
+
+    let html = '';
+
+    for (const pKey in tree) {
+        const pNode = tree[pKey];
+        let prefHeader = '';
+        if (hasPref && pKey !== '_all') {
+            prefHeader = `<div class="shindo_nest_pref_title">【<ruby>${pNode.name}<rt>${pNode.furigana}</rt></ruby>】</div>`;
+        }
+
+        let innerHtml = '';
+
+        for (const aKey in pNode.areas) {
+            const aNode = pNode.areas[aKey];
+            let areaHeader = '';
+            if (hasArea && aKey !== '_all') {
+                areaHeader = `<div class="shindo_nest_area_title">［<ruby>${aNode.name}<rt>${aNode.furigana}</rt></ruby>］</div>`;
+            }
+
+            let cityHtmlList = [];
+
+            for (const cKey in aNode.cities) {
+                const cNode = aNode.cities[cKey];
+                let cityPart = '';
+                if (hasCity && cKey !== '_all') {
+                    cityPart = `<span class="shindo_nest_city_title"><ruby>${cNode.name}<rt>${cNode.furigana}</rt></ruby></span>`;
+                }
+
+                let stationPart = '';
+                if (hasStation) {
+                    const stList = cNode.stations.map(st => `<ruby>${st.name}<rt>${st.furigana}</rt></ruby>`).join('　');
+                    stationPart = `<span class="shindo_nest_station_list">${stList}</span>`;
+                }
+
+                if (hasCity && hasStation) {
+                    cityHtmlList.push(`<div class="shindo_nest_row">${cityPart}：${stationPart}</div>`);
+                } else if (hasCity) {
+                    cityHtmlList.push(`<span class="shindo_nest_item">${cityPart}</span>`);
+                } else if (hasStation) {
+                    cityHtmlList.push(`<span class="shindo_nest_item">${stationPart}</span>`);
+                }
+            }
+
+            if (hasArea && aKey !== '_all') {
+                innerHtml += `<div class="shindo_nest_block">${areaHeader}${cityHtmlList.join('')}</div>`;
+            } else {
+                innerHtml += cityHtmlList.join('');
+            }
+        }
+
+        if (hasPref && pKey !== '_all') {
+            html += `<div class="shindo_nest_block">${prefHeader}${innerHtml}</div>`;
+        } else {
+            html += innerHtml;
+        }
+    }
+
+    return html;
+}
+
 var filled_list = {};
 var point_onoff = 1; //0:off, 1:on
 var fill_onoff = 1; //0:off, 1:on
@@ -1167,12 +1484,32 @@ async function citiesMapGet() {
         const value = await mapLF.getItem("cities");
         if (value !== null) {
             cities_data = value;
+        if (cities_data && cities_data.features) {
+            cities_data.features.forEach(f => {
+                const regCode = f.properties.regioncode;
+                if (regCode) {
+                    const center = getFeatureCenter(f);
+                    if (center) cityCenters[regCode] = center;
+                }
+            });
+        }
+
             console.log("Map Loading completed: 'cities', IndexedDB");
         } else {
             if (window.confirm("地図データ「市区町村」（約10MB）をダウンロードします。よろしいですか？")) {
                 const response = await fetch("https://kottaro123456.github.io/geojsons/cities.geojson");
                 const data = await response.json();
                 cities_data = data;
+        if (cities_data && cities_data.features) {
+            cities_data.features.forEach(f => {
+                const regCode = f.properties.regioncode;
+                if (regCode) {
+                    const center = getFeatureCenter(f);
+                    if (center) cityCenters[regCode] = center;
+                }
+            });
+        }
+
                 console.log("Map Loading completed: 'cities', Network");
                 await mapLF.setItem("cities", cities_data);
                 console.log("Map Saved successfully: 'cities', IndexedDB");
@@ -2036,7 +2373,12 @@ async function QuakeSelect(num, isFlyOff) {
         document.getElementById('title_text').innerText = "震度速報 - 細分区域モード";
         isStationMode = false;
     } else {
-        document.getElementById('title_text').innerText = "震度分布図 - 観測点モード";
+        const u = (typeof unitSettings !== 'undefined' && unitSettings.mapIconUnit) ? unitSettings.mapIconUnit : 'station';
+        let uLabel = "観測点";
+        if (u === 'city') uLabel = "市区町村";
+        else if (u === 'area') uLabel = "細分区域";
+        else if (u === 'pref') uLabel = "都道府県";
+        document.getElementById('title_text').innerText = `震度分布図 - ${uLabel}モード`;
         isStationMode = true;
     }
 
@@ -2159,6 +2501,7 @@ async function QuakeSelect(num, isFlyOff) {
     // --- 5. ポイント＆塗りつぶしデータの作成 ---
     const pointsFeatures = [];
     filled_list = {};
+    const pref_filled_list = {};
     const counts = {};
     ['1', '2', '3', '4', '50', '51', '55', '60', '65', '7', '_', 'N'].forEach(s => counts[s] = 0);
 
@@ -2168,102 +2511,320 @@ async function QuakeSelect(num, isFlyOff) {
         if (el) el.innerHTML = "";
     });
 
-    // 震度データのループ処理
-    if (targetData.points) {
-        targetData.points.forEach(point => {
-            let lat, lon, name, furigana;
-            let iconSize = 0.13; // デフォルトサイズ
+    const scaleToSuffix = (scale) => {
+        if (scale == 10) return "1";
+        if (scale == 20) return "2";
+        if (scale == 30) return "3";
+        if (scale == 40) return "4";
+        if (scale == 45) return "50";
+        if (scale == 46) return "51";
+        if (scale == 50) return "55";
+        if (scale == 55) return "60";
+        if (scale == 60) return "65";
+        if (scale == 70) return "7";
+        if (scale <= 0) return "N";
+        return "_";
+    };
 
-            if (isStationMode) {
-                // [観測点モード]
+    const scaleToText = (scale) => {
+        if (scale == 10) return "震度1";
+        if (scale == 20) return "震度2";
+        if (scale == 30) return "震度3";
+        if (scale == 40) return "震度4";
+        if (scale == 45) return "震度5弱";
+        if (scale == 46) return "震度5弱以上と推定";
+        if (scale == 50) return "震度5強";
+        if (scale == 55) return "震度6弱";
+        if (scale == 60) return "震度6強";
+        if (scale == 70) return "震度7";
+        if (scale <= 0) return "情報なし";
+        return "不明";
+    };
+
+    const isIconBig = document.getElementById('shindoiconbig_check') && document.getElementById('shindoiconbig_check').checked;
+    const bigMultiplier = isIconBig ? 1.5 : 1.0;
+
+    const validPoints = [];
+    const unmappedPoints = [];
+    const prefMax = {};
+    const areaMax = {};
+    const cityMax = {};
+
+    if (isStationMode) {
+        // [観測点モード]
+        if (targetData.points) {
+            targetData.points.forEach(point => {
                 const stationIndex = JMAPoints.indexOf(point.addr);
                 if (stationIndex !== -1) {
-                    const stationData = JMAPointsJson[stationIndex];
-                    lat = stationData.lat;
-                    lon = stationData.lon;
-                    name = point.addr;
-                    furigana = stationData.furigana;
+                    const st = JMAPointsJson[stationIndex];
+                    const lat = parseFloat(st.lat);
+                    const lon = parseFloat(st.lon);
+                    const item = {
+                        name: point.addr,
+                        furigana: st.furigana,
+                        scale: point.scale,
+                        lat: lat,
+                        lon: lon,
+                        pref: st.pref,
+                        area: st.area,
+                        city: st.city
+                    };
+                    validPoints.push(item);
 
-                    // 塗りつぶし用: 観測点のエリアコードを取得
-                    const areaCode = AreaNameToCode(stationData.area.name);
-                    if (areaCode) {
-                        if ((!filled_list[areaCode]) || filled_list[areaCode] < point.scale) {
-                            filled_list[areaCode] = point.scale;
+                    // 細分区域の塗り用
+                    const aCode = AreaNameToCode(st.area ? st.area.name : "");
+                    if (aCode) {
+                        if ((!filled_list[aCode]) || filled_list[aCode] < point.scale) {
+                            filled_list[aCode] = point.scale;
                         }
                     }
+
+                    // 都道府県の塗り用
+                    if (st.pref && st.pref.code) {
+                        const pCode = st.pref.code;
+                        if ((!pref_filled_list[pCode]) || pref_filled_list[pCode] < point.scale) {
+                            pref_filled_list[pCode] = point.scale;
+                        }
+                    }
+
+                    // 都道府県最大
+                    if (st.pref && st.pref.code) {
+                        const pCode = st.pref.code;
+                        if (!prefMax[pCode]) {
+                            prefMax[pCode] = { maxScale: point.scale, name: st.pref.name, furigana: st.pref.furigana, code: pCode, sumLon: lon, sumLat: lat, count: 1 };
+                        } else {
+                            if (point.scale > prefMax[pCode].maxScale) prefMax[pCode].maxScale = point.scale;
+                            prefMax[pCode].sumLon += lon;
+                            prefMax[pCode].sumLat += lat;
+                            prefMax[pCode].count++;
+                        }
+                    }
+
+                    // 細分区域最大
+                    if (aCode) {
+                        if (!areaMax[aCode]) {
+                            areaMax[aCode] = { maxScale: point.scale, name: st.area.name, furigana: st.area.furigana, code: aCode };
+                        } else {
+                            if (point.scale > areaMax[aCode].maxScale) areaMax[aCode].maxScale = point.scale;
+                        }
+                    }
+
+                    // 市区町村最大
+                    if (st.city && st.city.code) {
+                        const cCode = st.city.code;
+                        if (!cityMax[cCode]) {
+                            cityMax[cCode] = { maxScale: point.scale, name: st.city.name, furigana: st.city.furigana, code: cCode, pref: st.pref, area: st.area, sumLon: lon, sumLat: lat, count: 1 };
+                        } else {
+                            if (point.scale > cityMax[cCode].maxScale) cityMax[cCode].maxScale = point.scale;
+                            cityMax[cCode].sumLon += lon;
+                            cityMax[cCode].sumLat += lat;
+                            cityMax[cCode].count++;
+                        }
+                    }
+                } else {
+                    unmappedPoints.push(point);
                 }
-            } else {
-                // [区域モード(震度速報)]
-                // point.addr が「エリア名」になっている
-                const areaCode = AreaNameToCode(point.addr);
-                if (areaCode && centerPoint[areaCode]) {
-                    lat = centerPoint[areaCode].lat;
-                    lon = centerPoint[areaCode].lng;
-                    name = point.addr;
-                    furigana = AreaNameToKana(name);
+            });
+        }
 
-                    // 塗りつぶし用: そのまま使用
-                    filled_list[areaCode] = point.scale;
+        // マップアイコン作成
+        const mapIconUnit = unitSettings.mapIconUnit || 'station';
 
-                    // ★修正: アイコンサイズを調整 (0.22)
-                    iconSize = 0.22;
-                }
-            }
-
-            // 「震度大きく」のチェックが入っていればサイズを1.5倍にする
-            if (document.getElementById('shindoiconbig_check').checked) {
-                iconSize *= 1.5;
-            }
-
-            // 座標が特定できた場合のみ追加
-            if (lat !== undefined && lon !== undefined) {
-                // 震度に応じたアイコン名とテキスト、およびソートキー
-                let iconName = "int_";
-                let shindoText = "不明";
-                let suffix = "_";
-                let sortKey = 0; // ★追加: 並び順用変数の初期化
-
-                // sortKeyには震度の数値(10, 20...70)をそのまま入れます
-                if (point.scale == 10) { iconName = `${icon_theme}_int1`; shindoText = "震度1"; suffix = "1"; sortKey = 10; }
-                else if (point.scale == 20) { iconName = `${icon_theme}_int2`; shindoText = "震度2"; suffix = "2"; sortKey = 20; }
-                else if (point.scale == 30) { iconName = `${icon_theme}_int3`; shindoText = "震度3"; suffix = "3"; sortKey = 30; }
-                else if (point.scale == 40) { iconName = `${icon_theme}_int4`; shindoText = "震度4"; suffix = "4"; sortKey = 40; }
-                else if (point.scale == 45) { iconName = `${icon_theme}_int50`; shindoText = "震度5弱"; suffix = "50"; sortKey = 45; }
-                else if (point.scale == 46) { iconName = `${icon_theme}_int51`; shindoText = "震度5弱以上と推定"; suffix = "51"; sortKey = 46; }
-                else if (point.scale == 50) { iconName = `${icon_theme}_int55`; shindoText = "震度5強"; suffix = "55"; sortKey = 50; }
-                else if (point.scale == 55) { iconName = `${icon_theme}_int60`; shindoText = "震度6弱"; suffix = "60"; sortKey = 55; }
-                else if (point.scale == 60) { iconName = `${icon_theme}_int65`; shindoText = "震度6強"; suffix = "65"; sortKey = 60; }
-                else if (point.scale == 70) { iconName = `${icon_theme}_int7`; shindoText = "震度7"; suffix = "7"; sortKey = 70; }
-                else if (point.scale <= 0) { iconName = `${icon_theme}_intN`; shindoText = "情報なし"; suffix = "N"; sortKey = -1; }
-
-                // GeoJSON feature作成
+        if (mapIconUnit === 'station') {
+            validPoints.forEach(p => {
+                const suffix = scaleToSuffix(p.scale);
+                const iconName = `${icon_theme}_int${suffix}`;
+                const shindoText = scaleToText(p.scale);
                 pointsFeatures.push({
                     type: 'Feature',
-                    geometry: { type: 'Point', coordinates: [lon, lat] },
+                    geometry: { type: 'Point', coordinates: [p.lon, p.lat] },
                     properties: {
                         iconName: iconName,
-                        iconSize: iconSize,
-                        sortKey: sortKey, // ★追加: ここで並び順をデータに持たせる
-                        popupContent: `<ruby>${name}<rt>${furigana}</rt></ruby>　${shindoText}`
+                        iconSize: 0.13 * bigMultiplier,
+                        sortKey: p.scale,
+                        popupContent: `<ruby>${p.name}<rt>${p.furigana}</rt></ruby>　${shindoText}`
                     }
                 });
-
-                // 右側リストへの追加
-                const article = document.getElementById(`shindo${suffix}_article`);
-                if (article) {
-                    article.innerHTML += `<ruby>${name}<rt>${furigana}</rt></ruby>　`;
-                    counts[suffix]++;
+            });
+        } else if (mapIconUnit === 'city') {
+            for (const cCode in cityMax) {
+                const cItem = cityMax[cCode];
+                let coords = cityCenters[cCode];
+                if (!coords) {
+                    coords = [cItem.sumLon / cItem.count, cItem.sumLat / cItem.count];
                 }
-            } else {
-                // 座標が特定できなかった観測点 (位置プロット不可) -> 「観測点情報なし」に記録
-                const unmappedName = point.addr || "名称不明";
-                const articleN = document.getElementById('shindoN_article');
-                if (articleN) {
-                    articleN.innerHTML += `<ruby>${unmappedName}<rt></rt></ruby>　`;
-                    counts['N']++;
+                const suffix = scaleToSuffix(cItem.maxScale);
+                const iconName = `${icon_theme}_int${suffix}`;
+                const shindoText = scaleToText(cItem.maxScale);
+                pointsFeatures.push({
+                    type: 'Feature',
+                    geometry: { type: 'Point', coordinates: coords },
+                    properties: {
+                        iconName: iconName,
+                        iconSize: 0.18 * bigMultiplier,
+                        sortKey: cItem.maxScale,
+                        popupContent: `<ruby>${cItem.name}<rt>${cItem.furigana}</rt></ruby>　最大${shindoText}`
+                    }
+                });
+            }
+        } else if (mapIconUnit === 'area') {
+            for (const aCode in areaMax) {
+                const aItem = areaMax[aCode];
+                if (centerPoint[aCode]) {
+                    const coords = [centerPoint[aCode].lng, centerPoint[aCode].lat];
+                    const suffix = scaleToSuffix(aItem.maxScale);
+                    const iconName = `${icon_theme}_int${suffix}`;
+                    const shindoText = scaleToText(aItem.maxScale);
+                    pointsFeatures.push({
+                        type: 'Feature',
+                        geometry: { type: 'Point', coordinates: coords },
+                        properties: {
+                            iconName: iconName,
+                            iconSize: 0.20 * bigMultiplier,
+                            sortKey: aItem.maxScale,
+                            popupContent: `<ruby>${aItem.name}<rt>${aItem.furigana}</rt></ruby>　最大${shindoText}`
+                        }
+                    });
                 }
             }
-        });
+        } else if (mapIconUnit === 'pref') {
+            for (const pCode in prefMax) {
+                const pItem = prefMax[pCode];
+                let coords = prefCenters[pCode];
+                if (!coords) {
+                    coords = [pItem.sumLon / pItem.count, pItem.sumLat / pItem.count];
+                }
+                const suffix = scaleToSuffix(pItem.maxScale);
+                const iconName = `${icon_theme}_int${suffix}`;
+                const shindoText = scaleToText(pItem.maxScale);
+                pointsFeatures.push({
+                    type: 'Feature',
+                    geometry: { type: 'Point', coordinates: coords },
+                    properties: {
+                        iconName: iconName,
+                        iconSize: 0.22 * bigMultiplier,
+                        sortKey: pItem.maxScale,
+                        popupContent: `<ruby>${pItem.name}<rt>${pItem.furigana}</rt></ruby>　最大${shindoText}`
+                    }
+                });
+            }
+        }
+
+        // 各地の震度リストUIの構築
+        const listUnits = unitSettings.listUnits || ['station'];
+        const isSingleUnit = (listUnits.length === 1);
+
+        if (isSingleUnit) {
+            const singleType = listUnits[0];
+            if (singleType === 'station') {
+                validPoints.forEach(p => {
+                    const suffix = scaleToSuffix(p.scale);
+                    const article = document.getElementById(`shindo${suffix}_article`);
+                    if (article) {
+                        article.innerHTML += `<ruby>${p.name}<rt>${p.furigana}</rt></ruby>　`;
+                        counts[suffix]++;
+                    }
+                });
+            } else if (singleType === 'city') {
+                for (const cCode in cityMax) {
+                    const cItem = cityMax[cCode];
+                    const suffix = scaleToSuffix(cItem.maxScale);
+                    const article = document.getElementById(`shindo${suffix}_article`);
+                    if (article) {
+                        article.innerHTML += `<ruby>${cItem.name}<rt>${cItem.furigana}</rt></ruby>　`;
+                        counts[suffix]++;
+                    }
+                }
+            } else if (singleType === 'area') {
+                for (const aCode in areaMax) {
+                    const aItem = areaMax[aCode];
+                    const suffix = scaleToSuffix(aItem.maxScale);
+                    const article = document.getElementById(`shindo${suffix}_article`);
+                    if (article) {
+                        article.innerHTML += `<ruby>${aItem.name}<rt>${aItem.furigana}</rt></ruby>　`;
+                        counts[suffix]++;
+                    }
+                }
+            } else if (singleType === 'pref') {
+                for (const pCode in prefMax) {
+                    const pItem = prefMax[pCode];
+                    const suffix = scaleToSuffix(pItem.maxScale);
+                    const article = document.getElementById(`shindo${suffix}_article`);
+                    if (article) {
+                        article.innerHTML += `<ruby>${pItem.name}<rt>${pItem.furigana}</rt></ruby>　`;
+                        counts[suffix]++;
+                    }
+                }
+            }
+        } else {
+            // ネスト表示モード
+            const pointsBySuffix = {};
+            ['1', '2', '3', '4', '50', '51', '55', '60', '65', '7', '_', 'N'].forEach(s => pointsBySuffix[s] = []);
+
+            validPoints.forEach(p => {
+                const suffix = scaleToSuffix(p.scale);
+                pointsBySuffix[suffix].push(p);
+                counts[suffix]++;
+            });
+
+            for (const suffix in pointsBySuffix) {
+                const group = pointsBySuffix[suffix];
+                if (group.length > 0) {
+                    const article = document.getElementById(`shindo${suffix}_article`);
+                    if (article) {
+                        article.innerHTML = buildNestedListHtml(group, listUnits);
+                    }
+                }
+            }
+        }
+
+        // 観測点情報なし
+        if (unmappedPoints.length > 0) {
+            const articleN = document.getElementById('shindoN_article');
+            if (articleN) {
+                unmappedPoints.forEach(p => {
+                    const unmappedName = p.addr || "名称不明";
+                    articleN.innerHTML += `<ruby>${unmappedName}<rt></rt></ruby>　`;
+                    counts['N']++;
+                });
+            }
+        }
+
+    } else {
+        // [区域モード(震度速報)] - 従来通りのフォールバック
+        if (targetData.points) {
+            targetData.points.forEach(point => {
+                const areaCode = AreaNameToCode(point.addr);
+                if (areaCode && centerPoint[areaCode]) {
+                    const lat = centerPoint[areaCode].lat;
+                    const lon = centerPoint[areaCode].lng;
+                    const name = point.addr;
+                    const furigana = AreaNameToKana(name);
+                    filled_list[areaCode] = point.scale;
+
+                    const suffix = scaleToSuffix(point.scale);
+                    const iconName = `${icon_theme}_int${suffix}`;
+                    const shindoText = scaleToText(point.scale);
+
+                    pointsFeatures.push({
+                        type: 'Feature',
+                        geometry: { type: 'Point', coordinates: [lon, lat] },
+                        properties: {
+                            iconName: iconName,
+                            iconSize: 0.22 * bigMultiplier,
+                            sortKey: point.scale,
+                            popupContent: `<ruby>${name}<rt>${furigana}</rt></ruby>　${shindoText}`
+                        }
+                    });
+
+                    const article = document.getElementById(`shindo${suffix}_article`);
+                    if (article) {
+                        article.innerHTML += `<ruby>${name}<rt>${furigana}</rt></ruby>　`;
+                        counts[suffix]++;
+                    }
+                }
+            });
+        }
     }
 
     // 地図上のポイント更新
@@ -2277,23 +2838,48 @@ async function QuakeSelect(num, isFlyOff) {
     const themeColors = shindoColors[icon_theme] || shindoColors.eqm;
     const landColors = { nerv: "#3a3a3a", wni: "#ffffff", quarog: "#508C78" };
     const defaultLandColor = landColors[this_theme] || "#3a3a3a";
-
-    // 塗りのオンオフをチェック
     const isFillOn = document.getElementById('display_onoff_fill_check').checked;
 
-    const matchExpression = ['match', ['get', 'code']];
-    for (const [code, scale] of Object.entries(filled_list)) {
-        // オフの場合はデフォルトベースカラーにする
-        const color = isFillOn ? (themeColors[scale] || themeColors.default) : defaultLandColor;
-        matchExpression.push(code);
-        matchExpression.push(color);
-    }
-    matchExpression.push(defaultLandColor);
+    const mapFillUnit = isStationMode ? (unitSettings.mapFillUnit || 'area') : 'area';
 
-    if (map.getLayer('japan_fill')) {
-        map.setPaintProperty('japan_fill', 'fill-color', matchExpression);
-        // 必ず表示状態にしておく（色分けで隠すため）
-        map.setLayoutProperty('japan_fill', 'visibility', 'visible');
+    if (mapFillUnit === 'pref') {
+        if (map.getLayer('japan_fill')) map.setLayoutProperty('japan_fill', 'visibility', 'none');
+        if (map.getLayer('japan_line')) map.setLayoutProperty('japan_line', 'visibility', 'none');
+
+        const prefMatchExpression = ['match', ['get', 'code']];
+        for (const [code, scale] of Object.entries(pref_filled_list)) {
+            const color = isFillOn ? (themeColors[scale] || themeColors.default) : defaultLandColor;
+            prefMatchExpression.push(parseInt(code, 10));
+            prefMatchExpression.push(color);
+        }
+        prefMatchExpression.push(defaultLandColor);
+
+        if (map.getLayer('pref_fill')) {
+            map.setPaintProperty('pref_fill', 'fill-color', prefMatchExpression);
+            map.setLayoutProperty('pref_fill', 'visibility', isFillOn ? 'visible' : 'none');
+        }
+        if (map.getLayer('pref_line')) {
+            map.setLayoutProperty('pref_line', 'visibility', 'visible');
+        }
+    } else {
+        if (map.getLayer('pref_fill')) map.setLayoutProperty('pref_fill', 'visibility', 'none');
+        if (map.getLayer('pref_line')) map.setLayoutProperty('pref_line', 'visibility', 'none');
+
+        const matchExpression = ['match', ['get', 'code']];
+        for (const [code, scale] of Object.entries(filled_list)) {
+            const color = isFillOn ? (themeColors[scale] || themeColors.default) : defaultLandColor;
+            matchExpression.push(code);
+            matchExpression.push(color);
+        }
+        matchExpression.push(defaultLandColor);
+
+        if (map.getLayer('japan_fill')) {
+            map.setPaintProperty('japan_fill', 'fill-color', matchExpression);
+            map.setLayoutProperty('japan_fill', 'visibility', isFillOn ? 'visible' : 'none');
+        }
+        if (map.getLayer('japan_line')) {
+            map.setLayoutProperty('japan_line', 'visibility', 'visible');
+        }
     }
 
 
@@ -2302,7 +2888,18 @@ async function QuakeSelect(num, isFlyOff) {
     const kakutitle = document.getElementsByClassName('shindo_ichiran_kakutitle');
     const updateTitle = (index, suffix) => {
         if (kakutitle[index]) {
-            const unit = isStationMode ? "ヶ所" : "区域";
+            let unit = "ヶ所";
+            if (!isStationMode) {
+                unit = "区域";
+            } else if (unitSettings.listUnits.length === 1) {
+                const u = unitSettings.listUnits[0];
+                if (u === 'pref') unit = "都道府県";
+                else if (u === 'area') unit = "区域";
+                else if (u === 'city') unit = "市区町村";
+                else unit = "ヶ所";
+            } else {
+                unit = "ヶ所";
+            }
             const label = (suffix === 'N') ? "観測点情報なし" : "震度";
             kakutitle[index].innerHTML = `${label}<img src="source/svg/${icon_theme}_int${suffix}.svg">　${counts[suffix]}<span class="kasho_small">${unit}</span>`;
             totalPoints += counts[suffix];
@@ -2315,7 +2912,6 @@ async function QuakeSelect(num, isFlyOff) {
         }
     };
 
-    // HTMLの並び順に合わせて更新
     updateTitle(0, '7');
     updateTitle(1, '65');
     updateTitle(2, '60');
@@ -2329,9 +2925,36 @@ async function QuakeSelect(num, isFlyOff) {
     updateTitle(10, '_');
     updateTitle(11, 'N');
 
-    const unitTotal = isStationMode ? "ヶ所" : "区域";
-    document.getElementById('shindoichiran_title_num').innerHTML = `全 ${totalPoints}<span class="small">${unitTotal}</span>`;
-
+    const titleNumEl = document.getElementById('shindoichiran_title_num');
+    if (titleNumEl) {
+        if (!isStationMode) {
+            titleNumEl.innerHTML = `全 ${totalPoints}<span class="small">区域</span>`;
+        } else if (unitSettings.listUnits.length === 1) {
+            const u = unitSettings.listUnits[0];
+            let unitLabel = "ヶ所";
+            if (u === 'pref') unitLabel = "都道府県";
+            else if (u === 'area') unitLabel = "細分区域";
+            else if (u === 'city') unitLabel = "市区町村";
+            titleNumEl.innerHTML = `全 ${totalPoints}<span class="small">${unitLabel}</span>`;
+        } else {
+            // ネスト選択時: 14都道府県・36市区町村・120観測点 （細分区域は除外）
+            const parts = [];
+            const listUnits = unitSettings.listUnits;
+            if (listUnits.includes('pref')) {
+                const pCnt = Object.keys(prefMax).length;
+                parts.push(`${pCnt}<span class="small">都道府県</span>`);
+            }
+            if (listUnits.includes('city')) {
+                const cCnt = Object.keys(cityMax).length;
+                parts.push(`${cCnt}<span class="small">市区町村</span>`);
+            }
+            if (listUnits.includes('station')) {
+                const sCnt = validPoints.length;
+                parts.push(`${sCnt}<span class="small">観測点</span>`);
+            }
+            titleNumEl.innerHTML = parts.join('・') || `全 ${totalPoints}<span class="small">ヶ所</span>`;
+        }
+    }
 
     // --- 8. カメラ移動 (FlyTo) ---
     // 保存 (位置初期化用)

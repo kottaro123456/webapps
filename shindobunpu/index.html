@@ -138,6 +138,7 @@
                 <input type="checkbox" name="shindo_ichiran" id="shindo_ichiran_check"><label
                     for="shindo_ichiran_check">各地の震度</label>
             </span>
+            <button id="btn_unit_setting" class="btm_btn">単位切替</button>
             <button id="view_info" class="btm_btn">情報</button>
         </div>
     </div>
@@ -328,40 +329,50 @@
             </div>
         </div>
     </div>
-        <div style="margin-top: 5px;">
-            <span class="setsumei" id="theme_set" style="padding: 2px 5px;">テーマ
-                <input type="radio" name="theme" id="theme_nerv" value="nerv" onchange="theme_change(this.value)"
-                    checked><label for="theme_nerv">NERV</label>
-                <input type="radio" name="theme" id="theme_wni" value="wni" onchange="theme_change(this.value)"><label
-                    for="theme_wni">WNI</label>
-                <input type="radio" name="theme" id="theme_quarog" value="quarog"
-                    onchange="theme_change(this.value)"><label for="theme_quarog">Quarog</label>
-            </span>
-            <span class="setsumei" id="icon_theme_set" style="padding: 2px 5px;">アイコン
-                <input type="radio" name="icon_theme" id="icon_theme_eqm" value="eqm"
-                    onchange="icon_theme_change(this.value)" checked><label for="icon_theme_eqm">EQM1</label>
-                <input type="radio" name="icon_theme" id="icon_theme_jqk" value="jqk"
-                    onchange="icon_theme_change(this.value)"><label for="icon_theme_jqk">JQuake</label>
-                <input type="radio" name="icon_theme" id="icon_theme_wni" value="wni"
-                    onchange="icon_theme_change(this.value)"><label for="icon_theme_wni">WNI</label>
-            </span>
-            <span class="setsumei" id="display_onoff" style="padding: 2px 5px;">表示
-                <input type="checkbox" name="shindo_ichiran" id="display_onoff_shingen_check" checked><label
-                    for="display_onoff_shingen_check">震源</label>
-                <input type="checkbox" name="shindo_ichiran" id="display_onoff_point_check" checked><label
-                    for="display_onoff_point_check">観測点</label>
-                <input type="checkbox" name="shindo_ichiran" id="display_onoff_fill_check" checked><label
-                    for="display_onoff_fill_check">塗り</label>
-                <input type="checkbox" name="shindo_ichiran" id="display_onoff_saibun_check"><label
-                    for="display_onoff_saibun_check">市町村</label>
-                <input type="checkbox" name="shindo_ichiran" id="display_onoff_tsunami_check" checked><label
-                    for="display_onoff_tsunami_check">津波</label>
-            </span>
-            <span class="shindoichiran">
-                <input type="checkbox" name="shindo_ichiran" id="shindo_ichiran_check"><label
-                    for="shindo_ichiran_check">各地の震度</label>
-            </span>
-            <button id="view_info">情報</button>
+
+    <!-- 表示単位設定ダイアログ (モーダル形式) -->
+    <div id="unit_modal_overlay" class="unit_modal_overlay" style="display: none;">
+        <div id="unit_panel_wrapper" class="unit_panel_wrapper">
+            <div class="unit_panel_header">
+                <span>表示単位の設定</span>
+                <button id="close_unit_panel_btn" class="unit_close_btn">✕</button>
+            </div>
+            <div class="unit_panel_body">
+                <div class="unit_field_group">
+                    <label class="unit_group_title">マップ：観測点アイコン表示単位</label>
+                    <div class="unit_options_row">
+                        <label><input type="radio" name="map_icon_unit" value="station" checked> 観測点</label>
+                        <label><input type="radio" name="map_icon_unit" value="city"> 市区町村</label>
+                        <label><input type="radio" name="map_icon_unit" value="area"> 細分区域</label>
+                        <label><input type="radio" name="map_icon_unit" value="pref"> 都道府県</label>
+                    </div>
+                    <span class="unit_hint">※各単位内の最大震度アイコンを中心位置に1つ表示します</span>
+                </div>
+
+                <div class="unit_field_group">
+                    <label class="unit_group_title">マップ：塗りつぶし単位</label>
+                    <div class="unit_options_row">
+                        <label><input type="radio" name="map_fill_unit" value="area" checked> 細分区域</label>
+                        <label><input type="radio" name="map_fill_unit" value="pref"> 都道府県</label>
+                    </div>
+                </div>
+
+                <div class="unit_field_group">
+                    <label class="unit_group_title">各地の震度（リスト）：表示単位 & ネスト</label>
+                    <div class="unit_options_row">
+                        <label><input type="checkbox" name="list_unit" value="pref"> 都道府県</label>
+                        <label><input type="checkbox" name="list_unit" value="area"> 細分区域</label>
+                        <label><input type="checkbox" name="list_unit" value="city"> 市区町村</label>
+                        <label><input type="checkbox" name="list_unit" value="station" checked> 観測点</label>
+                    </div>
+                    <span class="unit_hint">※複数選択時は上位から順にネスト表示（都道府県 ＞ 細分区域 ＞ 市区町村 ＞ 観測点）されます</span>
+                </div>
+
+                <div class="unit_panel_actions">
+                    <button id="unit_cancel_btn" class="btm_btn">キャンセル</button>
+                    <button id="unit_apply_btn" class="unit_accent_btn">適用</button>
+                </div>
+            </div>
         </div>
     </div>
     <div id="shindo_ichiran">

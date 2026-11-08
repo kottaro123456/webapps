@@ -1267,3 +1267,184 @@ input[type="number"] {
     padding-top: 12px;
     border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
+
+/* ==========================================================================
+   表示単位設定モーダル
+   ========================================================================== */
+.unit_modal_overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(4px);
+    z-index: 20000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 16px;
+    box-sizing: border-box;
+}
+
+.unit_panel_wrapper {
+    position: relative;
+    width: 480px;
+    max-width: 95vw;
+    background: rgba(22, 27, 36, 0.98);
+    border: 1.5px solid var(--accent-blue);
+    border-radius: 12px;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.85);
+    color: #e0e6ed;
+    font-family: var(--fontFamily);
+    font-size: 14px;
+    overflow: hidden;
+    animation: searchModalFadeIn 0.2s ease-out;
+}
+
+.unit_panel_header {
+    background: var(--accent-blue);
+    color: #ffffff;
+    padding: 12px 20px;
+    font-weight: bold;
+    font-size: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.unit_close_btn {
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 0 4px;
+    line-height: 1;
+    opacity: 0.8;
+    transition: opacity 0.15s;
+}
+
+.unit_close_btn:hover {
+    opacity: 1;
+}
+
+.unit_panel_body {
+    padding: 18px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.unit_field_group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.unit_group_title {
+    font-weight: bold;
+    color: #8bb5e8;
+    font-size: 13px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 4px;
+}
+
+.unit_options_row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+    padding: 4px 0;
+}
+
+.unit_options_row label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    color: #ffffff;
+    font-size: 13.5px;
+}
+
+.unit_options_row input[type="radio"],
+.unit_options_row input[type="checkbox"] {
+    accent-color: var(--accent-blue);
+    cursor: pointer;
+    width: 16px;
+    height: 16px;
+}
+
+.unit_hint {
+    font-size: 11.5px;
+    color: #9cb1cb;
+    line-height: 1.4;
+}
+
+.unit_panel_actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 8px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.unit_accent_btn {
+    background: var(--accent-blue);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 7px 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.unit_accent_btn:hover {
+    filter: brightness(1.15);
+}
+
+/* 各地の震度：ネスト階層表示用スタイル */
+.shindo_nest_row {
+    margin-bottom: 5px;
+    line-height: 1.6;
+}
+.shindo_nest_block {
+    display: block;
+    margin-top: 6px;
+    margin-bottom: 4px;
+}
+.shindo_nest_pref_title {
+    font-weight: bold;
+    color: #99c7f4;
+    display: block;
+    margin-top: 8px;
+    margin-bottom: 3px;
+    border-left: 3px solid #1c79a9;
+    padding-left: 6px;
+}
+.shindo_nest_pref_title:first-child {
+    margin-top: 0;
+}
+.shindo_nest_area_title {
+    color: #b8d7ea;
+    display: block;
+    margin-left: 10px;
+    margin-top: 4px;
+    margin-bottom: 2px;
+}
+.shindo_nest_city_title {
+    color: #ffffff;
+    display: inline-block;
+    margin-left: 18px;
+    font-weight: 500;
+}
+.shindo_nest_station_list {
+    display: inline;
+    color: #e0e6ed;
+}
+.shindo_nest_item {
+    display: inline-block;
+    margin-right: 8px;
+}
