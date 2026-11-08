@@ -2503,7 +2503,11 @@ async function QuakeSelect(num, isFlyOff) {
     filled_list = {};
     const pref_filled_list = {};
     const counts = {};
-    ['1', '2', '3', '4', '50', '51', '55', '60', '65', '7', '_', 'N'].forEach(s => counts[s] = 0);
+    const countsBySuffix = {};
+    ['1', '2', '3', '4', '50', '51', '55', '60', '65', '7', '_', 'N'].forEach(s => {
+        counts[s] = 0;
+        countsBySuffix[s] = { pref: 0, area: 0, city: 0, station: 0, hasData: false };
+    });
 
     // リストUIのリセット
     ['1', '2', '3', '4', '50', '51', '55', '60', '65', '7', '_', 'N'].forEach(s => {
@@ -2764,7 +2768,6 @@ async function QuakeSelect(num, isFlyOff) {
             validPoints.forEach(p => {
                 const suffix = scaleToSuffix(p.scale);
                 pointsBySuffix[suffix].push(p);
-                counts[suffix]++;
             });
 
             for (const suffix in pointsBySuffix) {
@@ -2774,6 +2777,27 @@ async function QuakeSelect(num, isFlyOff) {
                     if (article) {
                         article.innerHTML = buildNestedListHtml(group, listUnits);
                     }
+
+                    // 震度枠内の各階層ユニーク数を算出
+                    const prefsInGroup = new Set();
+                    const areasInGroup = new Set();
+                    const citiesInGroup = new Set();
+                    const stationsInGroup = new Set();
+
+                    group.forEach(p => {
+                        if (p.pref && p.pref.code) prefsInGroup.add(p.pref.code);
+                        if (p.area && p.area.name) areasInGroup.add(p.area.name);
+                        if (p.city && p.city.code) citiesInGroup.add(p.city.code);
+                        stationsInGroup.add(p.name);
+                    });
+
+                    countsBySuffix[suffix] = {
+                        pref: prefsInGroup.size,
+                        area: areasInGroup.size,
+                        city: citiesInGroup.size,
+                        station: stationsInGroup.size,
+                        hasData: true
+                    };
                 }
             }
         }
@@ -2787,6 +2811,7 @@ async function QuakeSelect(num, isFlyOff) {
                     articleN.innerHTML += `<ruby>${unmappedName}<rt></rt></ruby>　`;
                     counts['N']++;
                 });
+                countsBySuffix['N'] = { pref: 0, area: 0, city: 0, station: unmappedPoints.length, hasData: true };
             }
         }
 
@@ -2888,25 +2913,52 @@ async function QuakeSelect(num, isFlyOff) {
     const kakutitle = document.getElementsByClassName('shindo_ichiran_kakutitle');
     const updateTitle = (index, suffix) => {
         if (kakutitle[index]) {
-            let unit = "ヶ所";
+            const label = (suffix === 'N') ? "観測点情報なし" : "震度";
+            let subText = "";
+            let hasItem = false;
+
             if (!isStationMode) {
-                unit = "区域";
+                const cnt = counts[suffix] || 0;
+                subText = `${cnt}<span class="kasho_small">区域</span>`;
+                hasItem = (cnt > 0);
+                totalPoints += cnt;
             } else if (unitSettings.listUnits.length === 1) {
                 const u = unitSettings.listUnits[0];
-                if (u === 'pref') unit = "都道府県";
-                else if (u === 'area') unit = "区域";
-                else if (u === 'city') unit = "市区町村";
-                else unit = "ヶ所";
+                const cnt = counts[suffix] || 0;
+                let uLabel = "ヶ所";
+                if (u === 'pref') uLabel = "都道府県";
+                else if (u === 'area') uLabel = "細分区域";
+                else if (u === 'city') uLabel = "市区町村";
+                subText = `${cnt}<span class="kasho_small">${uLabel}</span>`;
+                hasItem = (cnt > 0);
+                totalPoints += cnt;
             } else {
-                unit = "ヶ所";
+                // ネスト表示時：選択されている単位（都道府県・市区町村・観測点）の内訳を併記
+                const cObj = countsBySuffix[suffix];
+                if (cObj && cObj.hasData) {
+                    hasItem = true;
+                    const parts = [];
+                    if (unitSettings.listUnits.includes('pref')) {
+                        parts.push(`${cObj.pref}<span class="kasho_small">都道府県</span>`);
+                    }
+                    if (unitSettings.listUnits.includes('city')) {
+                        parts.push(`${cObj.city}<span class="kasho_small">市区町村</span>`);
+                    }
+                    if (unitSettings.listUnits.includes('station')) {
+                        parts.push(`${cObj.station}<span class="kasho_small">ヶ所</span>`);
+                    }
+                    subText = parts.join('・') || `0<span class="kasho_small">ヶ所</span>`;
+                } else {
+                    hasItem = false;
+                    subText = `0<span class="kasho_small">ヶ所</span>`;
+                }
             }
-            const label = (suffix === 'N') ? "観測点情報なし" : "震度";
-            kakutitle[index].innerHTML = `${label}<img src="source/svg/${icon_theme}_int${suffix}.svg">　${counts[suffix]}<span class="kasho_small">${unit}</span>`;
-            totalPoints += counts[suffix];
+
+            kakutitle[index].innerHTML = `${label}<img src="source/svg/${icon_theme}_int${suffix}.svg">　${subText}`;
 
             const container = document.getElementById(`shindo${suffix}`);
             if (container) {
-                if (counts[suffix] === 0) container.classList.add('display');
+                if (!hasItem) container.classList.add('display');
                 else container.classList.remove('display');
             }
         }
