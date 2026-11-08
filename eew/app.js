@@ -1882,6 +1882,7 @@ function clearSnetLayers() {
     }
 
     function updateDebugWsBadge(status) {
+        updateEEWMonitorWsBadge(status);
         if (!isDebugIndicatorEnabled) return;
         const badge = document.getElementById('debugWsBadge');
         if (!badge) return;
@@ -1977,6 +1978,769 @@ function clearSnetLayers() {
      * @param {Date} [nowDate] - 現在時刻 (省略時はgetCurrentAppTime())
      * @returns {{pRadius: number, sRadius: number}}
      */
+    // ==========================================
+    // WOLFX EEW MONITOR & HISTORY ARCHIVE
+    // ==========================================
+    let isEEWMonitorEnabled = false;
+    let monitorPopoutWindow = null;
+    let currentWolfxEvents = {};
+    let activeMonitorEventId = null;
+    let activeMonitorSelectedSerial = 'latest';
+
+    function initEEWMonitorUI() {
+        const monitorToggleEl = document.getElementById('eewMonitorToggle');
+        const toggleBtn = document.getElementById('toggleMonitorBtn');
+        const closeBtn = document.getElementById('eewMonitorCloseBtn');
+        const popoutBtn = document.getElementById('eewMonitorPopoutBtn');
+        const copyBtn = document.getElementById('eewCopyJsonBtn');
+        const historyBtn = document.getElementById('eewHistoryBtn');
+        const historyCloseBtn = document.getElementById('eewHistoryCloseBtn');
+        const historyBackdropEl = document.getElementById('eewHistoryBackdrop');
+        const historyRefreshBtn = document.getElementById('eewHistoryRefreshBtn');
+
+        const savedMonitorState = localStorage.getItem('eew_monitor_enabled') === 'true';
+        setEEWMonitorVisible(savedMonitorState);
+
+        if (monitorToggleEl) {
+            monitorToggleEl.checked = savedMonitorState;
+            monitorToggleEl.addEventListener('change', (e) => {
+                setEEWMonitorVisible(e.target.checked);
+            });
+        }
+
+        if (toggleBtn) {
+            toggleBtn.addEventListener('click', () => {
+                setEEWMonitorVisible(!isEEWMonitorEnabled);
+            });
+        }
+
+        if (closeBtn) {
+            closeBtn.addEventListener('click', () => {
+                setEEWMonitorVisible(false);
+            });
+        }
+
+        if (popoutBtn) {
+            popoutBtn.addEventListener('click', () => {
+                openEEWMonitorPopout();
+            });
+        }
+
+        if (copyBtn) {
+            copyBtn.addEventListener('click', () => {
+                copyCurrentMonitorJson();
+            });
+        }
+
+        if (historyBtn) {
+            historyBtn.addEventListener('click', () => {
+                openEEWHistoryModal();
+            });
+        }
+        if (historyCloseBtn) {
+            historyCloseBtn.addEventListener('click', () => {
+                closeEEWHistoryModal();
+            });
+        }
+        if (historyBackdropEl) {
+            historyBackdropEl.addEventListener('click', () => {
+                closeEEWHistoryModal();
+            });
+        }
+        if (historyRefreshBtn) {
+            historyRefreshBtn.addEventListener('click', () => {
+                loadEEWHistoryList();
+            });
+        }
+    }
+
+    function updateEEWMonitorWsBadge(status) {
+        const badge = document.getElementById('eewMonitorWsBadge');
+        if (badge) {
+            badge.className = `debug-badge ${status}`;
+            if (status === 'connected') badge.textContent = 'WS: ON';
+            else if (status === 'connecting') badge.textContent = 'WS: CONNECTING';
+            else badge.textContent = 'WS: OFF';
+        }
+
+        if (monitorPopoutWindow && !monitorPopoutWindow.closed) {
+            try {
+                const popBadge = monitorPopoutWindow.document.getElementById('popWsBadge');
+                if (popBadge) {
+                    popBadge.className = `debug-badge ${status}`;
+                    popBadge.textContent = status === 'connected' ? 'WS: ON' : (status === 'connecting' ? 'WS: CONNECTING' : 'WS: OFF');
+                }
+            } catch (e) {}
+        }
+    }
+
+    function setEEWMonitorVisible(visible) {
+        isEEWMonitorEnabled = visible;
+        localStorage.setItem('eew_monitor_enabled', visible ? 'true' : 'false');
+
+        const monitorPanelEl = document.getElementById('eewMonitorPanel');
+        const monitorToggleEl = document.getElementById('eewMonitorToggle');
+        const toggleBtn = document.getElementById('toggleMonitorBtn');
+
+        if (monitorPanelEl) {
+            if (visible) monitorPanelEl.classList.remove('hidden');
+            else monitorPanelEl.classList.add('hidden');
+        }
+        if (monitorToggleEl) {
+            monitorToggleEl.checked = visible;
+        }
+        if (toggleBtn) {
+            if (visible) toggleBtn.classList.add('active');
+            else toggleBtn.classList.remove('active');
+        }
+
+        if (visible) {
+            updateEEWMonitorDisplay();
+        }
+    }
+
+    function handleWolfxMonitorAndSave(rawData, niedData) {
+        if (!rawData) return;
+        if (rawData.type === 'ping' || rawData.type === 'pong' || rawData.type === 'heartbeat') return;
+
+        const eventId = String(rawData.EventID || (niedData && niedData.event_id) || (rawData.OriginTime ? String(rawData.OriginTime).replace(/[^0-9]/g, '') : Date.now()));
+        const serial = parseInt(rawData.Serial !== undefined ? rawData.Serial : ((niedData && niedData.report_num) || 1), 10);
+        const recvTime = new Date();
+
+        if (!currentWolfxEvents[eventId]) {
+            currentWolfxEvents[eventId] = {
+                event_id: eventId,
+                reports: []
+            };
+        }
+
+        const reports = currentWolfxEvents[eventId].reports;
+        const existingIdx = reports.findIndex(r => r.serial === serial);
+        const reportEntry = {
+            serial: serial,
+            recv_time: recvTime,
+            raw: rawData,
+            parsed: niedData
+        };
+
+        if (existingIdx >= 0) {
+            reports[existingIdx] = reportEntry;
+        } else {
+            reports.push(reportEntry);
+            reports.sort((a, b) => a.serial - b.serial);
+        }
+
+        activeMonitorEventId = eventId;
+        activeMonitorSelectedSerial = 'latest';
+
+        updateEEWMonitorDisplay();
+        saveEEWMessageToBackend(rawData);
+    }
+
+    function saveEEWMessageToBackend(rawData) {
+        try {
+            fetch('api.php?action=save_eew', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(rawData)
+            }).catch(err => {
+                console.warn("[EEW] api.php save failed:", err);
+            });
+        } catch (e) {
+            console.warn("[EEW] save error:", e);
+        }
+    }
+
+    function updateEEWMonitorDisplay() {
+        const timeEl = document.getElementById('eewMonitorRecvTime');
+        const dotEl = document.getElementById('eewMonitorFlashDot');
+        const badgeEl = document.getElementById('eewMonitorStatusBadge');
+        const hypoEl = document.getElementById('eewMonitorHypo');
+        const maxIntEl = document.getElementById('eewMonitorMaxInt');
+        const magEl = document.getElementById('eewMonitorMag');
+        const depthEl = document.getElementById('eewMonitorDepth');
+        const warnEl = document.getElementById('eewMonitorWarn');
+        const tabsEl = document.getElementById('eewReportTabs');
+        const preEl = document.getElementById('eewJsonPre');
+        const panelEl = document.getElementById('eewMonitorPanel');
+
+        if (!activeMonitorEventId || !currentWolfxEvents[activeMonitorEventId]) {
+            if (preEl) preEl.innerHTML = '<code>// Wolfx WebSocket電文を受信するとここに生JSONが表示されます</code>';
+            return;
+        }
+
+        const ev = currentWolfxEvents[activeMonitorEventId];
+        const reports = ev.reports || [];
+        if (reports.length === 0) return;
+
+        let curReport = reports[reports.length - 1];
+        if (activeMonitorSelectedSerial !== 'latest') {
+            const found = reports.find(r => r.serial === parseInt(activeMonitorSelectedSerial, 10));
+            if (found) curReport = found;
+        }
+
+        const raw = curReport.raw;
+        const parsed = curReport.parsed;
+
+        // フラッシュアニメーション
+        if (dotEl) {
+            dotEl.classList.remove('active');
+            void dotEl.offsetWidth;
+            dotEl.classList.add('active');
+        }
+        if (panelEl) {
+            panelEl.classList.add('flash');
+            setTimeout(() => panelEl.classList.remove('flash'), 400);
+        }
+
+        // サマリー更新
+        if (timeEl) timeEl.textContent = `受信: ${formatDetailTime(curReport.recv_time)}`;
+
+        const isCancel = raw.isCancel === true || raw.is_cancel === true;
+        const isWarn = raw.Warn === true || raw.isWarn === true || raw.warn === true;
+        const isFinal = raw.isFinal === true || raw.is_final === true;
+
+        if (badgeEl) {
+            badgeEl.className = 'summary-status-badge';
+            if (isCancel) {
+                badgeEl.classList.add('cancel');
+                badgeEl.textContent = '取消報';
+            } else if (isWarn) {
+                badgeEl.classList.add('warn');
+                badgeEl.textContent = isFinal ? '警報 (最終)' : '緊急地震速報 (警報)';
+            } else {
+                badgeEl.classList.add('forecast');
+                badgeEl.textContent = isFinal ? '予報 (最終)' : '緊急地震速報 (予報)';
+            }
+        }
+
+        if (hypoEl) hypoEl.textContent = (parsed && parsed.region_name) || raw.Hypocenter || raw.Title || '震源不明';
+        if (maxIntEl) maxIntEl.textContent = (parsed && parsed.calcintensity) || raw.MaxIntensity || '--';
+        if (magEl) magEl.textContent = `M${(parsed && parsed.magnitude) || raw.Magunitude || raw.Magnitude || '--'}`;
+        if (depthEl) depthEl.textContent = (parsed && parsed.depth) || (raw.Depth !== undefined ? `${raw.Depth}km` : '--');
+        if (warnEl) warnEl.textContent = isWarn ? '警報' : (isCancel ? '取消' : '予報');
+
+        // タブ生成
+        if (tabsEl) {
+            tabsEl.innerHTML = '';
+            const latestBtn = document.createElement('button');
+            latestBtn.className = `eew-tab-btn ${activeMonitorSelectedSerial === 'latest' ? 'active' : ''}`;
+            latestBtn.textContent = `最新報 (第${reports[reports.length - 1].serial}報)`;
+            latestBtn.addEventListener('click', () => {
+                activeMonitorSelectedSerial = 'latest';
+                updateEEWMonitorDisplay();
+            });
+            tabsEl.appendChild(latestBtn);
+
+            reports.forEach(r => {
+                const btn = document.createElement('button');
+                btn.className = `eew-tab-btn ${activeMonitorSelectedSerial === String(r.serial) ? 'active' : ''}`;
+                btn.textContent = `第${r.serial}報`;
+                btn.addEventListener('click', () => {
+                    activeMonitorSelectedSerial = String(r.serial);
+                    updateEEWMonitorDisplay();
+                });
+                tabsEl.appendChild(btn);
+            });
+        }
+
+        // JSON整形表示
+        const jsonStr = JSON.stringify(raw, null, 2);
+        if (preEl) {
+            preEl.textContent = jsonStr;
+        }
+
+        // ポップアップウィンドウにも反映
+        syncEEWMonitorToPopout(curReport, reports, jsonStr);
+    }
+
+    function copyCurrentMonitorJson() {
+        const preEl = document.getElementById('eewJsonPre');
+        const copyBtn = document.getElementById('eewCopyJsonBtn');
+        if (!preEl) return;
+
+        const text = preEl.textContent;
+        navigator.clipboard.writeText(text).then(() => {
+            if (copyBtn) {
+                const origHtml = copyBtn.innerHTML;
+                copyBtn.innerHTML = '<span class="material-symbols-rounded">check</span> コピー完了';
+                copyBtn.style.color = '#4ade80';
+                setTimeout(() => {
+                    copyBtn.innerHTML = origHtml;
+                    copyBtn.style.color = '';
+                }, 2000);
+            }
+        }).catch(err => {
+            console.warn("Clipboard copy failed:", err);
+        });
+    }
+
+    function openEEWMonitorPopout() {
+        if (monitorPopoutWindow && !monitorPopoutWindow.closed) {
+            monitorPopoutWindow.focus();
+            return;
+        }
+
+        monitorPopoutWindow = window.open('', 'eew_popout_window', 'width=560,height=720,menubar=no,toolbar=no,status=no,location=no');
+        if (!monitorPopoutWindow) {
+            alert("ポップアップブロックを解除してください。");
+            return;
+        }
+
+        const doc = monitorPopoutWindow.document;
+        doc.open();
+        doc.write(`<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>Wolfx EEW Monitor (別ウィンドウ)</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,400,1,0" />
+    <style>
+        body {
+            margin: 0;
+            padding: 16px;
+            background: #0f172a;
+            color: #f1f5f9;
+            font-family: 'Roboto Mono', monospace, sans-serif;
+            font-size: 13px;
+            box-sizing: border-box;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255,255,255,0.15);
+            padding-bottom: 10px;
+            margin-bottom: 12px;
+        }
+        .title {
+            font-weight: 700;
+            font-size: 15px;
+            color: #38bdf8;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .debug-badge {
+            font-size: 11px;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 4px;
+        }
+        .debug-badge.connected { background: #16a34a; color: #fff; }
+        .debug-badge.connecting { background: #ca8a04; color: #fff; }
+        .debug-badge.disconnected { background: #dc2626; color: #fff; }
+        .summary-card {
+            background: rgba(0,0,0,0.4);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 12px;
+        }
+        .summary-top {
+            display: flex;
+            justify-content: space-between;
+            color: #94a3b8;
+            font-size: 11px;
+            margin-bottom: 6px;
+        }
+        .summary-main {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+        .status-badge {
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-weight: 700;
+            font-size: 11px;
+            background: #475569;
+        }
+        .status-badge.warn { background: #ef4444; color: #fff; }
+        .status-badge.forecast { background: #0284c7; color: #fff; }
+        .hypo { font-size: 17px; font-weight: 700; color: #fff; }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            border-top: 1px solid rgba(255,255,255,0.08);
+            padding-top: 8px;
+            font-size: 12px;
+        }
+        .grid span { color: #94a3b8; }
+        .grid strong { color: #38bdf8; display: block; font-size: 13px; }
+        .tabs {
+            display: flex;
+            gap: 6px;
+            overflow-x: auto;
+            margin-bottom: 12px;
+            padding-bottom: 4px;
+        }
+        .tab-btn {
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.15);
+            color: #cbd5e1;
+            padding: 4px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 11px;
+            white-space: nowrap;
+        }
+        .tab-btn.active {
+            background: #0284c7;
+            border-color: #38bdf8;
+            color: #fff;
+            font-weight: 700;
+        }
+        .json-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+            font-size: 11px;
+            color: #94a3b8;
+        }
+        .copy-btn {
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.15);
+            color: #cbd5e1;
+            padding: 3px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 11px;
+        }
+        .copy-btn:hover { background: rgba(56,189,248,0.2); color: #38bdf8; }
+        pre {
+            background: #020617;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 6px;
+            padding: 12px;
+            color: #e2e8f0;
+            font-size: 12px;
+            line-height: 1.4;
+            max-height: calc(100vh - 280px);
+            overflow: auto;
+            white-space: pre-wrap;
+            word-break: break-all;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="title">WOLFX EEW MONITOR</div>
+        <div class="debug-badge disconnected" id="popWsBadge">WS: OFF</div>
+    </div>
+    <div class="summary-card">
+        <div class="summary-top">
+            <span id="popRecvTime">受信: --:--:--.--</span>
+        </div>
+        <div class="summary-main">
+            <span class="status-badge" id="popStatusBadge">待機中</span>
+            <span class="hypo" id="popHypo">電文を受信していません</span>
+        </div>
+        <div class="grid">
+            <div><span>最大震度</span><strong id="popMaxInt">--</strong></div>
+            <div><span>規模</span><strong id="popMag">--</strong></div>
+            <div><span>深さ</span><strong id="popDepth">--</strong></div>
+            <div><span>警報/予報</span><strong id="popWarn">--</strong></div>
+        </div>
+    </div>
+    <div class="tabs" id="popTabs"></div>
+    <div class="json-header">
+        <span>Raw JSON</span>
+        <button class="copy-btn" id="popCopyBtn">コピー</button>
+    </div>
+    <pre id="popPre"><code>// 電文待機中</code></pre>
+</body>
+</html>`);
+        doc.close();
+
+        updateEEWMonitorWsBadge(wolfxWS && wolfxWS.readyState === WebSocket.OPEN ? 'connected' : 'disconnected');
+        updateEEWMonitorDisplay();
+
+        monitorPopoutWindow.addEventListener('unload', () => {
+            monitorPopoutWindow = null;
+        });
+    }
+
+    function syncEEWMonitorToPopout(curReport, reports, jsonStr) {
+        if (!monitorPopoutWindow || monitorPopoutWindow.closed) return;
+        try {
+            const doc = monitorPopoutWindow.document;
+            const popRecvTime = doc.getElementById('popRecvTime');
+            const popStatusBadge = doc.getElementById('popStatusBadge');
+            const popHypo = doc.getElementById('popHypo');
+            const popMaxInt = doc.getElementById('popMaxInt');
+            const popMag = doc.getElementById('popMag');
+            const popDepth = doc.getElementById('popDepth');
+            const popWarn = doc.getElementById('popWarn');
+            const popTabs = doc.getElementById('popTabs');
+            const popPre = doc.getElementById('popPre');
+            const popCopyBtn = doc.getElementById('popCopyBtn');
+
+            const raw = curReport.raw;
+            const parsed = curReport.parsed;
+            const isCancel = raw.isCancel === true || raw.is_cancel === true;
+            const isWarn = raw.Warn === true || raw.isWarn === true || raw.warn === true;
+            const isFinal = raw.isFinal === true || raw.is_final === true;
+
+            if (popRecvTime) popRecvTime.textContent = `受信: ${formatDetailTime(curReport.recv_time)}`;
+            if (popStatusBadge) {
+                popStatusBadge.className = 'status-badge';
+                if (isCancel) { popStatusBadge.classList.add('cancel'); popStatusBadge.textContent = '取消報'; }
+                else if (isWarn) { popStatusBadge.classList.add('warn'); popStatusBadge.textContent = isFinal ? '警報 (最終)' : '緊急地震速報 (警報)'; }
+                else { popStatusBadge.classList.add('forecast'); popStatusBadge.textContent = isFinal ? '予報 (最終)' : '緊急地震速報 (予報)'; }
+            }
+            if (popHypo) popHypo.textContent = (parsed && parsed.region_name) || raw.Hypocenter || raw.Title || '震源不明';
+            if (popMaxInt) popMaxInt.textContent = (parsed && parsed.calcintensity) || raw.MaxIntensity || '--';
+            if (popMag) popMag.textContent = `M${(parsed && parsed.magnitude) || raw.Magunitude || raw.Magnitude || '--'}`;
+            if (popDepth) popDepth.textContent = (parsed && parsed.depth) || (raw.Depth !== undefined ? `${raw.Depth}km` : '--');
+            if (popWarn) popWarn.textContent = isWarn ? '警報' : (isCancel ? '取消' : '予報');
+
+            if (popTabs) {
+                popTabs.innerHTML = '';
+                const latestBtn = doc.createElement('button');
+                latestBtn.className = `tab-btn ${activeMonitorSelectedSerial === 'latest' ? 'active' : ''}`;
+                latestBtn.textContent = `最新報 (第${reports[reports.length - 1].serial}報)`;
+                latestBtn.addEventListener('click', () => {
+                    activeMonitorSelectedSerial = 'latest';
+                    updateEEWMonitorDisplay();
+                });
+                popTabs.appendChild(latestBtn);
+
+                reports.forEach(r => {
+                    const btn = doc.createElement('button');
+                    btn.className = `tab-btn ${activeMonitorSelectedSerial === String(r.serial) ? 'active' : ''}`;
+                    btn.textContent = `第${r.serial}報`;
+                    btn.addEventListener('click', () => {
+                        activeMonitorSelectedSerial = String(r.serial);
+                        updateEEWMonitorDisplay();
+                    });
+                    popTabs.appendChild(btn);
+                });
+            }
+
+            if (popPre) popPre.textContent = jsonStr;
+            if (popCopyBtn && !popCopyBtn._hasListener) {
+                popCopyBtn._hasListener = true;
+                popCopyBtn.addEventListener('click', () => {
+                    monitorPopoutWindow.navigator.clipboard.writeText(jsonStr).then(() => {
+                        popCopyBtn.textContent = 'コピー完了！';
+                        setTimeout(() => { popCopyBtn.textContent = 'コピー'; }, 2000);
+                    });
+                });
+            }
+        } catch (e) {
+            console.warn("syncEEWMonitorToPopout error:", e);
+        }
+    }
+
+    // ==========================================
+    // EEW HISTORY ARCHIVE LOGIC (MODAL)
+    // ==========================================
+    function openEEWHistoryModal() {
+        const modal = document.getElementById('eewHistoryModal');
+        if (modal) {
+            modal.classList.remove('hidden');
+            loadEEWHistoryList();
+        }
+    }
+
+    function closeEEWHistoryModal() {
+        const modal = document.getElementById('eewHistoryModal');
+        if (modal) modal.classList.add('hidden');
+    }
+
+    async function loadEEWHistoryList() {
+        const listEl = document.getElementById('eewHistoryItemsList');
+        const countEl = document.getElementById('eewHistoryCount');
+        if (!listEl) return;
+
+        listEl.innerHTML = '<div class="history-empty">履歴を取得中...</div>';
+
+        try {
+            const res = await fetch('api.php?action=list_eew&limit=100');
+            const data = await res.json();
+
+            if (data.status !== 'success' || !data.items || data.items.length === 0) {
+                listEl.innerHTML = '<div class="history-empty">保存された過去のEEW電文はありません</div>';
+                if (countEl) countEl.textContent = '0 件';
+                const detailEl = document.getElementById('eewHistoryDetailPane');
+                if (detailEl) detailEl.innerHTML = '<div class="detail-placeholder">保存された電文がありません</div>';
+                return;
+            }
+
+            if (countEl) countEl.textContent = `${data.total} 件`;
+            listEl.innerHTML = '';
+
+            data.items.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'history-item-card';
+                card.dataset.eventId = item.event_id;
+
+                const isWarn = item.is_warn || false;
+                const shindoClass = isWarn ? 'history-card-shindo warn' : 'history-card-shindo';
+                const statusText = item.is_cancel ? '取消' : (isWarn ? '警報' : '予報');
+
+                card.innerHTML = `
+                    <div class="history-card-header">
+                        <span class="history-card-time">${item.origin_time || item.updated_at || item.event_id}</span>
+                        <span class="${shindoClass}">震度${item.max_intensity || '--'}</span>
+                    </div>
+                    <div class="history-card-hypo">${item.hypocenter || '震源不明'}</div>
+                    <div class="history-card-footer">
+                        <span>M${item.magnitude || '--'} / ${item.depth || '--'}</span>
+                        <span>全${item.reports_count || item.latest_serial || 1}報${item.is_final ? '(最終)' : ''} [${statusText}]</span>
+                    </div>
+                `;
+
+                card.addEventListener('click', () => {
+                    listEl.querySelectorAll('.history-item-card').forEach(c => c.classList.remove('active'));
+                    card.classList.add('active');
+                    loadEEWHistoryDetail(item.event_id);
+                });
+
+                listEl.appendChild(card);
+            });
+
+            // 最初のカードを自動選択
+            const firstCard = listEl.querySelector('.history-item-card');
+            if (firstCard) firstCard.click();
+        } catch (e) {
+            console.error("loadEEWHistoryList error:", e);
+            listEl.innerHTML = '<div class="history-empty">履歴の取得に失敗しました</div>';
+        }
+    }
+
+    async function loadEEWHistoryDetail(eventId) {
+        const detailEl = document.getElementById('eewHistoryDetailPane');
+        if (!detailEl) return;
+
+        detailEl.innerHTML = '<div class="detail-placeholder">電文詳細を読み込み中...</div>';
+
+        try {
+            const res = await fetch(`api.php?action=get_eew&event_id=${encodeURIComponent(eventId)}`);
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            const eventData = await res.json();
+
+            const reports = eventData.reports || [];
+            let activeReportIndex = reports.length - 1;
+
+            function renderDetailContent() {
+                const curReport = reports[activeReportIndex] || {};
+                const raw = curReport.raw || {};
+                const isWarn = eventData.is_warn || raw.Warn === true;
+                const isFinal = eventData.is_final || raw.isFinal === true;
+                const isCancel = eventData.is_cancel || raw.isCancel === true;
+
+                // シミュレーション時刻文字列（YYYY-MM-DDTHH:mm:ss）
+                let simTimeStr = '';
+                const ot = eventData.origin_time || raw.OriginTime || eventData.event_id || '';
+                const cleanOt = String(ot).replace(/[^0-9]/g, '');
+                if (cleanOt.length >= 14) {
+                    const y = cleanOt.substring(0, 4);
+                    const m = cleanOt.substring(4, 6);
+                    const d = cleanOt.substring(6, 8);
+                    const h = cleanOt.substring(8, 10);
+                    const min = cleanOt.substring(10, 12);
+                    const s = cleanOt.substring(12, 14);
+                    simTimeStr = `${y}-${m}-${d}T${h}:${min}:${s}`;
+                }
+
+                detailEl.innerHTML = `
+                    <div class="detail-header-card">
+                        <div class="detail-header-top">
+                            <span class="detail-event-id">Event ID: ${eventData.event_id}</span>
+                            <div class="detail-action-buttons">
+                                ${simTimeStr ? `<button class="detail-sim-btn" id="historySimJumpBtn" title="この日時の強震モニタをシミュレーション再生"><span class="material-symbols-rounded">play_circle</span> シミュレーション起動</button>` : ''}
+                            </div>
+                        </div>
+                        <div class="detail-main-info">
+                            <span class="detail-hypo-name">${eventData.hypocenter || raw.Hypocenter || '震源不明'}</span>
+                            <span class="summary-status-badge ${isCancel ? 'cancel' : (isWarn ? 'warn' : 'forecast')}">
+                                ${isCancel ? '取消報' : (isWarn ? (isFinal ? '警報 (最終)' : '警報') : (isFinal ? '予報 (最終)' : '予報'))}
+                            </span>
+                        </div>
+                        <div class="detail-grid">
+                            <div class="detail-grid-item"><span class="detail-grid-label">発震時刻</span><span class="detail-grid-val">${eventData.origin_time || raw.OriginTime || '--'}</span></div>
+                            <div class="detail-grid-item"><span class="detail-grid-label">最大震度</span><span class="detail-grid-val">震度${eventData.max_intensity || raw.MaxIntensity || '--'}</span></div>
+                            <div class="detail-grid-item"><span class="detail-grid-label">マグニチュード</span><span class="detail-grid-val">M${eventData.magnitude || raw.Magunitude || raw.Magnitude || '--'}</span></div>
+                            <div class="detail-grid-item"><span class="detail-grid-label">深さ</span><span class="detail-grid-val">${eventData.depth || raw.Depth || '--'}</span></div>
+                        </div>
+                    </div>
+
+                    <div class="eew-report-tabs-section">
+                        <div class="tabs-label">報数 (${reports.length}報中 第${curReport.serial || activeReportIndex + 1}報を表示):</div>
+                        <div class="eew-report-tabs" id="historyReportTabs"></div>
+                    </div>
+
+                    <div class="eew-json-section">
+                        <div class="eew-json-header">
+                            <span>第${curReport.serial || activeReportIndex + 1}報 生電文 (Raw JSON) - 受信: ${curReport.recv_time || '--'}</span>
+                            <button class="copy-json-btn" id="historyCopyJsonBtn">
+                                <span class="material-symbols-rounded">content_copy</span> コピー
+                            </button>
+                        </div>
+                        <pre class="eew-json-pre" id="historyJsonPre">${JSON.stringify(raw, null, 2)}</pre>
+                    </div>
+                `;
+
+                // 報数タブ生成
+                const tabsEl = detailEl.querySelector('#historyReportTabs');
+                if (tabsEl) {
+                    reports.forEach((rep, idx) => {
+                        const btn = document.createElement('button');
+                        btn.className = `eew-tab-btn ${idx === activeReportIndex ? 'active' : ''}`;
+                        btn.textContent = `第${rep.serial || idx + 1}報`;
+                        btn.addEventListener('click', () => {
+                            activeReportIndex = idx;
+                            renderDetailContent();
+                        });
+                        tabsEl.appendChild(btn);
+                    });
+                }
+
+                // コピーボタン
+                const copyBtn = detailEl.querySelector('#historyCopyJsonBtn');
+                if (copyBtn) {
+                    copyBtn.addEventListener('click', () => {
+                        navigator.clipboard.writeText(JSON.stringify(raw, null, 2)).then(() => {
+                            copyBtn.innerHTML = '<span class="material-symbols-rounded">check</span> コピー完了';
+                            copyBtn.style.color = '#4ade80';
+                            setTimeout(() => {
+                                copyBtn.innerHTML = '<span class="material-symbols-rounded">content_copy</span> コピー';
+                                copyBtn.style.color = '';
+                            }, 2000);
+                        });
+                    });
+                }
+
+                // シミュレーション起動ボタン
+                const simBtn = detailEl.querySelector('#historySimJumpBtn');
+                if (simBtn && simTimeStr) {
+                    simBtn.addEventListener('click', () => {
+                        const simInput = document.getElementById('simTimeInput');
+                        const simToggleBtn = document.getElementById('simToggleBtn');
+                        if (simInput) {
+                            simInput.value = simTimeStr;
+                            closeEEWHistoryModal();
+                            if (!isSimulationMode && simToggleBtn) {
+                                simToggleBtn.click();
+                            }
+                        }
+                    });
+                }
+            }
+
+            renderDetailContent();
+        } catch (e) {
+            console.error("loadEEWHistoryDetail error:", e);
+            detailEl.innerHTML = '<div class="detail-placeholder">電文詳細の取得に失敗しました</div>';
+        }
+    }
+
     function calculateEstimatedPSWaveRadius(originTimeStr, depthVal, nowDate) {
         if (!nowDate) nowDate = getCurrentAppTime();
         if (!originTimeStr) return { pRadius: 0, sRadius: 0 };
@@ -2130,6 +2894,7 @@ function clearSnetLayers() {
 
         isInitialCheckDone = false;
         updateDebugWsBadge('connecting');
+        updateEEWMonitorWsBadge('connecting');
 
         try {
             wolfxWS = new WebSocket('wss://ws-api.wolfx.jp/jma_eew');
@@ -2140,6 +2905,7 @@ function clearSnetLayers() {
                 fetchState.kmoni.lastSuccess = getCurrentAppTime();
                 updateFetchStatusUI();
                 updateDebugWsBadge('connected');
+                updateEEWMonitorWsBadge('connected');
 
                 // Heartbeat (Ping) 毎20秒送信
                 clearInterval(wolfxPingInterval);
@@ -2165,6 +2931,7 @@ function clearSnetLayers() {
 
                     const niedData = parseWolfxEEW(rawData);
                     updateDebugWsInfo(rawData, niedData);
+                    handleWolfxMonitorAndSave(rawData, niedData);
 
                     if (niedData) {
                         await handleWolfxEEW(niedData);
@@ -3202,6 +3969,7 @@ function initAudioSettings() {
 }
 
 initAudioSettings();
+initEEWMonitorUI();
 
 // A:ver1.1.12 & B:ver1.0.1
 const devOptionAEl = document.getElementById('devOptionACheckbox');

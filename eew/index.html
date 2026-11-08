@@ -64,6 +64,12 @@
             <button id="toggleSubMapBtn" class="control-btn" title="強震モニタ表示">
                 <span class="material-symbols-rounded" id="subMapIcon">map</span>
             </button>
+            <button id="toggleMonitorBtn" class="control-btn" title="リアルタイム電文モニター">
+                <span class="material-symbols-rounded">terminal</span>
+            </button>
+            <button id="eewHistoryBtn" class="control-btn" title="EEW過去電文履歴">
+                <span class="material-symbols-rounded">history</span>
+            </button>
             <button id="toggleFetchBtn" class="control-btn" title="取得を一時停止/再開">
                 <span class="material-symbols-rounded" id="fetchIcon">pause</span>
             </button>
@@ -114,6 +120,94 @@
                 <div class="debug-row"><span class="debug-label">有効データ:</span><span class="debug-value highlight" id="debugYahooValidStatus">--</span></div>
                 <div class="debug-row"><span class="debug-label">hypoInfo:</span><span class="debug-value" id="debugYahooHypo">null</span></div>
                 <div class="debug-row"><span class="debug-label">psWave:</span><span class="debug-value" id="debugYahooPsWave">null</span></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- EEW リアルタイム電文モニター (画面右側独立パネル) -->
+    <div class="eew-monitor-panel hidden" id="eewMonitorPanel">
+        <div class="eew-monitor-header">
+            <div class="eew-monitor-title">
+                <span class="material-symbols-rounded monitor-icon">terminal</span>
+                <span>WOLFX EEW MONITOR</span>
+            </div>
+            <div class="eew-monitor-actions">
+                <span class="debug-badge disconnected" id="eewMonitorWsBadge">WS: OFF</span>
+                <button id="eewMonitorPopoutBtn" class="monitor-icon-btn" title="別ウィンドウで開く">
+                    <span class="material-symbols-rounded">open_in_new</span>
+                </button>
+                <button id="eewMonitorCloseBtn" class="monitor-icon-btn" title="閉じる">
+                    <span class="material-symbols-rounded">close</span>
+                </button>
+            </div>
+        </div>
+        <div class="eew-monitor-body">
+            <div class="eew-monitor-summary" id="eewMonitorSummary">
+                <div class="summary-top-row">
+                    <span class="monitor-recv-time" id="eewMonitorRecvTime">最終受信: --:--:--.--</span>
+                    <span class="monitor-flash-dot" id="eewMonitorFlashDot"></span>
+                </div>
+                <div class="summary-main">
+                    <div class="summary-status-badge wait" id="eewMonitorStatusBadge">待機中</div>
+                    <div class="summary-hypo" id="eewMonitorHypo">電文を受信していません</div>
+                </div>
+                <div class="summary-details-grid">
+                    <div class="summary-cell"><span class="cell-label">最大震度</span><span class="cell-value" id="eewMonitorMaxInt">--</span></div>
+                    <div class="summary-cell"><span class="cell-label">マグニチュード</span><span class="cell-value" id="eewMonitorMag">--</span></div>
+                    <div class="summary-cell"><span class="cell-label">震源の深さ</span><span class="cell-value" id="eewMonitorDepth">--</span></div>
+                    <div class="summary-cell"><span class="cell-label">警報/予報</span><span class="cell-value" id="eewMonitorWarn">--</span></div>
+                </div>
+            </div>
+
+            <!-- 報数切り替えタブ -->
+            <div class="eew-report-tabs-section">
+                <div class="tabs-label">受信報数履歴:</div>
+                <div class="eew-report-tabs" id="eewReportTabs">
+                    <button class="eew-tab-btn active" data-serial="latest">最新報</button>
+                </div>
+            </div>
+
+            <!-- 生電文 (Raw JSON) ビュー -->
+            <div class="eew-json-section">
+                <div class="eew-json-header">
+                    <span>受信生電文 (Raw JSON)</span>
+                    <button class="copy-json-btn" id="eewCopyJsonBtn" title="JSONをクリップボードにコピー">
+                        <span class="material-symbols-rounded">content_copy</span> コピー
+                    </button>
+                </div>
+                <pre class="eew-json-pre" id="eewJsonPre"><code>// Wolfx WebSocket電文を受信するとここに生JSONが表示されます</code></pre>
+            </div>
+        </div>
+    </div>
+
+    <!-- EEW 過去電文履歴モーダル -->
+    <div class="eew-history-modal hidden" id="eewHistoryModal">
+        <div class="eew-history-backdrop" id="eewHistoryBackdrop"></div>
+        <div class="eew-history-dialog">
+            <div class="eew-history-header">
+                <div class="history-title">
+                    <span class="material-symbols-rounded">history</span>
+                    <span>EEW 過去電文履歴・アーカイブ</span>
+                </div>
+                <button class="history-close-btn" id="eewHistoryCloseBtn">
+                    <span class="material-symbols-rounded">close</span>
+                </button>
+            </div>
+            <div class="eew-history-body">
+                <div class="history-list-pane">
+                    <div class="history-search-bar">
+                        <button id="eewHistoryRefreshBtn" class="history-refresh-btn" title="更新">
+                            <span class="material-symbols-rounded">refresh</span> 更新
+                        </button>
+                        <span class="history-count" id="eewHistoryCount">0 件</span>
+                    </div>
+                    <div class="history-items-list" id="eewHistoryItemsList">
+                        <div class="history-empty">電文履歴を読み込み中...</div>
+                    </div>
+                </div>
+                <div class="history-detail-pane" id="eewHistoryDetailPane">
+                    <div class="detail-placeholder">左の一覧から地震を選択してください</div>
+                </div>
             </div>
         </div>
     </div>
@@ -234,6 +328,10 @@
                     <div class="setting-item flex-between">
                         <span class="setting-label">デバッグインジケーター表示</span>
                         <label class="toggle-switch"><input type="checkbox" id="debugIndicatorToggle"><span class="slider"></span></label>
+                    </div>
+                    <div class="setting-item flex-between">
+                        <span class="setting-label">EEWリアルタイムモニター表示</span>
+                        <label class="toggle-switch"><input type="checkbox" id="eewMonitorToggle"><span class="slider"></span></label>
                     </div>
                 </div>
             </details>
